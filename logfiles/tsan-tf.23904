@@ -1,0 +1,190 @@
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=23904)
+  Cycle in lock order graph: M431 (0x7f6611d630a8) => M434 (0x7f6611d63148) => M431
+
+  Mutex M434 acquired here while holding mutex M431 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M431 acquired here while holding mutex M434 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=23904)
+  Write of size 8 at 0x7b08000032a8 by thread T5 (mutexes: write M706, write M766):
+    #0 operator delete(void*) <null> (libtsan.so.0+0x741fd)
+    #1 ros::MessageDeserializer::deserialize() <null> (libroscpp.so+0x14d705)
+
+  Previous atomic write of size 4 at 0x7b08000032a8 by thread T1 (mutexes: write M729, write M730):
+    #0 __tsan_atomic32_fetch_sub <null> (libtsan.so.0+0x68aed)
+    #1 std::__atomic_base<int>::fetch_sub(int, std::memory_order) /usr/include/c++/7/bits/atomic_base.h:524 (testListener+0xeb4c)
+    #2 boost::detail::atomic_decrement(std::atomic<int>*) /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:35 (testListener+0xeb4c)
+    #3 boost::detail::sp_counted_base::release() /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:108 (testListener+0xecf8)
+    #4 ros::Connection::readTransport() <null> (libroscpp.so+0x9f87d)
+
+  Mutex M706 (0x7b4400001760) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::SubscriptionQueue::SubscriptionQueue(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int, bool) <null> (libroscpp.so+0x146fa8)
+    #2 TransformBroadcaster_single_frame_Test::TestBody() /catkin/buildtmp/tf/src/tf/test/testListener.cpp:37 (testListener+0xd35a)
+    #3 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #4 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #5 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #6 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #7 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #8 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #9 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #10 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #11 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #12 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (testListener+0x1042a)
+    #13 main /catkin/buildtmp/tf/src/tf/test/testListener.cpp:57 (testListener+0xdcbb)
+
+  Mutex M766 (0x7b2c00005928) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::MessageDeserializer::MessageDeserializer(boost::shared_ptr<ros::SubscriptionCallbackHelper> const&, ros::SerializedMessage const&, boost::shared_ptr<std::map<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > > > const&) <null> (libroscpp.so+0x14d289)
+
+  Mutex M729 (0x7b5400010240) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::TransportTCP::TransportTCP(ros::PollSet*, int) <null> (libroscpp.so+0x112d4f)
+
+  Mutex M730 (0x7b50000300b0) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 boost::recursive_mutex::recursive_mutex() <null> (libroscpp.so+0xa47ed)
+
+  Thread T5 (tid=23944, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 TransformBroadcaster_single_frame_Test::TestBody() /catkin/buildtmp/tf/src/tf/test/testListener.cpp:37 (testListener+0xd35a)
+    #3 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #4 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #5 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #6 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #7 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #8 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #9 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #10 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #11 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #12 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (testListener+0x1042a)
+    #13 main /catkin/buildtmp/tf/src/tf/test/testListener.cpp:57 (testListener+0xdcbb)
+
+  Thread T1 (tid=23929, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: data race (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x741fd) in operator delete(void*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=23904)
+  Write of size 8 at 0x7b4800010208 by thread T1 (mutexes: write M622):
+    #0 operator delete(void*) <null> (libtsan.so.0+0x741fd)
+    #1 boost::signals2::slot<void (boost::shared_ptr<ros::Connection> const&, ros::Connection::DropReason), boost::function<void (boost::shared_ptr<ros::Connection> const&, ros::Connection::DropReason)> >::~slot() <null> (libroscpp.so+0xa46e6)
+    #2 boost::detail::sp_counted_impl_p<boost::signals2::detail::connection_body<std::pair<boost::signals2::detail::slot_meta_group, boost::optional<int> >, boost::signals2::slot<void (boost::shared_ptr<ros::Connection> const&, ros::Connection::DropReason), boost::function<void (boost::shared_ptr<ros::Connection> const&, ros::Connection::DropReason)> >, boost::signals2::mutex> >::dispose() <null> (libroscpp.so+0xa4393)
+    #3 boost::detail::sp_counted_impl_p<boost::signals2::detail::signal_impl<void (boost::shared_ptr<ros::Connection> const&, ros::Connection::DropReason), boost::signals2::optional_last_value<void>, int, std::less<int>, boost::function<void (boost::shared_ptr<ros::Connection> const&, ros::Connection::DropReason)>, boost::function<void (boost::signals2::connection const&, boost::shared_ptr<ros::Connection> const&, ros::Connection::DropReason)>, boost::signals2::mutex>::invocation_state>::dispose() <null> (libroscpp.so+0xa4215)
+    #4 boost::detail::sp_counted_impl_p<boost::signals2::detail::signal_impl<void (boost::shared_ptr<ros::Connection> const&, ros::Connection::DropReason), boost::signals2::optional_last_value<void>, int, std::less<int>, boost::function<void (boost::shared_ptr<ros::Connection> const&, ros::Connection::DropReason)>, boost::function<void (boost::signals2::connection const&, boost::shared_ptr<ros::Connection> const&, ros::Connection::DropReason)>, boost::signals2::mutex> >::dispose() <null> (libroscpp.so+0xa4255)
+    #5 ros::Connection::~Connection() <null> (libroscpp.so+0xa2cf0)
+
+  Previous atomic write of size 4 at 0x7b480001020c by main thread:
+    #0 __tsan_atomic32_fetch_sub <null> (libtsan.so.0+0x68aed)
+    #1 std::__atomic_base<int>::fetch_sub(int, std::memory_order) /usr/include/c++/7/bits/atomic_base.h:524 (testListener+0xeb4c)
+    #2 boost::detail::atomic_decrement(std::atomic<int>*) /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:35 (testListener+0xeb4c)
+    #3 boost::detail::sp_counted_base::weak_release() /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:122 (testListener+0xed84)
+    #4 std::vector<boost::shared_ptr<ros::PublisherLink>, std::allocator<boost::shared_ptr<ros::PublisherLink> > >::~vector() <null> (libroscpp.so+0x14295e)
+    #5 TransformBroadcaster_multi_frame_Test::TestBody() /catkin/buildtmp/tf/src/tf/test/testListener.cpp:44 (testListener+0xd9e7)
+    #6 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #7 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #8 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #9 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #10 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #11 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #12 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #13 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #14 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #15 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (testListener+0x1042a)
+    #16 main /catkin/buildtmp/tf/src/tf/test/testListener.cpp:57 (testListener+0xdcbb)
+
+  Mutex M622 (0x7b48000002b0) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::PollManager::PollManager() <null> (libroscpp.so+0xda4ae)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+  Thread T1 (tid=23929, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: data race (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x741fd) in operator delete(void*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=23904)
+  Write of size 8 at 0x7b5000030208 by thread T1 (mutexes: write M622):
+    #0 operator delete(void*) <null> (libtsan.so.0+0x741fd)
+    #1 ros::ConnectionManager::removeDroppedConnections() <null> (libroscpp.so+0x1064a8)
+
+  Previous atomic write of size 4 at 0x7b5000030208 by main thread:
+    #0 __tsan_atomic32_fetch_sub <null> (libtsan.so.0+0x68aed)
+    #1 std::__atomic_base<int>::fetch_sub(int, std::memory_order) /usr/include/c++/7/bits/atomic_base.h:524 (testListener+0xeb4c)
+    #2 boost::detail::atomic_decrement(std::atomic<int>*) /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:35 (testListener+0xeb4c)
+    #3 boost::detail::sp_counted_base::release() /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:108 (testListener+0xecf8)
+    #4 ros::TransportPublisherLink::~TransportPublisherLink() <null> (libroscpp.so+0x11ec17)
+    #5 TransformBroadcaster_multi_frame_Test::TestBody() /catkin/buildtmp/tf/src/tf/test/testListener.cpp:44 (testListener+0xd9e7)
+    #6 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #7 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #8 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #9 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #10 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #11 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #12 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #13 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #14 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #15 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (testListener+0x1042a)
+    #16 main /catkin/buildtmp/tf/src/tf/test/testListener.cpp:57 (testListener+0xdcbb)
+
+  Mutex M622 (0x7b48000002b0) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::PollManager::PollManager() <null> (libroscpp.so+0xda4ae)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+  Thread T1 (tid=23929, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: data race (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x741fd) in operator delete(void*)
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=23904)
+  Cycle in lock order graph: M630 (0x7b4400000f20) => M631 (0x7b4400000f60) => M630
+
+  Mutex M631 acquired here while holding mutex M630 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 TransformBroadcaster_single_frame_Test::TestBody() /catkin/buildtmp/tf/src/tf/test/testListener.cpp:37 (testListener+0xd35a)
+    #3 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #4 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #5 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #6 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #7 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #8 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #9 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #10 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #11 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #12 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (testListener+0x1042a)
+    #13 main /catkin/buildtmp/tf/src/tf/test/testListener.cpp:57 (testListener+0xdcbb)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M630 acquired here while holding mutex M631 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::mutex::lock() <null> (libtf.so+0x37d4b)
+    #2 boost::unique_lock<boost::mutex>::lock() <null> (libtf.so+0x3d0d2)
+    #3 ros::TopicManager::shutdown() <null> (libroscpp.so+0xd278a)
+    #4 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+ThreadSanitizer: reported 5 warnings

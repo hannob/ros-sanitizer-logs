@@ -1,0 +1,52 @@
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=1909)
+  Cycle in lock order graph: M448 (0x7f001ce470a8) => M451 (0x7f001ce47148) => M448
+
+  Mutex M451 acquired here while holding mutex M448 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M448 acquired here while holding mutex M451 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=1909)
+  Cycle in lock order graph: M615 (0x7b40000003a8) => M663 (0x7b50000010b0) => M615
+
+  Mutex M663 acquired here while holding mutex M615 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_expect_b+0xd6b5)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_expect_b+0xcec8)
+    #4 SrvCall_callSrv_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_expect_b.cpp:55 (test_roscpp-service_call_expect_b+0xac43)
+    #5 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #6 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #7 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #8 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #9 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #10 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #11 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #12 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #13 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #14 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-service_call_expect_b+0xb9e6)
+    #15 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_expect_b.cpp:69 (test_roscpp-service_call_expect_b+0xb22a)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M615 acquired here while holding mutex M663 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=1956, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+ThreadSanitizer: reported 2 warnings

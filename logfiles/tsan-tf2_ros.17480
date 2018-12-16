@@ -1,0 +1,163 @@
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=17480)
+  Cycle in lock order graph: M450 (0x7f607b1d70a8) => M453 (0x7f607b1d7148) => M450
+
+  Mutex M453 acquired here while holding mutex M450 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M450 acquired here while holding mutex M453 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=17480)
+  Write of size 1 at 0x7ffff35f9018 by main thread:
+    #0 tf2_ros::TransformListener::~TransformListener() /catkin/buildtmp/tf2_ros/src/tf2_ros/src/transform_listener.cpp:62 (libtf2_ros.so+0x112638)
+    #1 tf2_ros_transform_transform_listener_Test::TestBody() /catkin/buildtmp/tf2_ros/src/tf2_ros/test/listener_unittest.cpp:39 (tf2_ros_test_listener+0xa81a)
+    #2 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #3 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #4 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #5 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #6 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #7 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #8 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #9 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #10 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #11 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (tf2_ros_test_listener+0xb166)
+    #12 main /catkin/buildtmp/tf2_ros/src/tf2_ros/test/listener_unittest.cpp:45 (tf2_ros_test_listener+0xa921)
+
+  Previous read of size 1 at 0x7ffff35f9018 by thread T5:
+    #0 tf2_ros::TransformListener::dedicatedListenerThread() /catkin/buildtmp/tf2_ros/src/tf2_ros/include/tf2_ros/transform_listener.h:80 (libtf2_ros.so+0x115795)
+    #1 boost::_mfi::mf0<void, tf2_ros::TransformListener>::operator()(tf2_ros::TransformListener*) const <null> (libtf2_ros.so+0x125c17)
+    #2 void boost::_bi::list1<boost::_bi::value<tf2_ros::TransformListener*> >::operator()<boost::_mfi::mf0<void, tf2_ros::TransformListener>, boost::_bi::list0>(boost::_bi::type<void>, boost::_mfi::mf0<void, tf2_ros::TransformListener>&, boost::_bi::list0&, int) <null> (libtf2_ros.so+0x125663)
+    #3 boost::_bi::bind_t<void, boost::_mfi::mf0<void, tf2_ros::TransformListener>, boost::_bi::list1<boost::_bi::value<tf2_ros::TransformListener*> > >::operator()() <null> (libtf2_ros.so+0x124c35)
+    #4 boost::detail::thread_data<boost::_bi::bind_t<void, boost::_mfi::mf0<void, tf2_ros::TransformListener>, boost::_bi::list1<boost::_bi::value<tf2_ros::TransformListener*> > > >::run() <null> (libtf2_ros.so+0x12416a)
+    #5 <null> <null> (libboost_thread.so.1.65.1+0x11bcc)
+
+  Location is stack of main thread.
+
+  Location is global '<null>' at 0x000000000000 ([stack]+0x000000020018)
+
+  Thread T5 (tid=17527, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 boost::thread::thread<boost::_bi::bind_t<void, boost::_mfi::mf0<void, tf2_ros::TransformListener>, boost::_bi::list1<boost::_bi::value<tf2_ros::TransformListener*> > > >(boost::_bi::bind_t<void, boost::_mfi::mf0<void, tf2_ros::TransformListener>, boost::_bi::list1<boost::_bi::value<tf2_ros::TransformListener*> > >&&) /usr/include/boost/thread/detail/thread.hpp:273 (libtf2_ros.so+0x1176b7)
+    #3 tf2_ros::TransformListener::initWithThread() /catkin/buildtmp/tf2_ros/src/tf2_ros/src/transform_listener.cpp:85 (libtf2_ros.so+0x11305e)
+    #4 tf2_ros::TransformListener::TransformListener(tf2::BufferCore&, bool) /catkin/buildtmp/tf2_ros/src/tf2_ros/src/transform_listener.cpp:42 (libtf2_ros.so+0x1123ee)
+    #5 tf2_ros_transform_transform_listener_Test::TestBody() /catkin/buildtmp/tf2_ros/src/tf2_ros/test/listener_unittest.cpp:39 (tf2_ros_test_listener+0xa80b)
+    #6 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #7 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #8 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #9 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #10 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #11 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #12 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #13 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #14 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #15 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (tf2_ros_test_listener+0xb166)
+    #16 main /catkin/buildtmp/tf2_ros/src/tf2_ros/test/listener_unittest.cpp:45 (tf2_ros_test_listener+0xa921)
+
+SUMMARY: ThreadSanitizer: data race /catkin/buildtmp/tf2_ros/src/tf2_ros/src/transform_listener.cpp:62 in tf2_ros::TransformListener::~TransformListener()
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=17480)
+  Read of size 1 at 0x7ffff35f9018 by thread T5:
+    #0 tf2_ros::TransformListener::dedicatedListenerThread() /catkin/buildtmp/tf2_ros/src/tf2_ros/include/tf2_ros/transform_listener.h:80 (libtf2_ros.so+0x115795)
+    #1 boost::_mfi::mf0<void, tf2_ros::TransformListener>::operator()(tf2_ros::TransformListener*) const <null> (libtf2_ros.so+0x125c17)
+    #2 void boost::_bi::list1<boost::_bi::value<tf2_ros::TransformListener*> >::operator()<boost::_mfi::mf0<void, tf2_ros::TransformListener>, boost::_bi::list0>(boost::_bi::type<void>, boost::_mfi::mf0<void, tf2_ros::TransformListener>&, boost::_bi::list0&, int) <null> (libtf2_ros.so+0x125663)
+    #3 boost::_bi::bind_t<void, boost::_mfi::mf0<void, tf2_ros::TransformListener>, boost::_bi::list1<boost::_bi::value<tf2_ros::TransformListener*> > >::operator()() <null> (libtf2_ros.so+0x124c35)
+    #4 boost::detail::thread_data<boost::_bi::bind_t<void, boost::_mfi::mf0<void, tf2_ros::TransformListener>, boost::_bi::list1<boost::_bi::value<tf2_ros::TransformListener*> > > >::run() <null> (libtf2_ros.so+0x12416a)
+    #5 <null> <null> (libboost_thread.so.1.65.1+0x11bcc)
+
+  Previous write of size 1 at 0x7ffff35f9018 by main thread:
+    #0 tf2_ros::TransformListener::~TransformListener() /catkin/buildtmp/tf2_ros/src/tf2_ros/src/transform_listener.cpp:62 (libtf2_ros.so+0x112638)
+    #1 tf2_ros_transform_transform_listener_Test::TestBody() /catkin/buildtmp/tf2_ros/src/tf2_ros/test/listener_unittest.cpp:39 (tf2_ros_test_listener+0xa81a)
+    #2 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #3 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #4 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #5 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #6 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #7 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #8 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #9 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #10 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #11 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (tf2_ros_test_listener+0xb166)
+    #12 main /catkin/buildtmp/tf2_ros/src/tf2_ros/test/listener_unittest.cpp:45 (tf2_ros_test_listener+0xa921)
+
+  Location is stack of main thread.
+
+  Location is global '<null>' at 0x000000000000 ([stack]+0x000000020018)
+
+  Thread T5 (tid=17527, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 boost::thread::thread<boost::_bi::bind_t<void, boost::_mfi::mf0<void, tf2_ros::TransformListener>, boost::_bi::list1<boost::_bi::value<tf2_ros::TransformListener*> > > >(boost::_bi::bind_t<void, boost::_mfi::mf0<void, tf2_ros::TransformListener>, boost::_bi::list1<boost::_bi::value<tf2_ros::TransformListener*> > >&&) /usr/include/boost/thread/detail/thread.hpp:273 (libtf2_ros.so+0x1176b7)
+    #3 tf2_ros::TransformListener::initWithThread() /catkin/buildtmp/tf2_ros/src/tf2_ros/src/transform_listener.cpp:85 (libtf2_ros.so+0x11305e)
+    #4 tf2_ros::TransformListener::TransformListener(tf2::BufferCore&, bool) /catkin/buildtmp/tf2_ros/src/tf2_ros/src/transform_listener.cpp:42 (libtf2_ros.so+0x1123ee)
+    #5 tf2_ros_transform_transform_listener_Test::TestBody() /catkin/buildtmp/tf2_ros/src/tf2_ros/test/listener_unittest.cpp:39 (tf2_ros_test_listener+0xa80b)
+    #6 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #7 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #8 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #9 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #10 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #11 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #12 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #13 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #14 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #15 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (tf2_ros_test_listener+0xb166)
+    #16 main /catkin/buildtmp/tf2_ros/src/tf2_ros/test/listener_unittest.cpp:45 (tf2_ros_test_listener+0xa921)
+
+SUMMARY: ThreadSanitizer: data race /catkin/buildtmp/tf2_ros/src/tf2_ros/include/tf2_ros/transform_listener.h:80 in tf2_ros::TransformListener::dedicatedListenerThread()
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=17480)
+  Cycle in lock order graph: M630 (0x7b4400000a20) => M631 (0x7b4400000a60) => M630
+
+  Mutex M631 acquired here while holding mutex M630 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::recursive_mutex::lock() /usr/include/boost/thread/pthread/recursive_mutex.hpp:113 (libtf2_ros.so+0x12bc6f)
+    #2 boost::unique_lock<boost::recursive_mutex>::lock() /usr/include/boost/thread/lock_types.hpp:346 (libtf2_ros.so+0x142156)
+    #3 ros::TopicManager::registerSubscriber(boost::shared_ptr<ros::Subscription> const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) <null> (libroscpp.so+0xd6c0c)
+    #4 tf2_ros::TransformListener::TransformListener(tf2::BufferCore&, bool) /catkin/buildtmp/tf2_ros/src/tf2_ros/src/transform_listener.cpp:42 (libtf2_ros.so+0x1123ee)
+    #5 tf2_ros_transform_transform_listener_Test::TestBody() /catkin/buildtmp/tf2_ros/src/tf2_ros/test/listener_unittest.cpp:39 (tf2_ros_test_listener+0xa80b)
+    #6 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #7 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #8 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #9 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #10 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #11 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #12 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #13 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #14 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #15 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (tf2_ros_test_listener+0xb166)
+    #16 main /catkin/buildtmp/tf2_ros/src/tf2_ros/test/listener_unittest.cpp:45 (tf2_ros_test_listener+0xa921)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M630 acquired here while holding mutex M631 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::posix::pthread_mutex_lock(pthread_mutex_t*) /usr/include/boost/thread/pthread/mutex.hpp:62 (libtf2_ros.so+0x12ab1f)
+    #2 boost::mutex::lock() /usr/include/boost/thread/pthread/mutex.hpp:116 (libtf2_ros.so+0x12ab1f)
+    #3 boost::unique_lock<boost::mutex>::lock() /usr/include/boost/thread/lock_types.hpp:346 (libtf2_ros.so+0x12f0ec)
+    #4 ros::TopicManager::shutdown() <null> (libroscpp.so+0xd278a)
+    #5 tf2_ros_transform_transform_listener_Test::TestBody() /catkin/buildtmp/tf2_ros/src/tf2_ros/test/listener_unittest.cpp:39 (tf2_ros_test_listener+0xa81a)
+    #6 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #7 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #8 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #9 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #10 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #11 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #12 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #13 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #14 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #15 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (tf2_ros_test_listener+0xb166)
+    #16 main /catkin/buildtmp/tf2_ros/src/tf2_ros/test/listener_unittest.cpp:45 (tf2_ros_test_listener+0xa921)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+ThreadSanitizer: reported 4 warnings

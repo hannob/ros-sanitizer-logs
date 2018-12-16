@@ -1,0 +1,75 @@
+
+=================================================================
+==27024==ERROR: LeakSanitizer: detected memory leaks
+
+Indirect leak of 528 byte(s) in 2 object(s) allocated from:
+    #0 0x7f0e95685458 in operator new(unsigned long) (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xe0458)
+    #1 0x7f0e947c7db6 in urdf::parseURDF(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (/usr/lib/x86_64-linux-gnu/liburdfdom_world.so.1.0+0x7db6)
+    #2 0x60300000369f  (<unknown module>)
+
+Indirect leak of 416 byte(s) in 2 object(s) allocated from:
+    #0 0x7f0e95685458 in operator new(unsigned long) (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xe0458)
+    #1 0x7f0e947c7989 in urdf::parseURDF(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (/usr/lib/x86_64-linux-gnu/liburdfdom_world.so.1.0+0x7989)
+    #2 0x60300000369f  (<unknown module>)
+
+Indirect leak of 224 byte(s) in 2 object(s) allocated from:
+    #0 0x7f0e95685458 in operator new(unsigned long) (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xe0458)
+    #1 0x7f0e947d2a23  (/usr/lib/x86_64-linux-gnu/liburdfdom_world.so.1.0+0x12a23)
+
+Indirect leak of 80 byte(s) in 2 object(s) allocated from:
+    #0 0x7f0e95685458 in operator new(unsigned long) (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xe0458)
+    #1 0x7f0e947d74cc  (/usr/lib/x86_64-linux-gnu/liburdfdom_world.so.1.0+0x174cc)
+
+Indirect leak of 64 byte(s) in 2 object(s) allocated from:
+    #0 0x7f0e95685458 in operator new(unsigned long) (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xe0458)
+    #1 0x7f0e947d71b4  (/usr/lib/x86_64-linux-gnu/liburdfdom_world.so.1.0+0x171b4)
+
+Indirect leak of 62 byte(s) in 2 object(s) allocated from:
+    #0 0x7f0e95685458 in operator new(unsigned long) (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xe0458)
+    #1 0x7f0e9455bcfa in std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_mutate(unsigned long, unsigned long, char const*, unsigned long) (/usr/lib/x86_64-linux-gnu/libstdc++.so.6+0x124cfa)
+
+Indirect leak of 48 byte(s) in 2 object(s) allocated from:
+    #0 0x7f0e95685458 in operator new(unsigned long) (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xe0458)
+    #1 0x7f0e947c7edb in urdf::parseURDF(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (/usr/lib/x86_64-linux-gnu/liburdfdom_world.so.1.0+0x7edb)
+    #2 0x60300000369f  (<unknown module>)
+
+Indirect leak of 48 byte(s) in 2 object(s) allocated from:
+    #0 0x7f0e95685458 in operator new(unsigned long) (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xe0458)
+    #1 0x7f0e947c7b1d in urdf::parseURDF(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (/usr/lib/x86_64-linux-gnu/liburdfdom_world.so.1.0+0x7b1d)
+    #2 0x60300000369f  (<unknown module>)
+
+Indirect leak of 48 byte(s) in 2 object(s) allocated from:
+    #0 0x7f0e95685458 in operator new(unsigned long) (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xe0458)
+    #1 0x7f0e947d7500  (/usr/lib/x86_64-linux-gnu/liburdfdom_world.so.1.0+0x17500)
+
+Indirect leak of 48 byte(s) in 2 object(s) allocated from:
+    #0 0x7f0e95685458 in operator new(unsigned long) (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xe0458)
+    #1 0x7f0e947d71e0  (/usr/lib/x86_64-linux-gnu/liburdfdom_world.so.1.0+0x171e0)
+
+Indirect leak of 48 byte(s) in 2 object(s) allocated from:
+    #0 0x7f0e95685458 in operator new(unsigned long) (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xe0458)
+    #1 0x7f0e947d2aa2  (/usr/lib/x86_64-linux-gnu/liburdfdom_world.so.1.0+0x12aa2)
+
+Indirect leak of 32 byte(s) in 2 object(s) allocated from:
+    #0 0x7f0e95685458 in operator new(unsigned long) (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xe0458)
+    #1 0x7f0e947ca79f  (/usr/lib/x86_64-linux-gnu/liburdfdom_world.so.1.0+0xa79f)
+
+Indirect leak of 32 byte(s) in 2 object(s) allocated from:
+    #0 0x7f0e95685458 in operator new(unsigned long) (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xe0458)
+    #1 0x7f0e947cab2f  (/usr/lib/x86_64-linux-gnu/liburdfdom_world.so.1.0+0xab2f)
+
+Indirect leak of 24 byte(s) in 1 object(s) allocated from:
+    #0 0x7f0e95685458 in operator new(unsigned long) (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xe0458)
+    #1 0x7f0e947d464c  (/usr/lib/x86_64-linux-gnu/liburdfdom_world.so.1.0+0x1464c)
+    #2 0x7f0e93473f8f  (/lib/x86_64-linux-gnu/libpthread.so.0+0xef8f)
+    #3 0x61000000003f  (<unknown module>)
+
+Indirect leak of 24 byte(s) in 1 object(s) allocated from:
+    #0 0x7f0e95685458 in operator new(unsigned long) (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xe0458)
+    #1 0x7f0e947d464c  (/usr/lib/x86_64-linux-gnu/liburdfdom_world.so.1.0+0x1464c)
+
+Indirect leak of 24 byte(s) in 1 object(s) allocated from:
+    #0 0x7f0e95685458 in operator new(unsigned long) (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xe0458)
+    #1 0x7f0e947ce1bc  (/usr/lib/x86_64-linux-gnu/liburdfdom_world.so.1.0+0xe1bc)
+
+SUMMARY: AddressSanitizer: 1750 byte(s) leaked in 29 allocation(s).

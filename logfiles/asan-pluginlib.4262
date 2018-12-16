@@ -1,0 +1,55 @@
+
+=================================================================
+==4262==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 160 byte(s) in 1 object(s) allocated from:
+    #0 0x7f853d36d458 in operator new(unsigned long) (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xe0458)
+    #1 0x7f85324b4006  (<unknown module>)
+    #2 0x7f85324b177c  (<unknown module>)
+    #3 0x7f85324b1a82  (<unknown module>)
+    #4 0x7f85324b1a9d  (<unknown module>)
+    #5 0x7f853e258732  (/lib64/ld-linux-x86-64.so.2+0x10732)
+
+Direct leak of 160 byte(s) in 1 object(s) allocated from:
+    #0 0x7f853d36d458 in operator new(unsigned long) (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xe0458)
+    #1 0x7f85324b3a0d  (<unknown module>)
+    #2 0x7f85324b12e8  (<unknown module>)
+    #3 0x7f85324b1a76  (<unknown module>)
+    #4 0x7f85324b1a9d  (<unknown module>)
+    #5 0x7f853e258732  (/lib64/ld-linux-x86-64.so.2+0x10732)
+
+Indirect leak of 114 byte(s) in 2 object(s) allocated from:
+    #0 0x7f853d36d458 in operator new(unsigned long) (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xe0458)
+    #1 0x7f853be56c36 in std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_assign(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (/usr/lib/x86_64-linux-gnu/libstdc++.so.6+0x124c36)
+
+Indirect leak of 70 byte(s) in 4 object(s) allocated from:
+    #0 0x7f853d36d458 in operator new(unsigned long) (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xe0458)
+    #1 0x7f853cb3fa0c  (/opt/ros/melodic/lib/libclass_loader.so+0x17a0c)
+
+Indirect leak of 19 byte(s) in 1 object(s) allocated from:
+    #0 0x7f853d36d458 in operator new(unsigned long) (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xe0458)
+    #1 0x7f853d0483f2 in void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*, std::forward_iterator_tag) /usr/include/c++/7/bits/basic_string.tcc:219
+    #2 0x7f85324b4d6d  (<unknown module>)
+    #3 0x7f85324b4408  (<unknown module>)
+    #4 0x7f85324b3a29  (<unknown module>)
+    #5 0x7f85324b12e8  (<unknown module>)
+    #6 0x7f85324b1a76  (<unknown module>)
+    #7 0x7f85324b1a9d  (<unknown module>)
+    #8 0x7f853e258732  (/lib64/ld-linux-x86-64.so.2+0x10732)
+
+Indirect leak of 19 byte(s) in 1 object(s) allocated from:
+    #0 0x7f853d36d458 in operator new(unsigned long) (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xe0458)
+    #1 0x7f853d0483f2 in void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*, std::forward_iterator_tag) /usr/include/c++/7/bits/basic_string.tcc:219
+    #2 0x7f85324b4d6d  (<unknown module>)
+    #3 0x7f85324b4bee  (<unknown module>)
+    #4 0x7f85324b4022  (<unknown module>)
+    #5 0x7f85324b177c  (<unknown module>)
+    #6 0x7f85324b1a82  (<unknown module>)
+    #7 0x7f85324b1a9d  (<unknown module>)
+    #8 0x7f853e258732  (/lib64/ld-linux-x86-64.so.2+0x10732)
+
+Indirect leak of 16 byte(s) in 2 object(s) allocated from:
+    #0 0x7f853d36d458 in operator new(unsigned long) (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xe0458)
+    #1 0x7f853cb40223 in void std::vector<class_loader::ClassLoader*, std::allocator<class_loader::ClassLoader*> >::_M_realloc_insert<class_loader::ClassLoader* const&>(__gnu_cxx::__normal_iterator<class_loader::ClassLoader**, std::vector<class_loader::ClassLoader*, std::allocator<class_loader::ClassLoader*> > >, class_loader::ClassLoader* const&) (/opt/ros/melodic/lib/libclass_loader.so+0x18223)
+
+SUMMARY: AddressSanitizer: 558 byte(s) leaked in 12 allocation(s).

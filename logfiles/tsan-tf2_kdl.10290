@@ -1,0 +1,237 @@
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=10290)
+  Cycle in lock order graph: M439 (0x7f48c64530a8) => M442 (0x7f48c6453148) => M439
+
+  Mutex M442 acquired here while holding mutex M439 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M439 acquired here while holding mutex M442 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=10290)
+  Cycle in lock order graph: M424 (0x7f48c2a12720) => M439 (0x7f48c64530a8) => M442 (0x7f48c6453148) => M424
+
+  Mutex M439 acquired here while holding mutex M424 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M442 acquired here while holding mutex M439 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+  Mutex M424 acquired here while holding mutex M442 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::mutex>::lock() <null> (libtf2_ros.so+0x61cf7)
+    #2 tf2::Stamped<KDL::Frame> tf2_ros::BufferInterface::transform<tf2::Stamped<KDL::Frame> >(tf2::Stamped<KDL::Frame> const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, ros::Duration) const /opt/ros/melodic/include/tf2_ros/buffer_interface.h:147 (test_kdl+0x13943)
+    #3 TfKDL_Frame_Test::TestBody() /catkin/buildtmp/tf2_kdl/src/tf2_kdl/test/test_tf2_kdl.cpp:48 (test_kdl+0xcdc5)
+    #4 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #5 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #6 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #7 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #8 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #9 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #10 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #11 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #12 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #13 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_kdl+0x11dc6)
+    #14 main /catkin/buildtmp/tf2_kdl/src/tf2_kdl/test/test_tf2_kdl.cpp:128 (test_kdl+0xf5a0)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=10290)
+  Cycle in lock order graph: M439 (0x7f48c64530a8) => M442 (0x7f48c6453148) => M439
+
+  Mutex M442 acquired here while holding mutex M439 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M439 acquired here while holding mutex M442 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=10290)
+  Cycle in lock order graph: M439 (0x7f48c64530a8) => M442 (0x7f48c6453148) => M424 (0x7f48c2a12720) => M439
+
+  Mutex M442 acquired here while holding mutex M439 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M424 acquired here while holding mutex M442 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::mutex>::lock() <null> (libtf2_ros.so+0x61cf7)
+    #2 tf2::Stamped<KDL::Frame> tf2_ros::BufferInterface::transform<tf2::Stamped<KDL::Frame> >(tf2::Stamped<KDL::Frame> const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, ros::Duration) const /opt/ros/melodic/include/tf2_ros/buffer_interface.h:147 (test_kdl+0x13943)
+    #3 TfKDL_Frame_Test::TestBody() /catkin/buildtmp/tf2_kdl/src/tf2_kdl/test/test_tf2_kdl.cpp:48 (test_kdl+0xcdc5)
+    #4 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #5 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #6 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #7 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #8 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #9 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #10 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #11 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #12 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #13 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_kdl+0x11dc6)
+    #14 main /catkin/buildtmp/tf2_kdl/src/tf2_kdl/test/test_tf2_kdl.cpp:128 (test_kdl+0xf5a0)
+
+  Mutex M439 acquired here while holding mutex M424 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=10290)
+  Cycle in lock order graph: M439 (0x7f48c64530a8) => M442 (0x7f48c6453148) => M424 (0x7f48c2a12720) => M439
+
+  Mutex M442 acquired here while holding mutex M439 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M424 acquired here while holding mutex M442 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::mutex>::lock() <null> (libtf2_ros.so+0x61cf7)
+    #2 tf2::Stamped<KDL::Frame> tf2_ros::BufferInterface::transform<tf2::Stamped<KDL::Frame> >(tf2::Stamped<KDL::Frame> const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, ros::Duration) const /opt/ros/melodic/include/tf2_ros/buffer_interface.h:147 (test_kdl+0x13943)
+    #3 TfKDL_Frame_Test::TestBody() /catkin/buildtmp/tf2_kdl/src/tf2_kdl/test/test_tf2_kdl.cpp:48 (test_kdl+0xcdc5)
+    #4 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #5 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #6 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #7 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #8 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #9 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #10 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #11 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #12 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #13 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_kdl+0x11dc6)
+    #14 main /catkin/buildtmp/tf2_kdl/src/tf2_kdl/test/test_tf2_kdl.cpp:128 (test_kdl+0xf5a0)
+
+  Mutex M439 acquired here while holding mutex M424 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=10290)
+  Cycle in lock order graph: M439 (0x7f48c64530a8) => M442 (0x7f48c6453148) => M424 (0x7f48c2a12720) => M439
+
+  Mutex M442 acquired here while holding mutex M439 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M424 acquired here while holding mutex M442 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::mutex>::lock() <null> (libtf2_ros.so+0x61cf7)
+    #2 tf2::Stamped<KDL::Frame> tf2_ros::BufferInterface::transform<tf2::Stamped<KDL::Frame> >(tf2::Stamped<KDL::Frame> const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, ros::Duration) const /opt/ros/melodic/include/tf2_ros/buffer_interface.h:147 (test_kdl+0x13943)
+    #3 TfKDL_Frame_Test::TestBody() /catkin/buildtmp/tf2_kdl/src/tf2_kdl/test/test_tf2_kdl.cpp:48 (test_kdl+0xcdc5)
+    #4 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #5 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #6 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #7 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #8 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #9 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #10 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #11 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #12 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #13 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_kdl+0x11dc6)
+    #14 main /catkin/buildtmp/tf2_kdl/src/tf2_kdl/test/test_tf2_kdl.cpp:128 (test_kdl+0xf5a0)
+
+  Mutex M439 acquired here while holding mutex M424 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=10290)
+  Cycle in lock order graph: M439 (0x7f48c64530a8) => M442 (0x7f48c6453148) => M424 (0x7f48c2a12720) => M439
+
+  Mutex M442 acquired here while holding mutex M439 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M424 acquired here while holding mutex M442 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::mutex>::lock() <null> (libtf2_ros.so+0x61cf7)
+    #2 tf2::Stamped<KDL::Frame> tf2_ros::BufferInterface::transform<tf2::Stamped<KDL::Frame> >(tf2::Stamped<KDL::Frame> const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, ros::Duration) const /opt/ros/melodic/include/tf2_ros/buffer_interface.h:147 (test_kdl+0x13943)
+    #3 TfKDL_Frame_Test::TestBody() /catkin/buildtmp/tf2_kdl/src/tf2_kdl/test/test_tf2_kdl.cpp:48 (test_kdl+0xcdc5)
+    #4 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #5 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #6 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #7 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #8 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #9 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #10 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #11 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #12 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #13 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_kdl+0x11dc6)
+    #14 main /catkin/buildtmp/tf2_kdl/src/tf2_kdl/test/test_tf2_kdl.cpp:128 (test_kdl+0xf5a0)
+
+  Mutex M439 acquired here while holding mutex M424 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=10290)
+  Cycle in lock order graph: M439 (0x7f48c64530a8) => M442 (0x7f48c6453148) => M424 (0x7f48c2a12720) => M439
+
+  Mutex M442 acquired here while holding mutex M439 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M424 acquired here while holding mutex M442 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::mutex>::lock() <null> (libtf2_ros.so+0x61cf7)
+    #2 tf2::Stamped<KDL::Frame> tf2_ros::BufferInterface::transform<tf2::Stamped<KDL::Frame> >(tf2::Stamped<KDL::Frame> const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, ros::Duration) const /opt/ros/melodic/include/tf2_ros/buffer_interface.h:147 (test_kdl+0x13943)
+    #3 TfKDL_Frame_Test::TestBody() /catkin/buildtmp/tf2_kdl/src/tf2_kdl/test/test_tf2_kdl.cpp:48 (test_kdl+0xcdc5)
+    #4 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #5 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #6 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #7 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #8 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #9 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #10 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #11 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #12 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #13 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_kdl+0x11dc6)
+    #14 main /catkin/buildtmp/tf2_kdl/src/tf2_kdl/test/test_tf2_kdl.cpp:128 (test_kdl+0xf5a0)
+
+  Mutex M439 acquired here while holding mutex M424 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+ThreadSanitizer: reported 8 warnings

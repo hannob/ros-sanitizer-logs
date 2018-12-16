@@ -1,0 +1,405 @@
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=21492)
+  Cycle in lock order graph: M450 (0x7f3a11dbf0a8) => M453 (0x7f3a11dbf148) => M450
+
+  Mutex M453 acquired here while holding mutex M450 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M450 acquired here while holding mutex M453 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=21492)
+  Write of size 8 at 0x7b0800001468 by thread T4 (mutexes: write M668, write M689):
+    #0 operator delete(void*) <null> (libtsan.so.0+0x741fd)
+    #1 boost::detail::sp_counted_impl_pd<unsigned char*, boost::checked_array_deleter<unsigned char> >::~sp_counted_impl_pd() /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp:146 (test_roscpp-sim_time_test+0x2cae0)
+    #2 ros::MessageDeserializer::deserialize() <null> (libroscpp.so+0x14d705)
+
+  Previous atomic write of size 4 at 0x7b0800001468 by main thread:
+    #0 __tsan_atomic32_fetch_sub <null> (libtsan.so.0+0x68aed)
+    #1 std::__atomic_base<int>::fetch_sub(int, std::memory_order) /usr/include/c++/7/bits/atomic_base.h:524 (test_roscpp-sim_time_test+0x1f914)
+    #2 boost::detail::atomic_decrement(std::atomic<int>*) /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:35 (test_roscpp-sim_time_test+0x1f914)
+    #3 boost::detail::sp_counted_base::release() /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:108 (test_roscpp-sim_time_test+0x1fac4)
+    #4 boost::detail::shared_count::~shared_count() /usr/include/boost/smart_ptr/detail/shared_count.hpp:426 (test_roscpp-sim_time_test+0x1fcbc)
+    #5 boost::shared_array<unsigned char>::~shared_array() /usr/include/boost/smart_ptr/shared_array.hpp:45 (test_roscpp-sim_time_test+0x201b1)
+    #6 ros::SerializedMessage::~SerializedMessage() /opt/ros/melodic/include/ros/serialized_message.h:39 (test_roscpp-sim_time_test+0x2457f)
+    #7 void ros::Publisher::publish<rosgraph_msgs::Clock_<std::allocator<void> > >(rosgraph_msgs::Clock_<std::allocator<void> > const&) const /opt/ros/melodic/include/ros/publisher.h:117 (test_roscpp-sim_time_test+0x25619)
+    #8 RosClockTest::setTime(ros::Time) /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sim_time_test.cpp:61 (test_roscpp-sim_time_test+0x2244b)
+    #9 RosClockTest_SimClockTest_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sim_time_test.cpp:88 (test_roscpp-sim_time_test+0x1cf95)
+    #10 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #11 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #12 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #13 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #14 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #15 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #16 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #17 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #18 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #19 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-sim_time_test+0x1f200)
+    #20 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sim_time_test.cpp:169 (test_roscpp-sim_time_test+0x1e2e3)
+
+  Mutex M668 (0x7b4400000fe0) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::SubscriptionQueue::SubscriptionQueue(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int, bool) <null> (libroscpp.so+0x146fa8)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+  Mutex M689 (0x7b2c00005878) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::MessageDeserializer::MessageDeserializer(boost::shared_ptr<ros::SubscriptionCallbackHelper> const&, ros::SerializedMessage const&, boost::shared_ptr<std::map<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > > > const&) <null> (libroscpp.so+0x14d289)
+
+  Thread T4 (tid=21522, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: data race (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x741fd) in operator delete(void*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=21492)
+  Write of size 8 at 0x7b2c00005808 by thread T4 (mutexes: write M668):
+    #0 operator delete(void*) <null> (libtsan.so.0+0x741fd)
+    #1 ros::SubscriptionQueue::call() <null> (libroscpp.so+0x14538e)
+
+  Previous atomic write of size 4 at 0x7b2c00005808 by thread T1 (mutexes: write M599, write M608, write M680, write M685, write M683, write M661):
+    #0 __tsan_atomic32_fetch_sub <null> (libtsan.so.0+0x68aed)
+    #1 std::__atomic_base<int>::fetch_sub(int, std::memory_order) /usr/include/c++/7/bits/atomic_base.h:524 (test_roscpp-sim_time_test+0x1f914)
+    #2 boost::detail::atomic_decrement(std::atomic<int>*) /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:35 (test_roscpp-sim_time_test+0x1f914)
+    #3 boost::detail::sp_counted_base::release() /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:108 (test_roscpp-sim_time_test+0x1fac4)
+    #4 ros::Subscription::handleMessage(ros::SerializedMessage const&, bool, bool, boost::shared_ptr<std::map<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > > > const&, boost::shared_ptr<ros::PublisherLink> const&) <null> (libroscpp.so+0x13f31d)
+
+  Mutex M668 (0x7b4400000fe0) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::SubscriptionQueue::SubscriptionQueue(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int, bool) <null> (libroscpp.so+0x146fa8)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+  Mutex M599 (0x7b48000002b0) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::PollManager::PollManager() <null> (libroscpp.so+0xda4ae)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+  Mutex M608 (0x7b4400000920) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::TopicManager::TopicManager() <null> (libroscpp.so+0xd1028)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+  Mutex M680 (0x7b5000001330) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::Publication::Publication(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned long, bool, bool) <null> (libroscpp.so+0xe39ce)
+    #2 RosClockTest::RosClockTest() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sim_time_test.cpp:67 (test_roscpp-sim_time_test+0x2264b)
+    #3 RosClockTest_SimClockTest_Test::RosClockTest_SimClockTest_Test() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sim_time_test.cpp:79 (test_roscpp-sim_time_test+0x22886)
+    #4 testing::internal::TestFactoryImpl<RosClockTest_SimClockTest_Test>::CreateTest() /usr/src/googletest/googletest/include/gtest/internal/gtest-internal.h:484 (test_roscpp-sim_time_test+0x2d931)
+    #5 testing::Test* testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::TestFactoryBase, testing::Test*>(testing::internal::TestFactoryBase*, testing::Test* (testing::internal::TestFactoryBase::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9b045)
+    #6 testing::Test* testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::TestFactoryBase, testing::Test*>(testing::internal::TestFactoryBase*, testing::Test* (testing::internal::TestFactoryBase::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x920ff)
+    #7 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2649 (libgtest.so+0x6cf84)
+    #8 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #9 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #10 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #11 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #12 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #13 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-sim_time_test+0x1f200)
+    #14 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sim_time_test.cpp:169 (test_roscpp-sim_time_test+0x1e2e3)
+
+  Mutex M685 (0x7b3c000000c0) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::IntraProcessSubscriberLink::IntraProcessSubscriberLink(boost::shared_ptr<ros::Publication> const&) <null> (libroscpp.so+0xeb796)
+    #2 RosClockTest::RosClockTest() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sim_time_test.cpp:67 (test_roscpp-sim_time_test+0x2264b)
+    #3 RosClockTest_SimClockTest_Test::RosClockTest_SimClockTest_Test() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sim_time_test.cpp:79 (test_roscpp-sim_time_test+0x22886)
+    #4 testing::internal::TestFactoryImpl<RosClockTest_SimClockTest_Test>::CreateTest() /usr/src/googletest/googletest/include/gtest/internal/gtest-internal.h:484 (test_roscpp-sim_time_test+0x2d931)
+    #5 testing::Test* testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::TestFactoryBase, testing::Test*>(testing::internal::TestFactoryBase*, testing::Test* (testing::internal::TestFactoryBase::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9b045)
+    #6 testing::Test* testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::TestFactoryBase, testing::Test*>(testing::internal::TestFactoryBase*, testing::Test* (testing::internal::TestFactoryBase::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x920ff)
+    #7 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2649 (libgtest.so+0x6cf84)
+    #8 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #9 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #10 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #11 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #12 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #13 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-sim_time_test+0x1f200)
+    #14 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sim_time_test.cpp:169 (test_roscpp-sim_time_test+0x1e2e3)
+
+  Mutex M683 (0x7b48000008c0) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::IntraProcessPublisherLink::IntraProcessPublisherLink(boost::shared_ptr<ros::Subscription> const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, ros::TransportHints const&) <null> (libroscpp.so+0xec2dd)
+    #2 RosClockTest::RosClockTest() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sim_time_test.cpp:67 (test_roscpp-sim_time_test+0x2264b)
+    #3 RosClockTest_SimClockTest_Test::RosClockTest_SimClockTest_Test() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sim_time_test.cpp:79 (test_roscpp-sim_time_test+0x22886)
+    #4 testing::internal::TestFactoryImpl<RosClockTest_SimClockTest_Test>::CreateTest() /usr/src/googletest/googletest/include/gtest/internal/gtest-internal.h:484 (test_roscpp-sim_time_test+0x2d931)
+    #5 testing::Test* testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::TestFactoryBase, testing::Test*>(testing::internal::TestFactoryBase*, testing::Test* (testing::internal::TestFactoryBase::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9b045)
+    #6 testing::Test* testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::TestFactoryBase, testing::Test*>(testing::internal::TestFactoryBase*, testing::Test* (testing::internal::TestFactoryBase::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x920ff)
+    #7 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2649 (libgtest.so+0x6cf84)
+    #8 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #9 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #10 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #11 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #12 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #13 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-sim_time_test+0x1f200)
+    #14 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sim_time_test.cpp:169 (test_roscpp-sim_time_test+0x1e2e3)
+
+  Mutex M661 (0x7b58000003c0) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 boost::mutex::mutex() /usr/include/boost/thread/pthread/mutex.hpp:101 (test_roscpp-sim_time_test+0x2180a)
+    #2 ros::Subscription::Subscription(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, ros::TransportHints const&) <null> (libroscpp.so+0x13e6dc)
+    #3 __libc_start_main <null> (libc.so.6+0x21b96)
+
+  Thread T4 (tid=21522, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+  Thread T1 (tid=21515, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: data race (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x741fd) in operator delete(void*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=21492)
+  Write of size 8 at 0x7b08000014a8 by main thread (mutexes: write M608):
+    #0 operator delete(void*) <null> (libtsan.so.0+0x741fd)
+    #1 ros::PublisherLink::~PublisherLink() <null> (libroscpp.so+0x95838)
+    #2 RosClockTest_SimClockTest_Test::~RosClockTest_SimClockTest_Test() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sim_time_test.cpp:79 (test_roscpp-sim_time_test+0x2cf89)
+    #3 RosClockTest_SimClockTest_Test::~RosClockTest_SimClockTest_Test() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sim_time_test.cpp:79 (test_roscpp-sim_time_test+0x2cfbb)
+    #4 testing::Test::DeleteSelf_() /usr/src/googletest/googletest/include/gtest/gtest.h:453 (libgtest.so+0x86912)
+    #5 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #6 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #7 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2662 (libgtest.so+0x6d021)
+    #8 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #9 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #10 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #11 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #12 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #13 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-sim_time_test+0x1f200)
+    #14 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sim_time_test.cpp:169 (test_roscpp-sim_time_test+0x1e2e3)
+
+  Previous atomic write of size 4 at 0x7b08000014a8 by thread T4 (mutexes: write M668):
+    #0 __tsan_atomic32_fetch_sub <null> (libtsan.so.0+0x68aed)
+    #1 std::__atomic_base<int>::fetch_sub(int, std::memory_order) /usr/include/c++/7/bits/atomic_base.h:524 (test_roscpp-sim_time_test+0x1f914)
+    #2 boost::detail::atomic_decrement(std::atomic<int>*) /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:35 (test_roscpp-sim_time_test+0x1f914)
+    #3 boost::detail::sp_counted_base::release() /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:108 (test_roscpp-sim_time_test+0x1fac4)
+    #4 boost::detail::sp_counted_impl_pd<ros::MessageDeserializer*, boost::detail::sp_ms_deleter<ros::MessageDeserializer> >::dispose() <null> (libroscpp.so+0x1426ca)
+
+  As if synchronized via sleep:
+    #0 nanosleep <null> (libtsan.so.0+0x4dd60)
+    #1 ros::ros_wallsleep(unsigned int, unsigned int) <null> (librostime.so+0x10228)
+    #2 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #3 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #4 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #5 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #6 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #7 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #8 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #9 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #10 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #11 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-sim_time_test+0x1f200)
+    #12 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sim_time_test.cpp:169 (test_roscpp-sim_time_test+0x1e2e3)
+
+  Mutex M608 (0x7b4400000920) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::TopicManager::TopicManager() <null> (libroscpp.so+0xd1028)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+  Mutex M668 (0x7b4400000fe0) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::SubscriptionQueue::SubscriptionQueue(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int, bool) <null> (libroscpp.so+0x146fa8)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+  Thread T4 (tid=21522, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: data race (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x741fd) in operator delete(void*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=21492)
+  Write of size 1 at 0x7fffd76d5bdf by thread T5:
+    #0 sleepThread(bool*) /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sim_time_test.cpp:104 (test_roscpp-sim_time_test+0x1d381)
+    #1 void boost::_bi::list1<boost::_bi::value<bool*> >::operator()<void (*)(bool*), boost::_bi::list0>(boost::_bi::type<void>, void (*&)(bool*), boost::_bi::list0&, int) /usr/include/boost/bind/bind.hpp:259 (test_roscpp-sim_time_test+0x2dd79)
+    #2 boost::_bi::bind_t<void, void (*)(bool*), boost::_bi::list1<boost::_bi::value<bool*> > >::operator()() /usr/include/boost/bind/bind.hpp:1294 (test_roscpp-sim_time_test+0x2d9df)
+    #3 boost::detail::thread_data<boost::_bi::bind_t<void, void (*)(bool*), boost::_bi::list1<boost::_bi::value<bool*> > > >::run() /usr/include/boost/thread/detail/thread.hpp:116 (test_roscpp-sim_time_test+0x2d39a)
+    #4 <null> <null> (libboost_thread.so.1.65.1+0x11bcc)
+
+  Previous read of size 1 at 0x7fffd76d5bdf by main thread:
+    #0 Clock_sleepFromZero_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sim_time_test.cpp:116 (test_roscpp-sim_time_test+0x1d508)
+    #1 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #2 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #3 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #4 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #5 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #6 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #7 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #8 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #9 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #10 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-sim_time_test+0x1f200)
+    #11 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sim_time_test.cpp:169 (test_roscpp-sim_time_test+0x1e2e3)
+
+  As if synchronized via sleep:
+    #0 nanosleep <null> (libtsan.so.0+0x4dd60)
+    #1 ros::ros_wallsleep(unsigned int, unsigned int) <null> (librostime.so+0x10228)
+    #2 void boost::_bi::list1<boost::_bi::value<bool*> >::operator()<void (*)(bool*), boost::_bi::list0>(boost::_bi::type<void>, void (*&)(bool*), boost::_bi::list0&, int) /usr/include/boost/bind/bind.hpp:259 (test_roscpp-sim_time_test+0x2dd79)
+    #3 boost::_bi::bind_t<void, void (*)(bool*), boost::_bi::list1<boost::_bi::value<bool*> > >::operator()() /usr/include/boost/bind/bind.hpp:1294 (test_roscpp-sim_time_test+0x2d9df)
+    #4 boost::detail::thread_data<boost::_bi::bind_t<void, void (*)(bool*), boost::_bi::list1<boost::_bi::value<bool*> > > >::run() /usr/include/boost/thread/detail/thread.hpp:116 (test_roscpp-sim_time_test+0x2d39a)
+    #5 <null> <null> (libboost_thread.so.1.65.1+0x11bcc)
+
+  Location is stack of main thread.
+
+  Location is global '<null>' at 0x000000000000 ([stack]+0x00000001fbdf)
+
+  Thread T5 (tid=21748, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 boost::thread::thread<boost::_bi::bind_t<void, void (*)(bool*), boost::_bi::list1<boost::_bi::value<bool*> > > >(boost::_bi::bind_t<void, void (*)(bool*), boost::_bi::list1<boost::_bi::value<bool*> > >&&) /usr/include/boost/thread/detail/thread.hpp:273 (test_roscpp-sim_time_test+0x25e3a)
+    #3 Clock_sleepFromZero_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sim_time_test.cpp:111 (test_roscpp-sim_time_test+0x1d46f)
+    #4 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #5 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #6 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #7 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #8 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #9 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #10 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #11 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #12 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #13 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-sim_time_test+0x1f200)
+    #14 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sim_time_test.cpp:169 (test_roscpp-sim_time_test+0x1e2e3)
+
+SUMMARY: ThreadSanitizer: data race /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sim_time_test.cpp:104 in sleepThread(bool*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=21492)
+  Read of size 1 at 0x7fffd76d5bdf by main thread:
+    #0 Clock_sleepFromZero_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sim_time_test.cpp:116 (test_roscpp-sim_time_test+0x1d508)
+    #1 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #2 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #3 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #4 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #5 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #6 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #7 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #8 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #9 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #10 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-sim_time_test+0x1f200)
+    #11 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sim_time_test.cpp:169 (test_roscpp-sim_time_test+0x1e2e3)
+
+  Previous write of size 1 at 0x7fffd76d5bdf by thread T5:
+    #0 sleepThread(bool*) /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sim_time_test.cpp:104 (test_roscpp-sim_time_test+0x1d381)
+    #1 void boost::_bi::list1<boost::_bi::value<bool*> >::operator()<void (*)(bool*), boost::_bi::list0>(boost::_bi::type<void>, void (*&)(bool*), boost::_bi::list0&, int) /usr/include/boost/bind/bind.hpp:259 (test_roscpp-sim_time_test+0x2dd79)
+    #2 boost::_bi::bind_t<void, void (*)(bool*), boost::_bi::list1<boost::_bi::value<bool*> > >::operator()() /usr/include/boost/bind/bind.hpp:1294 (test_roscpp-sim_time_test+0x2d9df)
+    #3 boost::detail::thread_data<boost::_bi::bind_t<void, void (*)(bool*), boost::_bi::list1<boost::_bi::value<bool*> > > >::run() /usr/include/boost/thread/detail/thread.hpp:116 (test_roscpp-sim_time_test+0x2d39a)
+    #4 <null> <null> (libboost_thread.so.1.65.1+0x11bcc)
+
+  As if synchronized via sleep:
+    #0 nanosleep <null> (libtsan.so.0+0x4dd60)
+    #1 ros::ros_wallsleep(unsigned int, unsigned int) <null> (librostime.so+0x10228)
+    #2 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #3 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #4 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #5 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #6 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #7 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #8 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #9 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #10 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #11 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-sim_time_test+0x1f200)
+    #12 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sim_time_test.cpp:169 (test_roscpp-sim_time_test+0x1e2e3)
+
+  Location is stack of main thread.
+
+  Location is global '<null>' at 0x000000000000 ([stack]+0x00000001fbdf)
+
+  Thread T5 (tid=21748, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 boost::thread::thread<boost::_bi::bind_t<void, void (*)(bool*), boost::_bi::list1<boost::_bi::value<bool*> > > >(boost::_bi::bind_t<void, void (*)(bool*), boost::_bi::list1<boost::_bi::value<bool*> > >&&) /usr/include/boost/thread/detail/thread.hpp:273 (test_roscpp-sim_time_test+0x25e3a)
+    #3 Clock_sleepFromZero_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sim_time_test.cpp:111 (test_roscpp-sim_time_test+0x1d46f)
+    #4 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #5 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #6 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #7 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #8 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #9 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #10 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #11 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #12 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #13 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-sim_time_test+0x1f200)
+    #14 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sim_time_test.cpp:169 (test_roscpp-sim_time_test+0x1e2e3)
+
+SUMMARY: ThreadSanitizer: data race /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sim_time_test.cpp:116 in Clock_sleepFromZero_Test::TestBody()
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=21492)
+  Write of size 1 at 0x7fffd76d5bbf by thread T6:
+    #0 waitThread(bool*) /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sim_time_test.cpp:137 (test_roscpp-sim_time_test+0x1daa7)
+    #1 void boost::_bi::list1<boost::_bi::value<bool*> >::operator()<void (*)(bool*), boost::_bi::list0>(boost::_bi::type<void>, void (*&)(bool*), boost::_bi::list0&, int) /usr/include/boost/bind/bind.hpp:259 (test_roscpp-sim_time_test+0x2dd79)
+    #2 boost::_bi::bind_t<void, void (*)(bool*), boost::_bi::list1<boost::_bi::value<bool*> > >::operator()() /usr/include/boost/bind/bind.hpp:1294 (test_roscpp-sim_time_test+0x2d9df)
+    #3 boost::detail::thread_data<boost::_bi::bind_t<void, void (*)(bool*), boost::_bi::list1<boost::_bi::value<bool*> > > >::run() /usr/include/boost/thread/detail/thread.hpp:116 (test_roscpp-sim_time_test+0x2d39a)
+    #4 <null> <null> (libboost_thread.so.1.65.1+0x11bcc)
+
+  Previous read of size 1 at 0x7fffd76d5bbf by main thread:
+    #0 Clock_waitForValid_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sim_time_test.cpp:156 (test_roscpp-sim_time_test+0x1df19)
+    #1 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #2 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #3 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #4 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #5 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #6 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #7 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #8 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #9 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #10 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-sim_time_test+0x1f200)
+    #11 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sim_time_test.cpp:169 (test_roscpp-sim_time_test+0x1e2e3)
+
+  As if synchronized via sleep:
+    #0 nanosleep <null> (libtsan.so.0+0x4dd60)
+    #1 ros::ros_wallsleep(unsigned int, unsigned int) <null> (librostime.so+0x10228)
+    #2 void boost::_bi::list1<boost::_bi::value<bool*> >::operator()<void (*)(bool*), boost::_bi::list0>(boost::_bi::type<void>, void (*&)(bool*), boost::_bi::list0&, int) /usr/include/boost/bind/bind.hpp:259 (test_roscpp-sim_time_test+0x2dd79)
+    #3 boost::_bi::bind_t<void, void (*)(bool*), boost::_bi::list1<boost::_bi::value<bool*> > >::operator()() /usr/include/boost/bind/bind.hpp:1294 (test_roscpp-sim_time_test+0x2d9df)
+    #4 boost::detail::thread_data<boost::_bi::bind_t<void, void (*)(bool*), boost::_bi::list1<boost::_bi::value<bool*> > > >::run() /usr/include/boost/thread/detail/thread.hpp:116 (test_roscpp-sim_time_test+0x2d39a)
+    #5 <null> <null> (libboost_thread.so.1.65.1+0x11bcc)
+
+  Location is stack of main thread.
+
+  Location is global '<null>' at 0x000000000000 ([stack]+0x00000001fbbf)
+
+  Thread T6 (tid=23511, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 boost::thread::thread<boost::_bi::bind_t<void, void (*)(bool*), boost::_bi::list1<boost::_bi::value<bool*> > > >(boost::_bi::bind_t<void, void (*)(bool*), boost::_bi::list1<boost::_bi::value<bool*> > >&&) /usr/include/boost/thread/detail/thread.hpp:273 (test_roscpp-sim_time_test+0x25e3a)
+    #3 Clock_waitForValid_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sim_time_test.cpp:151 (test_roscpp-sim_time_test+0x1ddb2)
+    #4 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #5 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #6 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #7 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #8 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #9 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #10 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #11 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #12 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #13 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-sim_time_test+0x1f200)
+    #14 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sim_time_test.cpp:169 (test_roscpp-sim_time_test+0x1e2e3)
+
+SUMMARY: ThreadSanitizer: data race /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sim_time_test.cpp:137 in waitThread(bool*)
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=21492)
+  Cycle in lock order graph: M607 (0x7b44000008e0) => M608 (0x7b4400000920) => M607
+
+  Mutex M608 acquired here while holding mutex M607 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M607 acquired here while holding mutex M608 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::mutex>::lock() <null> (libroscpp.so+0xa52a7)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+ThreadSanitizer: reported 8 warnings

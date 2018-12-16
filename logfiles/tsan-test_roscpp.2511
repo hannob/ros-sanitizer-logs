@@ -1,0 +1,295 @@
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=2511)
+  Cycle in lock order graph: M448 (0x7f290dfe60a8) => M451 (0x7f290dfe6148) => M448
+
+  Mutex M451 acquired here while holding mutex M448 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M448 acquired here while holding mutex M451 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=2511)
+  Write of size 8 at 0x7b0800002348 by main thread (mutexes: write M657, write M716):
+    #0 operator delete(void*) <null> (libtsan.so.0+0x741fd)
+    #1 boost::detail::sp_counted_impl_pd<unsigned char*, boost::checked_array_deleter<unsigned char> >::~sp_counted_impl_pd() /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp:146 (test_roscpp-pub_sub+0x2e35a)
+    #2 ros::MessageDeserializer::deserialize() <null> (libroscpp.so+0x14d705)
+    #3 __libc_start_main <null> (libc.so.6+0x21b96)
+
+  Previous atomic write of size 4 at 0x7b0800002348 by thread T1 (mutexes: write M669, write M670):
+    #0 __tsan_atomic32_fetch_sub <null> (libtsan.so.0+0x68aed)
+    #1 std::__atomic_base<int>::fetch_sub(int, std::memory_order) /usr/include/c++/7/bits/atomic_base.h:524 (test_roscpp-pub_sub+0x2053e)
+    #2 boost::detail::atomic_decrement(std::atomic<int>*) /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:35 (test_roscpp-pub_sub+0x2053e)
+    #3 boost::detail::sp_counted_base::release() /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:108 (test_roscpp-pub_sub+0x206ee)
+    #4 ros::Connection::readTransport() <null> (libroscpp.so+0x9f87d)
+
+  Mutex M657 (0x7b4400000c20) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::SubscriptionQueue::SubscriptionQueue(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int, bool) <null> (libroscpp.so+0x146fa8)
+    #2 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/pub_sub.cpp:76 (test_roscpp-pub_sub+0x1fa72)
+
+  Mutex M716 (0x7b2c00010038) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::MessageDeserializer::MessageDeserializer(boost::shared_ptr<ros::SubscriptionCallbackHelper> const&, ros::SerializedMessage const&, boost::shared_ptr<std::map<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > > > const&) <null> (libroscpp.so+0x14d289)
+
+  Mutex M669 (0x7b5400010240) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::TransportTCP::TransportTCP(ros::PollSet*, int) <null> (libroscpp.so+0x112d4f)
+
+  Mutex M670 (0x7b50000202b0) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 boost::recursive_mutex::recursive_mutex() <null> (libroscpp.so+0xa47ed)
+
+  Thread T1 (tid=2531, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: data race (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x741fd) in operator delete(void*)
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=2511)
+  Cycle in lock order graph: M687 (0x7b540001fec0) => M585 (0x7b4400000420) => M687
+
+  Mutex M585 acquired here while holding mutex M687 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M687 acquired here while holding mutex M585 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::TransportTCP::enableWrite() <null> (libroscpp.so+0x113147)
+
+  Thread T1 (tid=2531, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=2511)
+  Write of size 1 at 0x7b50000202b0 by thread T2 (mutexes: write M564, write M651):
+    #0 pthread_mutex_destroy <null> (libtsan.so.0+0x2c709)
+    #1 ros::Connection::~Connection() <null> (libroscpp.so+0xa2d75)
+    #2 ros::TransportPublisherLink::~TransportPublisherLink() <null> (libroscpp.so+0x11ec17)
+
+  Previous atomic read of size 1 at 0x7b50000202b0 by thread T1 (mutexes: write M669, write M188723817923871408):
+    #0 pthread_mutex_unlock <null> (libtsan.so.0+0x3fc59)
+    #1 ros::Connection::readTransport() <null> (libroscpp.so+0x9f691)
+
+  Location is heap block of size 472 at 0x7b5000020200 allocated by thread T2:
+    #0 operator new(unsigned long) <null> (libtsan.so.0+0x73f0a)
+    #1 boost::detail::sp_if_not_array<ros::Connection>::type boost::make_shared<ros::Connection>() <null> (libroscpp.so+0x108134)
+
+  Mutex M564 (0x7b5800000228) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::XMLRPCManager::XMLRPCManager() <null> (libroscpp.so+0xc1fc5)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+  Mutex M651 (0x7b5800000408) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 boost::mutex::mutex() <null> (libroscpp.so+0x12149e)
+    #2 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/pub_sub.cpp:76 (test_roscpp-pub_sub+0x1fa72)
+
+  Mutex M669 (0x7b5400010240) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::TransportTCP::TransportTCP(ros::PollSet*, int) <null> (libroscpp.so+0x112d4f)
+
+  Mutex M188723817923871408 is already destroyed.
+
+  Thread T2 (tid=2533, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+  Thread T1 (tid=2531, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: data race (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x2c709) in __interceptor_pthread_mutex_destroy
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=2511)
+  Write of size 1 at 0x7b5400010240 by thread T2 (mutexes: write M564, write M651):
+    #0 pthread_mutex_destroy <null> (libtsan.so.0+0x2c709)
+    #1 ros::TransportTCP::~TransportTCP() <null> (libroscpp.so+0x111dfd)
+    #2 ros::Connection::~Connection() <null> (libroscpp.so+0xa2daf)
+    #3 ros::TransportPublisherLink::~TransportPublisherLink() <null> (libroscpp.so+0x11ec17)
+
+  Previous atomic read of size 1 at 0x7b5400010240 by thread T1 (mutexes: write M188442360126964288):
+    #0 pthread_mutex_unlock <null> (libtsan.so.0+0x3fc59)
+    #1 ros::TransportTCP::socketUpdate(int) <null> (libroscpp.so+0x119407)
+
+  Location is heap block of size 640 at 0x7b5400010180 allocated by thread T2:
+    #0 operator new(unsigned long) <null> (libtsan.so.0+0x73f0a)
+    #1 boost::detail::sp_if_not_array<ros::TransportTCP>::type boost::make_shared<ros::TransportTCP, ros::PollSet*>(ros::PollSet*&&) <null> (libroscpp.so+0x107dd7)
+
+  Mutex M564 (0x7b5800000228) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::XMLRPCManager::XMLRPCManager() <null> (libroscpp.so+0xc1fc5)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+  Mutex M651 (0x7b5800000408) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 boost::mutex::mutex() <null> (libroscpp.so+0x12149e)
+    #2 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/pub_sub.cpp:76 (test_roscpp-pub_sub+0x1fa72)
+
+  Mutex M188442360126964288 is already destroyed.
+
+  Thread T2 (tid=2533, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+  Thread T1 (tid=2531, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: data race (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x2c709) in __interceptor_pthread_mutex_destroy
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=2511)
+  Write of size 8 at 0x7b0800003108 by thread T2 (mutexes: write M564, write M651):
+    #0 operator delete(void*) <null> (libtsan.so.0+0x741fd)
+    #1 ros::PublisherLink::~PublisherLink() <null> (libroscpp.so+0x95838)
+
+  Previous atomic write of size 4 at 0x7b0800003108 by main thread (mutexes: write M657):
+    #0 __tsan_atomic32_fetch_sub <null> (libtsan.so.0+0x68aed)
+    #1 std::__atomic_base<int>::fetch_sub(int, std::memory_order) /usr/include/c++/7/bits/atomic_base.h:524 (test_roscpp-pub_sub+0x2053e)
+    #2 boost::detail::atomic_decrement(std::atomic<int>*) /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:35 (test_roscpp-pub_sub+0x2053e)
+    #3 boost::detail::sp_counted_base::release() /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:108 (test_roscpp-pub_sub+0x206ee)
+    #4 boost::detail::sp_counted_impl_pd<ros::MessageDeserializer*, boost::detail::sp_ms_deleter<ros::MessageDeserializer> >::dispose() <null> (libroscpp.so+0x1426ca)
+    #5 __libc_start_main <null> (libc.so.6+0x21b96)
+
+  Mutex M564 (0x7b5800000228) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::XMLRPCManager::XMLRPCManager() <null> (libroscpp.so+0xc1fc5)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+  Mutex M651 (0x7b5800000408) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 boost::mutex::mutex() <null> (libroscpp.so+0x12149e)
+    #2 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/pub_sub.cpp:76 (test_roscpp-pub_sub+0x1fa72)
+
+  Mutex M657 (0x7b4400000c20) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::SubscriptionQueue::SubscriptionQueue(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int, bool) <null> (libroscpp.so+0x146fa8)
+    #2 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/pub_sub.cpp:76 (test_roscpp-pub_sub+0x1fa72)
+
+  Thread T2 (tid=2533, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: data race (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x741fd) in operator delete(void*)
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=2511)
+  Cycle in lock order graph: M587 (0x7b44000004a8) => M576 (0x7b48000002b0) => M587
+
+  Mutex M576 acquired here while holding mutex M587 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::PollManager::addPollThreadListener(boost::function<void ()> const&) <null> (libroscpp.so+0xdaab2)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M587 acquired here while holding mutex M576 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::mutex>::lock() <null> (libroscpp.so+0xa52a7)
+
+  Thread T1 (tid=2531, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=2511)
+  Cycle in lock order graph: M584 (0x7b44000003e0) => M585 (0x7b4400000420) => M584
+
+  Mutex M585 acquired here while holding mutex M584 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/pub_sub.cpp:76 (test_roscpp-pub_sub+0x1fa72)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M584 acquired here while holding mutex M585 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::mutex>::lock() <null> (libroscpp.so+0xa52a7)
+
+  Thread T1 (tid=2531, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=2511)
+  Cycle in lock order graph: M644 (0x7b5000000f30) => M687 (0x7b540001fec0) => M585 (0x7b4400000420) => M644
+
+  Mutex M687 acquired here while holding mutex M644 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::TransportTCP::enableWrite() <null> (libroscpp.so+0x113147)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M585 acquired here while holding mutex M687 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+
+  Mutex M644 acquired here while holding mutex M585 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::Publication::getNumSubscribers() <null> (libroscpp.so+0xe164f)
+    #2 void boost::_bi::list2<boost::arg<1>, boost::_bi::value<ros::Publisher> >::operator()<void (*)(boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&, ros::Publisher), boost::_bi::rrlist1<boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&> >(boost::_bi::type<void>, void (*&)(boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&, ros::Publisher), boost::_bi::rrlist1<boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&>&, int) /usr/include/boost/bind/bind.hpp:319 (test_roscpp-pub_sub+0x2a668)
+    #3 void boost::_bi::bind_t<void, void (*)(boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&, ros::Publisher), boost::_bi::list2<boost::arg<1>, boost::_bi::value<ros::Publisher> > >::operator()<boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&>(boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&) /usr/include/boost/bind/bind.hpp:1306 (test_roscpp-pub_sub+0x2942a)
+    #4 boost::detail::function::void_function_obj_invoker1<boost::_bi::bind_t<void, void (*)(boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&, ros::Publisher), boost::_bi::list2<boost::arg<1>, boost::_bi::value<ros::Publisher> > >, void, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&>::invoke(boost::detail::function::function_buffer&, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&) /usr/include/boost/function/function_template.hpp:159 (test_roscpp-pub_sub+0x27bd2)
+    #5 boost::function1<void, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&>::operator()(boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&) const /usr/include/boost/function/function_template.hpp:759 (test_roscpp-pub_sub+0x2cfd8)
+    #6 boost::detail::function::void_function_obj_invoker1<boost::function<void (boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&)>, void, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> >::invoke(boost::detail::function::function_buffer&, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const>) /usr/include/boost/function/function_template.hpp:159 (test_roscpp-pub_sub+0x2bc24)
+    #7 boost::function1<void, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> >::operator()(boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const>) const /usr/include/boost/function/function_template.hpp:759 (test_roscpp-pub_sub+0x2f777)
+    #8 ros::SubscriptionCallbackHelperT<boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&, void>::call(ros::SubscriptionCallbackHelperCallParams&) /opt/ros/melodic/include/ros/subscription_callback_helper.h:144 (test_roscpp-pub_sub+0x2edfc)
+    #9 ros::SubscriptionQueue::call() <null> (libroscpp.so+0x1450e1)
+    #10 __libc_start_main <null> (libc.so.6+0x21b96)
+
+  Thread T1 (tid=2531, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=2511)
+  Cycle in lock order graph: M687 (0x7b540001fec0) => M585 (0x7b4400000420) => M687
+
+  Mutex M585 acquired here while holding mutex M687 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M687 acquired here while holding mutex M585 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::TransportTCP::enableWrite() <null> (libroscpp.so+0x113147)
+
+  Thread T1 (tid=2531, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+ThreadSanitizer: reported 10 warnings

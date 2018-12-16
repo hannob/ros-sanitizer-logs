@@ -1,0 +1,189 @@
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=9359)
+  Cycle in lock order graph: M447 (0x7f7f41ce50a8) => M450 (0x7f7f41ce5148) => M447
+
+  Mutex M450 acquired here while holding mutex M447 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M447 acquired here while holding mutex M450 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=9359)
+  Write of size 8 at 0x7b2c00005808 by main thread (mutexes: write M677):
+    #0 operator delete(void*) <null> (libtsan.so.0+0x741fd)
+    #1 ros::SubscriptionQueue::call() <null> (libroscpp.so+0x14538e)
+    #2 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9af01)
+    #3 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91dbf)
+    #4 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3ed)
+    #5 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfc7)
+    #6 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d962)
+    #7 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76665)
+    #8 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9ca06)
+    #9 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933e1)
+    #10 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74af3)
+    #11 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (message_filters-test_subscriber+0x5101a)
+    #12 main /catkin/buildtmp/message_filters/src/message_filters/test/test_subscriber.cpp:206 (message_filters-test_subscriber+0x4ff64)
+
+  Previous atomic write of size 4 at 0x7b2c00005808 by thread T1 (mutexes: write M598, write M607, write M683, write M688, write M686, write M670):
+    #0 __tsan_atomic32_fetch_sub <null> (libtsan.so.0+0x68aed)
+    #1 std::__atomic_base<int>::fetch_sub(int, std::memory_order) /usr/include/c++/7/bits/atomic_base.h:524 (message_filters-test_subscriber+0x51506)
+    #2 boost::detail::atomic_decrement(std::atomic<int>*) /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:35 (message_filters-test_subscriber+0x51506)
+    #3 boost::detail::sp_counted_base::release() /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:108 (message_filters-test_subscriber+0x516b6)
+    #4 ros::Subscription::handleMessage(ros::SerializedMessage const&, bool, bool, boost::shared_ptr<std::map<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > > > const&, boost::shared_ptr<ros::PublisherLink> const&) <null> (libroscpp.so+0x13f31d)
+
+  As if synchronized via sleep:
+    #0 nanosleep <null> (libtsan.so.0+0x4dd60)
+    #1 ros::ros_wallsleep(unsigned int, unsigned int) <null> (librostime.so+0x10228)
+    #2 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9af01)
+    #3 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91dbf)
+    #4 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3ed)
+    #5 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfc7)
+    #6 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d962)
+    #7 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76665)
+    #8 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9ca06)
+    #9 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933e1)
+    #10 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74af3)
+    #11 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (message_filters-test_subscriber+0x5101a)
+    #12 main /catkin/buildtmp/message_filters/src/message_filters/test/test_subscriber.cpp:206 (message_filters-test_subscriber+0x4ff64)
+
+  Mutex M677 (0x7b44000009a0) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::SubscriptionQueue::SubscriptionQueue(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int, bool) <null> (libroscpp.so+0x146fa8)
+    #2 message_filters::Subscriber<roscpp::Logger_<std::allocator<void> > >::Subscriber(ros::NodeHandle&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned int, ros::TransportHints const&, ros::CallbackQueueInterface*) /catkin/buildtmp/message_filters/src/message_filters/include/message_filters/subscriber.h:114 (message_filters-test_subscriber+0x559ec)
+    #3 Subscriber_simple_Test::TestBody() /catkin/buildtmp/message_filters/src/message_filters/test/test_subscriber.cpp:66 (message_filters-test_subscriber+0x4c671)
+    #4 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9af01)
+    #5 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91dbf)
+    #6 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3ed)
+    #7 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfc7)
+    #8 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d962)
+    #9 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76665)
+    #10 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9ca06)
+    #11 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933e1)
+    #12 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74af3)
+    #13 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (message_filters-test_subscriber+0x5101a)
+    #14 main /catkin/buildtmp/message_filters/src/message_filters/test/test_subscriber.cpp:206 (message_filters-test_subscriber+0x4ff64)
+
+  Mutex M598 (0x7b48000002b0) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::PollManager::PollManager() <null> (libroscpp.so+0xda4ae)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+  Mutex M607 (0x7b4400000ba0) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::TopicManager::TopicManager() <null> (libroscpp.so+0xd1028)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+  Mutex M683 (0x7b5000001330) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::Publication::Publication(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned long, bool, bool) <null> (libroscpp.so+0xe39ce)
+    #2 Subscriber_simple_Test::TestBody() /catkin/buildtmp/message_filters/src/message_filters/test/test_subscriber.cpp:68 (message_filters-test_subscriber+0x4c767)
+    #3 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9af01)
+    #4 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91dbf)
+    #5 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3ed)
+    #6 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfc7)
+    #7 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d962)
+    #8 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76665)
+    #9 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9ca06)
+    #10 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933e1)
+    #11 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74af3)
+    #12 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (message_filters-test_subscriber+0x5101a)
+    #13 main /catkin/buildtmp/message_filters/src/message_filters/test/test_subscriber.cpp:206 (message_filters-test_subscriber+0x4ff64)
+
+  Mutex M688 (0x7b3c000001b0) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::IntraProcessSubscriberLink::IntraProcessSubscriberLink(boost::shared_ptr<ros::Publication> const&) <null> (libroscpp.so+0xeb796)
+    #2 Subscriber_simple_Test::TestBody() /catkin/buildtmp/message_filters/src/message_filters/test/test_subscriber.cpp:68 (message_filters-test_subscriber+0x4c767)
+    #3 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9af01)
+    #4 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91dbf)
+    #5 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3ed)
+    #6 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfc7)
+    #7 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d962)
+    #8 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76665)
+    #9 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9ca06)
+    #10 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933e1)
+    #11 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74af3)
+    #12 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (message_filters-test_subscriber+0x5101a)
+    #13 main /catkin/buildtmp/message_filters/src/message_filters/test/test_subscriber.cpp:206 (message_filters-test_subscriber+0x4ff64)
+
+  Mutex M686 (0x7b48000008c0) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::IntraProcessPublisherLink::IntraProcessPublisherLink(boost::shared_ptr<ros::Subscription> const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, ros::TransportHints const&) <null> (libroscpp.so+0xec2dd)
+    #2 Subscriber_simple_Test::TestBody() /catkin/buildtmp/message_filters/src/message_filters/test/test_subscriber.cpp:68 (message_filters-test_subscriber+0x4c767)
+    #3 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9af01)
+    #4 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91dbf)
+    #5 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3ed)
+    #6 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfc7)
+    #7 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d962)
+    #8 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76665)
+    #9 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9ca06)
+    #10 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933e1)
+    #11 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74af3)
+    #12 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (message_filters-test_subscriber+0x5101a)
+    #13 main /catkin/buildtmp/message_filters/src/message_filters/test/test_subscriber.cpp:206 (message_filters-test_subscriber+0x4ff64)
+
+  Mutex M670 (0x7b58000003c0) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 boost::mutex::mutex() /usr/include/boost/thread/pthread/mutex.hpp:101 (message_filters-test_subscriber+0x53762)
+    #2 ros::Subscription::Subscription(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, ros::TransportHints const&) <null> (libroscpp.so+0x13e6dc)
+    #3 message_filters::Subscriber<roscpp::Logger_<std::allocator<void> > >::Subscriber(ros::NodeHandle&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned int, ros::TransportHints const&, ros::CallbackQueueInterface*) /catkin/buildtmp/message_filters/src/message_filters/include/message_filters/subscriber.h:114 (message_filters-test_subscriber+0x559ec)
+    #4 Subscriber_simple_Test::TestBody() /catkin/buildtmp/message_filters/src/message_filters/test/test_subscriber.cpp:66 (message_filters-test_subscriber+0x4c671)
+    #5 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9af01)
+    #6 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91dbf)
+    #7 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3ed)
+    #8 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfc7)
+    #9 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d962)
+    #10 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76665)
+    #11 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9ca06)
+    #12 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933e1)
+    #13 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74af3)
+    #14 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (message_filters-test_subscriber+0x5101a)
+    #15 main /catkin/buildtmp/message_filters/src/message_filters/test/test_subscriber.cpp:206 (message_filters-test_subscriber+0x4ff64)
+
+  Thread T1 (tid=9393, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: data race (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x741fd) in operator delete(void*)
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=9359)
+  Cycle in lock order graph: M606 (0x7b4400000b60) => M607 (0x7b4400000ba0) => M606
+
+  Mutex M607 acquired here while holding mutex M606 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 message_filters::Subscriber<roscpp::Logger_<std::allocator<void> > >::Subscriber(ros::NodeHandle&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned int, ros::TransportHints const&, ros::CallbackQueueInterface*) /catkin/buildtmp/message_filters/src/message_filters/include/message_filters/subscriber.h:114 (message_filters-test_subscriber+0x559ec)
+    #3 Subscriber_simple_Test::TestBody() /catkin/buildtmp/message_filters/src/message_filters/test/test_subscriber.cpp:66 (message_filters-test_subscriber+0x4c671)
+    #4 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9af01)
+    #5 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91dbf)
+    #6 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3ed)
+    #7 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfc7)
+    #8 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d962)
+    #9 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76665)
+    #10 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9ca06)
+    #11 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933e1)
+    #12 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74af3)
+    #13 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (message_filters-test_subscriber+0x5101a)
+    #14 main /catkin/buildtmp/message_filters/src/message_filters/test/test_subscriber.cpp:206 (message_filters-test_subscriber+0x4ff64)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M606 acquired here while holding mutex M607 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::posix::pthread_mutex_lock(pthread_mutex_t*) /usr/include/boost/thread/pthread/mutex.hpp:62 (message_filters-test_subscriber+0x5389f)
+    #2 boost::mutex::lock() /usr/include/boost/thread/pthread/mutex.hpp:116 (message_filters-test_subscriber+0x5389f)
+    #3 boost::unique_lock<boost::mutex>::lock() /usr/include/boost/thread/lock_types.hpp:346 (message_filters-test_subscriber+0x6414c)
+    #4 ros::TopicManager::shutdown() <null> (libroscpp.so+0xd278a)
+    #5 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+ThreadSanitizer: reported 3 warnings

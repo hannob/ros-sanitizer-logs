@@ -1,0 +1,421 @@
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=29136)
+  Cycle in lock order graph: M542 (0x7f98c3e190a8) => M545 (0x7f98c3e19148) => M542
+
+  Mutex M545 acquired here while holding mutex M542 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M542 acquired here while holding mutex M545 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=29136)
+  Cycle in lock order graph: M1443 (0x7b50000304b0) => M1442 (0x7b5400020140) => M1443
+
+  Mutex M1442 acquired here while holding mutex M1443 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::TransportTCP::read(unsigned char*, unsigned int) <null> (libroscpp.so+0x113801)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M1443 acquired here while holding mutex M1442 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+
+  Thread T1 (tid=29194, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 main /catkin/buildtmp/diagnostic_aggregator/src/diagnostic_aggregator/src/aggregator_node.cpp:48 (aggregator_node+0x988a)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=29136)
+  Cycle in lock order graph: M1481 (0x7b50000304b0) => M1480 (0x7b5400020140) => M1481
+
+  Mutex M1480 acquired here while holding mutex M1481 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::TransportTCP::read(unsigned char*, unsigned int) <null> (libroscpp.so+0x113801)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M1481 acquired here while holding mutex M1480 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+
+  Thread T1 (tid=29194, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 main /catkin/buildtmp/diagnostic_aggregator/src/diagnostic_aggregator/src/aggregator_node.cpp:48 (aggregator_node+0x988a)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=29136)
+  Cycle in lock order graph: M1480 (0x7b5400020140) => M1482 (0x7b5000030518) => M1480
+
+  Mutex M1482 acquired here while holding mutex M1480 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::mutex>::lock() <null> (libroscpp.so+0xa52a7)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M1480 acquired here while holding mutex M1482 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::TransportTCP::disableWrite() <null> (libroscpp.so+0x112fc7)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+  Thread T1 (tid=29194, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 main /catkin/buildtmp/diagnostic_aggregator/src/diagnostic_aggregator/src/aggregator_node.cpp:48 (aggregator_node+0x988a)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=29136)
+  Write of size 8 at 0x7b08000036c8 by main thread (mutexes: write M1547, write M1665):
+    #0 operator delete(void*) <null> (libtsan.so.0+0x741fd)
+    #1 ros::MessageDeserializer::deserialize() <null> (libroscpp.so+0x14d705)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+  Previous atomic write of size 4 at 0x7b08000036c8 by thread T1 (mutexes: write M1639, write M1640):
+    #0 __tsan_atomic32_fetch_sub <null> (libtsan.so.0+0x68aed)
+    #1 std::__atomic_base<int>::fetch_sub(int, std::memory_order) /usr/include/c++/7/bits/atomic_base.h:524 (aggregator_node+0xa7c6)
+    #2 boost::detail::atomic_decrement(std::atomic<int>*) /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:35 (aggregator_node+0xa7c6)
+    #3 boost::detail::sp_counted_base::release() /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:108 (aggregator_node+0xa976)
+    #4 ros::Connection::readTransport() <null> (libroscpp.so+0x9f87d)
+
+  As if synchronized via sleep:
+    #0 nanosleep <null> (libtsan.so.0+0x4dd60)
+    #1 ros::ros_wallsleep(unsigned int, unsigned int) <null> (librostime.so+0x10228)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+  Mutex M1547 (0x7b4400001c60) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::SubscriptionQueue::SubscriptionQueue(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int, bool) <null> (libroscpp.so+0x146fa8)
+    #2 boost::_mfi::mf2<bool, diagnostic_aggregator::Aggregator, diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&>::operator()(diagnostic_aggregator::Aggregator*, diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&) const /usr/include/boost/bind/mem_fn_template.hpp:280 (libdiagnostic_aggregator.so+0x12e33a)
+    #3 bool boost::_bi::list3<boost::_bi::value<diagnostic_aggregator::Aggregator*>, boost::arg<1>, boost::arg<2> >::operator()<bool, boost::_mfi::mf2<bool, diagnostic_aggregator::Aggregator, diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&>, boost::_bi::rrlist2<diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&> >(boost::_bi::type<bool>, boost::_mfi::mf2<bool, diagnostic_aggregator::Aggregator, diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&>&, boost::_bi::rrlist2<diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&>&, long) /usr/include/boost/bind/bind.hpp:388 (libdiagnostic_aggregator.so+0x12b9d8)
+    #4 bool boost::_bi::bind_t<bool, boost::_mfi::mf2<bool, diagnostic_aggregator::Aggregator, diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&>, boost::_bi::list3<boost::_bi::value<diagnostic_aggregator::Aggregator*>, boost::arg<1>, boost::arg<2> > >::operator()<diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&>(diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&) /usr/include/boost/bind/bind.hpp:1318 (libdiagnostic_aggregator.so+0x1292f4)
+    #5 boost::detail::function::function_obj_invoker2<boost::_bi::bind_t<bool, boost::_mfi::mf2<bool, diagnostic_aggregator::Aggregator, diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&>, boost::_bi::list3<boost::_bi::value<diagnostic_aggregator::Aggregator*>, boost::arg<1>, boost::arg<2> > >, bool, diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&>::invoke(boost::detail::function::function_buffer&, diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&) /usr/include/boost/function/function_template.hpp:138 (libdiagnostic_aggregator.so+0x126a42)
+    #6 boost::function2<bool, diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&>::operator()(diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&) const /usr/include/boost/function/function_template.hpp:760 (libdiagnostic_aggregator.so+0x134b33)
+    #7 ros::ServiceSpec<diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> > >::call(boost::function<bool (diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&)> const&, ros::ServiceSpecCallParams<diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> > >&) /opt/ros/melodic/include/ros/service_callback_helper.h:125 (libdiagnostic_aggregator.so+0x133d1e)
+    #8 ros::ServiceCallbackHelperT<ros::ServiceSpec<diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> > > >::call(ros::ServiceCallbackHelperCallParams&) /opt/ros/melodic/include/ros/service_callback_helper.h:182 (libdiagnostic_aggregator.so+0x132cd4)
+    #9 ros::ServiceCallback::call() <null> (libroscpp.so+0x9aa03)
+    #10 __libc_start_main <null> (libc.so.6+0x21b96)
+
+  Mutex M1665 (0x7b2c000100e8) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::MessageDeserializer::MessageDeserializer(boost::shared_ptr<ros::SubscriptionCallbackHelper> const&, ros::SerializedMessage const&, boost::shared_ptr<std::map<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > > > const&) <null> (libroscpp.so+0x14d289)
+
+  Mutex M1639 (0x7b54000104c0) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::TransportTCP::TransportTCP(ros::PollSet*, int) <null> (libroscpp.so+0x112d4f)
+
+  Mutex M1640 (0x7b50000208b0) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 boost::recursive_mutex::recursive_mutex() <null> (libroscpp.so+0xa47ed)
+
+  Thread T1 (tid=29194, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 main /catkin/buildtmp/diagnostic_aggregator/src/diagnostic_aggregator/src/aggregator_node.cpp:48 (aggregator_node+0x988a)
+
+SUMMARY: ThreadSanitizer: data race (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x741fd) in operator delete(void*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=29136)
+  Write of size 1 at 0x7b50000208b0 by thread T2 (mutexes: write M704, write M1541):
+    #0 pthread_mutex_destroy <null> (libtsan.so.0+0x2c709)
+    #1 ros::Connection::~Connection() <null> (libroscpp.so+0xa2d75)
+    #2 ros::TransportPublisherLink::~TransportPublisherLink() <null> (libroscpp.so+0x11ec17)
+
+  Previous atomic read of size 1 at 0x7b50000208b0 by thread T1 (mutexes: write M1639, write M461754545333209264):
+    #0 pthread_mutex_unlock <null> (libtsan.so.0+0x3fc59)
+    #1 ros::Connection::readTransport() <null> (libroscpp.so+0x9f691)
+
+  Location is heap block of size 472 at 0x7b5000020800 allocated by thread T2:
+    #0 operator new(unsigned long) <null> (libtsan.so.0+0x73f0a)
+    #1 boost::detail::sp_if_not_array<ros::Connection>::type boost::make_shared<ros::Connection>() <null> (libroscpp.so+0x108134)
+
+  Mutex M704 (0x7b5800000228) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::XMLRPCManager::XMLRPCManager() <null> (libroscpp.so+0xc1fc5)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+  Mutex M1541 (0x7b5800004308) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 boost::mutex::mutex() <null> (libroscpp.so+0x12149e)
+    #2 boost::_mfi::mf2<bool, diagnostic_aggregator::Aggregator, diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&>::operator()(diagnostic_aggregator::Aggregator*, diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&) const /usr/include/boost/bind/mem_fn_template.hpp:280 (libdiagnostic_aggregator.so+0x12e33a)
+    #3 bool boost::_bi::list3<boost::_bi::value<diagnostic_aggregator::Aggregator*>, boost::arg<1>, boost::arg<2> >::operator()<bool, boost::_mfi::mf2<bool, diagnostic_aggregator::Aggregator, diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&>, boost::_bi::rrlist2<diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&> >(boost::_bi::type<bool>, boost::_mfi::mf2<bool, diagnostic_aggregator::Aggregator, diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&>&, boost::_bi::rrlist2<diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&>&, long) /usr/include/boost/bind/bind.hpp:388 (libdiagnostic_aggregator.so+0x12b9d8)
+    #4 bool boost::_bi::bind_t<bool, boost::_mfi::mf2<bool, diagnostic_aggregator::Aggregator, diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&>, boost::_bi::list3<boost::_bi::value<diagnostic_aggregator::Aggregator*>, boost::arg<1>, boost::arg<2> > >::operator()<diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&>(diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&) /usr/include/boost/bind/bind.hpp:1318 (libdiagnostic_aggregator.so+0x1292f4)
+    #5 boost::detail::function::function_obj_invoker2<boost::_bi::bind_t<bool, boost::_mfi::mf2<bool, diagnostic_aggregator::Aggregator, diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&>, boost::_bi::list3<boost::_bi::value<diagnostic_aggregator::Aggregator*>, boost::arg<1>, boost::arg<2> > >, bool, diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&>::invoke(boost::detail::function::function_buffer&, diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&) /usr/include/boost/function/function_template.hpp:138 (libdiagnostic_aggregator.so+0x126a42)
+    #6 boost::function2<bool, diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&>::operator()(diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&) const /usr/include/boost/function/function_template.hpp:760 (libdiagnostic_aggregator.so+0x134b33)
+    #7 ros::ServiceSpec<diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> > >::call(boost::function<bool (diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&)> const&, ros::ServiceSpecCallParams<diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> > >&) /opt/ros/melodic/include/ros/service_callback_helper.h:125 (libdiagnostic_aggregator.so+0x133d1e)
+    #8 ros::ServiceCallbackHelperT<ros::ServiceSpec<diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> > > >::call(ros::ServiceCallbackHelperCallParams&) /opt/ros/melodic/include/ros/service_callback_helper.h:182 (libdiagnostic_aggregator.so+0x132cd4)
+    #9 ros::ServiceCallback::call() <null> (libroscpp.so+0x9aa03)
+    #10 __libc_start_main <null> (libc.so.6+0x21b96)
+
+  Mutex M1639 (0x7b54000104c0) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::TransportTCP::TransportTCP(ros::PollSet*, int) <null> (libroscpp.so+0x112d4f)
+
+  Mutex M461754545333209264 is already destroyed.
+
+  Thread T2 (tid=29202, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 main /catkin/buildtmp/diagnostic_aggregator/src/diagnostic_aggregator/src/aggregator_node.cpp:48 (aggregator_node+0x988a)
+
+  Thread T1 (tid=29194, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 main /catkin/buildtmp/diagnostic_aggregator/src/diagnostic_aggregator/src/aggregator_node.cpp:48 (aggregator_node+0x988a)
+
+SUMMARY: ThreadSanitizer: data race (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x2c709) in __interceptor_pthread_mutex_destroy
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=29136)
+  Write of size 1 at 0x7b54000104c0 by thread T2 (mutexes: write M704, write M1541):
+    #0 pthread_mutex_destroy <null> (libtsan.so.0+0x2c709)
+    #1 ros::TransportTCP::~TransportTCP() <null> (libroscpp.so+0x111dfd)
+    #2 ros::Connection::~Connection() <null> (libroscpp.so+0xa2daf)
+    #3 ros::TransportPublisherLink::~TransportPublisherLink() <null> (libroscpp.so+0x11ec17)
+
+  Previous atomic read of size 1 at 0x7b54000104c0 by thread T1 (mutexes: write M461473087536301248):
+    #0 pthread_mutex_unlock <null> (libtsan.so.0+0x3fc59)
+    #1 ros::TransportTCP::socketUpdate(int) <null> (libroscpp.so+0x119407)
+
+  Location is heap block of size 640 at 0x7b5400010400 allocated by thread T2:
+    #0 operator new(unsigned long) <null> (libtsan.so.0+0x73f0a)
+    #1 boost::detail::sp_if_not_array<ros::TransportTCP>::type boost::make_shared<ros::TransportTCP, ros::PollSet*>(ros::PollSet*&&) <null> (libroscpp.so+0x107dd7)
+
+  Mutex M704 (0x7b5800000228) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::XMLRPCManager::XMLRPCManager() <null> (libroscpp.so+0xc1fc5)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+  Mutex M1541 (0x7b5800004308) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 boost::mutex::mutex() <null> (libroscpp.so+0x12149e)
+    #2 boost::_mfi::mf2<bool, diagnostic_aggregator::Aggregator, diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&>::operator()(diagnostic_aggregator::Aggregator*, diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&) const /usr/include/boost/bind/mem_fn_template.hpp:280 (libdiagnostic_aggregator.so+0x12e33a)
+    #3 bool boost::_bi::list3<boost::_bi::value<diagnostic_aggregator::Aggregator*>, boost::arg<1>, boost::arg<2> >::operator()<bool, boost::_mfi::mf2<bool, diagnostic_aggregator::Aggregator, diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&>, boost::_bi::rrlist2<diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&> >(boost::_bi::type<bool>, boost::_mfi::mf2<bool, diagnostic_aggregator::Aggregator, diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&>&, boost::_bi::rrlist2<diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&>&, long) /usr/include/boost/bind/bind.hpp:388 (libdiagnostic_aggregator.so+0x12b9d8)
+    #4 bool boost::_bi::bind_t<bool, boost::_mfi::mf2<bool, diagnostic_aggregator::Aggregator, diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&>, boost::_bi::list3<boost::_bi::value<diagnostic_aggregator::Aggregator*>, boost::arg<1>, boost::arg<2> > >::operator()<diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&>(diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&) /usr/include/boost/bind/bind.hpp:1318 (libdiagnostic_aggregator.so+0x1292f4)
+    #5 boost::detail::function::function_obj_invoker2<boost::_bi::bind_t<bool, boost::_mfi::mf2<bool, diagnostic_aggregator::Aggregator, diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&>, boost::_bi::list3<boost::_bi::value<diagnostic_aggregator::Aggregator*>, boost::arg<1>, boost::arg<2> > >, bool, diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&>::invoke(boost::detail::function::function_buffer&, diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&) /usr/include/boost/function/function_template.hpp:138 (libdiagnostic_aggregator.so+0x126a42)
+    #6 boost::function2<bool, diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&>::operator()(diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&) const /usr/include/boost/function/function_template.hpp:760 (libdiagnostic_aggregator.so+0x134b33)
+    #7 ros::ServiceSpec<diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> > >::call(boost::function<bool (diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >&, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> >&)> const&, ros::ServiceSpecCallParams<diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> > >&) /opt/ros/melodic/include/ros/service_callback_helper.h:125 (libdiagnostic_aggregator.so+0x133d1e)
+    #8 ros::ServiceCallbackHelperT<ros::ServiceSpec<diagnostic_msgs::AddDiagnosticsRequest_<std::allocator<void> >, diagnostic_msgs::AddDiagnosticsResponse_<std::allocator<void> > > >::call(ros::ServiceCallbackHelperCallParams&) /opt/ros/melodic/include/ros/service_callback_helper.h:182 (libdiagnostic_aggregator.so+0x132cd4)
+    #9 ros::ServiceCallback::call() <null> (libroscpp.so+0x9aa03)
+    #10 __libc_start_main <null> (libc.so.6+0x21b96)
+
+  Mutex M461473087536301248 is already destroyed.
+
+  Thread T2 (tid=29202, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 main /catkin/buildtmp/diagnostic_aggregator/src/diagnostic_aggregator/src/aggregator_node.cpp:48 (aggregator_node+0x988a)
+
+  Thread T1 (tid=29194, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 main /catkin/buildtmp/diagnostic_aggregator/src/diagnostic_aggregator/src/aggregator_node.cpp:48 (aggregator_node+0x988a)
+
+SUMMARY: ThreadSanitizer: data race (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x2c709) in __interceptor_pthread_mutex_destroy
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=29136)
+  Cycle in lock order graph: M1534 (0x7b5000002330) => M1618 (0x7b54000203c0) => M1534
+
+  Mutex M1618 acquired here while holding mutex M1534 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::TransportTCP::enableWrite() <null> (libroscpp.so+0x113147)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M1534 acquired here while holding mutex M1618 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::Publication::removeSubscriberLink(boost::shared_ptr<ros::SubscriberLink> const&) <null> (libroscpp.so+0xe4047)
+
+  Thread T1 (tid=29194, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 main /catkin/buildtmp/diagnostic_aggregator/src/diagnostic_aggregator/src/aggregator_node.cpp:48 (aggregator_node+0x988a)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=29136)
+  Cycle in lock order graph: M518 (0x7f98c27c8720) => M542 (0x7f98c3e190a8) => M545 (0x7f98c3e19148) => M518
+
+  Mutex M542 acquired here while holding mutex M518 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M545 acquired here while holding mutex M542 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+  Mutex M518 acquired here while holding mutex M545 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::mutex>::lock() <null> (libroscpp.so+0xa52a7)
+    #2 boost::_mfi::mf2<void, diagnostic_aggregator::Aggregator, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, boost::shared_ptr<diagnostic_aggregator::Analyzer> >::operator()(diagnostic_aggregator::Aggregator*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, boost::shared_ptr<diagnostic_aggregator::Analyzer>) const /usr/include/boost/bind/mem_fn_template.hpp:280 (libdiagnostic_aggregator.so+0x12d325)
+    #3 void boost::_bi::list3<boost::_bi::value<diagnostic_aggregator::Aggregator*>, boost::_bi::value<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, boost::_bi::value<boost::shared_ptr<diagnostic_aggregator::Analyzer> > >::operator()<boost::_mfi::mf2<void, diagnostic_aggregator::Aggregator, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, boost::shared_ptr<diagnostic_aggregator::Analyzer> >, boost::_bi::list0>(boost::_bi::type<void>, boost::_mfi::mf2<void, diagnostic_aggregator::Aggregator, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, boost::shared_ptr<diagnostic_aggregator::Analyzer> >&, boost::_bi::list0&, int) /usr/include/boost/bind/bind.hpp:398 (libdiagnostic_aggregator.so+0x12a9fc)
+    #4 boost::_bi::bind_t<void, boost::_mfi::mf2<void, diagnostic_aggregator::Aggregator, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, boost::shared_ptr<diagnostic_aggregator::Analyzer> >, boost::_bi::list3<boost::_bi::value<diagnostic_aggregator::Aggregator*>, boost::_bi::value<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, boost::_bi::value<boost::shared_ptr<diagnostic_aggregator::Analyzer> > > >::operator()() /usr/include/boost/bind/bind.hpp:1294 (libdiagnostic_aggregator.so+0x127f25)
+    #5 boost::detail::function::void_function_obj_invoker0<boost::_bi::bind_t<void, boost::_mfi::mf2<void, diagnostic_aggregator::Aggregator, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, boost::shared_ptr<diagnostic_aggregator::Analyzer> >, boost::_bi::list3<boost::_bi::value<diagnostic_aggregator::Aggregator*>, boost::_bi::value<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, boost::_bi::value<boost::shared_ptr<diagnostic_aggregator::Analyzer> > > >, void>::invoke(boost::detail::function::function_buffer&) /usr/include/boost/function/function_template.hpp:159 (libdiagnostic_aggregator.so+0x125429)
+    #6 bond::Bond::flushPendingCallbacks() <null> (libbondcpp.so+0x19e5c)
+    #7 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=29136)
+  Cycle in lock order graph: M542 (0x7f98c3e190a8) => M545 (0x7f98c3e19148) => M542
+
+  Mutex M545 acquired here while holding mutex M542 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M542 acquired here while holding mutex M545 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=29136)
+  Cycle in lock order graph: M727 (0x7b44000004a8) => M716 (0x7b48000002b0) => M727
+
+  Mutex M716 acquired here while holding mutex M727 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::PollManager::addPollThreadListener(boost::function<void ()> const&) <null> (libroscpp.so+0xdaab2)
+    #2 main /catkin/buildtmp/diagnostic_aggregator/src/diagnostic_aggregator/src/aggregator_node.cpp:48 (aggregator_node+0x988a)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M727 acquired here while holding mutex M716 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::mutex>::lock() <null> (libroscpp.so+0xa52a7)
+
+  Thread T1 (tid=29194, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 main /catkin/buildtmp/diagnostic_aggregator/src/diagnostic_aggregator/src/aggregator_node.cpp:48 (aggregator_node+0x988a)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=29136)
+  Cycle in lock order graph: M724 (0x7b44000003e0) => M725 (0x7b4400000420) => M724
+
+  Mutex M725 acquired here while holding mutex M724 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 diagnostic_aggregator::Aggregator::Aggregator() /catkin/buildtmp/diagnostic_aggregator/src/diagnostic_aggregator/src/aggregator.cpp:69 (libdiagnostic_aggregator.so+0x111bc0)
+    #3 main /catkin/buildtmp/diagnostic_aggregator/src/diagnostic_aggregator/src/aggregator_node.cpp:48 (aggregator_node+0x988a)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M724 acquired here while holding mutex M725 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::mutex>::lock() <null> (libroscpp.so+0xa52a7)
+
+  Thread T1 (tid=29194, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 main /catkin/buildtmp/diagnostic_aggregator/src/diagnostic_aggregator/src/aggregator_node.cpp:48 (aggregator_node+0x988a)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=29136)
+  Cycle in lock order graph: M542 (0x7f98c3e190a8) => M545 (0x7f98c3e19148) => M518 (0x7f98c27c8720) => M542
+
+  Mutex M545 acquired here while holding mutex M542 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M518 acquired here while holding mutex M545 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::mutex>::lock() <null> (libroscpp.so+0xa52a7)
+    #2 boost::_mfi::mf2<void, diagnostic_aggregator::Aggregator, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, boost::shared_ptr<diagnostic_aggregator::Analyzer> >::operator()(diagnostic_aggregator::Aggregator*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, boost::shared_ptr<diagnostic_aggregator::Analyzer>) const /usr/include/boost/bind/mem_fn_template.hpp:280 (libdiagnostic_aggregator.so+0x12d325)
+    #3 void boost::_bi::list3<boost::_bi::value<diagnostic_aggregator::Aggregator*>, boost::_bi::value<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, boost::_bi::value<boost::shared_ptr<diagnostic_aggregator::Analyzer> > >::operator()<boost::_mfi::mf2<void, diagnostic_aggregator::Aggregator, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, boost::shared_ptr<diagnostic_aggregator::Analyzer> >, boost::_bi::list0>(boost::_bi::type<void>, boost::_mfi::mf2<void, diagnostic_aggregator::Aggregator, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, boost::shared_ptr<diagnostic_aggregator::Analyzer> >&, boost::_bi::list0&, int) /usr/include/boost/bind/bind.hpp:398 (libdiagnostic_aggregator.so+0x12a9fc)
+    #4 boost::_bi::bind_t<void, boost::_mfi::mf2<void, diagnostic_aggregator::Aggregator, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, boost::shared_ptr<diagnostic_aggregator::Analyzer> >, boost::_bi::list3<boost::_bi::value<diagnostic_aggregator::Aggregator*>, boost::_bi::value<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, boost::_bi::value<boost::shared_ptr<diagnostic_aggregator::Analyzer> > > >::operator()() /usr/include/boost/bind/bind.hpp:1294 (libdiagnostic_aggregator.so+0x127f25)
+    #5 boost::detail::function::void_function_obj_invoker0<boost::_bi::bind_t<void, boost::_mfi::mf2<void, diagnostic_aggregator::Aggregator, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, boost::shared_ptr<diagnostic_aggregator::Analyzer> >, boost::_bi::list3<boost::_bi::value<diagnostic_aggregator::Aggregator*>, boost::_bi::value<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, boost::_bi::value<boost::shared_ptr<diagnostic_aggregator::Analyzer> > > >, void>::invoke(boost::detail::function::function_buffer&) /usr/include/boost/function/function_template.hpp:159 (libdiagnostic_aggregator.so+0x125429)
+    #6 bond::Bond::flushPendingCallbacks() <null> (libbondcpp.so+0x19e5c)
+    #7 __libc_start_main <null> (libc.so.6+0x21b96)
+
+  Mutex M542 acquired here while holding mutex M518 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=29136)
+  Cycle in lock order graph: M542 (0x7f98c3e190a8) => M545 (0x7f98c3e19148) => M518 (0x7f98c27c8720) => M542
+
+  Mutex M545 acquired here while holding mutex M542 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M518 acquired here while holding mutex M545 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::mutex>::lock() <null> (libroscpp.so+0xa52a7)
+    #2 boost::_mfi::mf2<void, diagnostic_aggregator::Aggregator, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, boost::shared_ptr<diagnostic_aggregator::Analyzer> >::operator()(diagnostic_aggregator::Aggregator*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, boost::shared_ptr<diagnostic_aggregator::Analyzer>) const /usr/include/boost/bind/mem_fn_template.hpp:280 (libdiagnostic_aggregator.so+0x12d325)
+    #3 void boost::_bi::list3<boost::_bi::value<diagnostic_aggregator::Aggregator*>, boost::_bi::value<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, boost::_bi::value<boost::shared_ptr<diagnostic_aggregator::Analyzer> > >::operator()<boost::_mfi::mf2<void, diagnostic_aggregator::Aggregator, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, boost::shared_ptr<diagnostic_aggregator::Analyzer> >, boost::_bi::list0>(boost::_bi::type<void>, boost::_mfi::mf2<void, diagnostic_aggregator::Aggregator, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, boost::shared_ptr<diagnostic_aggregator::Analyzer> >&, boost::_bi::list0&, int) /usr/include/boost/bind/bind.hpp:398 (libdiagnostic_aggregator.so+0x12a9fc)
+    #4 boost::_bi::bind_t<void, boost::_mfi::mf2<void, diagnostic_aggregator::Aggregator, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, boost::shared_ptr<diagnostic_aggregator::Analyzer> >, boost::_bi::list3<boost::_bi::value<diagnostic_aggregator::Aggregator*>, boost::_bi::value<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, boost::_bi::value<boost::shared_ptr<diagnostic_aggregator::Analyzer> > > >::operator()() /usr/include/boost/bind/bind.hpp:1294 (libdiagnostic_aggregator.so+0x127f25)
+    #5 boost::detail::function::void_function_obj_invoker0<boost::_bi::bind_t<void, boost::_mfi::mf2<void, diagnostic_aggregator::Aggregator, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, boost::shared_ptr<diagnostic_aggregator::Analyzer> >, boost::_bi::list3<boost::_bi::value<diagnostic_aggregator::Aggregator*>, boost::_bi::value<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, boost::_bi::value<boost::shared_ptr<diagnostic_aggregator::Analyzer> > > >, void>::invoke(boost::detail::function::function_buffer&) /usr/include/boost/function/function_template.hpp:159 (libdiagnostic_aggregator.so+0x125429)
+    #6 bond::Bond::flushPendingCallbacks() <null> (libbondcpp.so+0x19e5c)
+    #7 __libc_start_main <null> (libc.so.6+0x21b96)
+
+  Mutex M542 acquired here while holding mutex M518 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=29136)
+  Cycle in lock order graph: M542 (0x7f98c3e190a8) => M545 (0x7f98c3e19148) => M518 (0x7f98c27c8720) => M542
+
+  Mutex M545 acquired here while holding mutex M542 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M518 acquired here while holding mutex M545 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::mutex>::lock() <null> (libroscpp.so+0xa52a7)
+    #2 boost::_mfi::mf2<void, diagnostic_aggregator::Aggregator, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, boost::shared_ptr<diagnostic_aggregator::Analyzer> >::operator()(diagnostic_aggregator::Aggregator*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, boost::shared_ptr<diagnostic_aggregator::Analyzer>) const /usr/include/boost/bind/mem_fn_template.hpp:280 (libdiagnostic_aggregator.so+0x12d325)
+    #3 void boost::_bi::list3<boost::_bi::value<diagnostic_aggregator::Aggregator*>, boost::_bi::value<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, boost::_bi::value<boost::shared_ptr<diagnostic_aggregator::Analyzer> > >::operator()<boost::_mfi::mf2<void, diagnostic_aggregator::Aggregator, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, boost::shared_ptr<diagnostic_aggregator::Analyzer> >, boost::_bi::list0>(boost::_bi::type<void>, boost::_mfi::mf2<void, diagnostic_aggregator::Aggregator, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, boost::shared_ptr<diagnostic_aggregator::Analyzer> >&, boost::_bi::list0&, int) /usr/include/boost/bind/bind.hpp:398 (libdiagnostic_aggregator.so+0x12a9fc)
+    #4 boost::_bi::bind_t<void, boost::_mfi::mf2<void, diagnostic_aggregator::Aggregator, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, boost::shared_ptr<diagnostic_aggregator::Analyzer> >, boost::_bi::list3<boost::_bi::value<diagnostic_aggregator::Aggregator*>, boost::_bi::value<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, boost::_bi::value<boost::shared_ptr<diagnostic_aggregator::Analyzer> > > >::operator()() /usr/include/boost/bind/bind.hpp:1294 (libdiagnostic_aggregator.so+0x127f25)
+    #5 boost::detail::function::void_function_obj_invoker0<boost::_bi::bind_t<void, boost::_mfi::mf2<void, diagnostic_aggregator::Aggregator, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, boost::shared_ptr<diagnostic_aggregator::Analyzer> >, boost::_bi::list3<boost::_bi::value<diagnostic_aggregator::Aggregator*>, boost::_bi::value<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, boost::_bi::value<boost::shared_ptr<diagnostic_aggregator::Analyzer> > > >, void>::invoke(boost::detail::function::function_buffer&) /usr/include/boost/function/function_template.hpp:159 (libdiagnostic_aggregator.so+0x125429)
+    #6 bond::Bond::flushPendingCallbacks() <null> (libbondcpp.so+0x19e5c)
+    #7 __libc_start_main <null> (libc.so.6+0x21b96)
+
+  Mutex M542 acquired here while holding mutex M518 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+ThreadSanitizer: reported 15 warnings

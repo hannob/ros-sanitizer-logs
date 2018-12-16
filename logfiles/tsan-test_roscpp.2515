@@ -1,0 +1,445 @@
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=2515)
+  Cycle in lock order graph: M448 (0x7f44c6e830a8) => M451 (0x7f44c6e83148) => M448
+
+  Mutex M451 acquired here while holding mutex M448 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M448 acquired here while holding mutex M451 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=2515)
+  Cycle in lock order graph: M706 (0x7b540001fec0) => M603 (0x7b4400000560) => M706
+
+  Mutex M603 acquired here while holding mutex M706 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M706 acquired here while holding mutex M603 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::TransportTCP::enableWrite() <null> (libroscpp.so+0x113147)
+
+  Thread T1 (tid=2545, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=2515)
+  Write of size 8 at 0x7b0800001548 by main thread (mutexes: write M671, write M744):
+    #0 operator delete(void*) <null> (libtsan.so.0+0x741fd)
+    #1 boost::detail::sp_counted_impl_pd<unsigned char*, boost::checked_array_deleter<unsigned char> >::~sp_counted_impl_pd() /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp:146 (test_roscpp-sub_pub+0x38e54)
+    #2 ros::MessageDeserializer::deserialize() <null> (libroscpp.so+0x14d705)
+    #3 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #4 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #5 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #6 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #7 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #8 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #9 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #10 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #11 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #12 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-sub_pub+0x27164)
+    #13 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sub_pub.cpp:150 (test_roscpp-sub_pub+0x26760)
+
+  Previous atomic write of size 4 at 0x7b0800001548 by thread T1 (mutexes: write M688, write M689):
+    #0 __tsan_atomic32_fetch_sub <null> (libtsan.so.0+0x68aed)
+    #1 std::__atomic_base<int>::fetch_sub(int, std::memory_order) /usr/include/c++/7/bits/atomic_base.h:524 (test_roscpp-sub_pub+0x276d4)
+    #2 boost::detail::atomic_decrement(std::atomic<int>*) /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:35 (test_roscpp-sub_pub+0x276d4)
+    #3 boost::detail::sp_counted_base::release() /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:108 (test_roscpp-sub_pub+0x27884)
+    #4 ros::Connection::readTransport() <null> (libroscpp.so+0x9f87d)
+
+  Mutex M671 (0x7b4400000360) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::SubscriptionQueue::SubscriptionQueue(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int, bool) <null> (libroscpp.so+0x146fa8)
+    #2 Subscriptions_subPub_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sub_pub.cpp:112 (test_roscpp-sub_pub+0x25b97)
+    #3 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #4 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #5 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #6 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #7 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #8 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #9 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #10 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #11 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #12 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-sub_pub+0x27164)
+    #13 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sub_pub.cpp:150 (test_roscpp-sub_pub+0x26760)
+
+  Mutex M744 (0x7b2c00010038) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::MessageDeserializer::MessageDeserializer(boost::shared_ptr<ros::SubscriptionCallbackHelper> const&, ros::SerializedMessage const&, boost::shared_ptr<std::map<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > > > const&) <null> (libroscpp.so+0x14d289)
+
+  Mutex M688 (0x7b5400010240) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::TransportTCP::TransportTCP(ros::PollSet*, int) <null> (libroscpp.so+0x112d4f)
+
+  Mutex M689 (0x7b50000200b0) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 boost::recursive_mutex::recursive_mutex() <null> (libroscpp.so+0xa47ed)
+
+  Thread T1 (tid=2545, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: data race (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x741fd) in operator delete(void*)
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=2515)
+  Cycle in lock order graph: M678 (0x7b5000001330) => M706 (0x7b540001fec0) => M603 (0x7b4400000560) => M678
+
+  Mutex M706 acquired here while holding mutex M678 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::TransportTCP::enableWrite() <null> (libroscpp.so+0x113147)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M603 acquired here while holding mutex M706 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+
+  Mutex M678 acquired here while holding mutex M603 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::Publication::addCallbacks(boost::shared_ptr<ros::SubscriberCallbacks> const&) <null> (libroscpp.so+0xe4597)
+    #2 Subscriptions_subPub_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sub_pub.cpp:114 (test_roscpp-sub_pub+0x25ddd)
+    #3 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #4 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #5 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #6 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #7 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #8 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #9 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #10 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #11 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #12 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-sub_pub+0x27164)
+    #13 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sub_pub.cpp:150 (test_roscpp-sub_pub+0x26760)
+
+  Thread T1 (tid=2545, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=2515)
+  Write of size 8 at 0x7b0400000080 by thread T1 (mutexes: write M688, write M689):
+    #0 operator delete[](void*) <null> (libtsan.so.0+0x742ad)
+    #1 void boost::checked_array_delete<unsigned char>(unsigned char*) /usr/include/boost/core/checked_delete.hpp:41 (test_roscpp-sub_pub+0x35755)
+    #2 boost::checked_array_deleter<unsigned char>::operator()(unsigned char*) const /usr/include/boost/core/checked_delete.hpp:63 (test_roscpp-sub_pub+0x345e1)
+    #3 boost::detail::sp_counted_impl_pd<unsigned char*, boost::checked_array_deleter<unsigned char> >::dispose() /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp:172 (test_roscpp-sub_pub+0x393d1)
+    #4 boost::detail::sp_counted_base::release() /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:110 (test_roscpp-sub_pub+0x278b9)
+    #5 ros::Connection::readTransport() <null> (libroscpp.so+0x9f87d)
+
+  Previous read of size 1 at 0x7b0400000080 by main thread (mutexes: write M671, write M839493809460062904):
+    #0 void ros::serialization::Serializer<int>::read<ros::serialization::IStream>(ros::serialization::IStream&, int&) /opt/ros/melodic/include/ros/serialization.h:199 (test_roscpp-sub_pub+0x3b917)
+    #1 void ros::serialization::deserialize<int, ros::serialization::IStream>(ros::serialization::IStream&, int&) /opt/ros/melodic/include/ros/serialization.h:163 (test_roscpp-sub_pub+0x3b460)
+    #2 void ros::serialization::IStream::next<int>(int&) /opt/ros/melodic/include/ros/serialization.h:719 (test_roscpp-sub_pub+0x3ad67)
+    #3 void ros::serialization::Serializer<test_roscpp::TestArray_<std::allocator<void> > >::allInOne<ros::serialization::IStream, test_roscpp::TestArray_<std::allocator<void> >&>(ros::serialization::IStream&, test_roscpp::TestArray_<std::allocator<void> >&) /catkin/buildtmp/test_roscpp/devel/include/test_roscpp/TestArray.h:166 (test_roscpp-sub_pub+0x3ad67)
+    #4 void ros::serialization::Serializer<test_roscpp::TestArray_<std::allocator<void> > >::read<ros::serialization::IStream, test_roscpp::TestArray_<std::allocator<void> > >(ros::serialization::IStream&, test_roscpp::TestArray_<std::allocator<void> >&) /catkin/buildtmp/test_roscpp/devel/include/test_roscpp/TestArray.h:170 (test_roscpp-sub_pub+0x3a691)
+    #5 void ros::serialization::deserialize<test_roscpp::TestArray_<std::allocator<void> >, ros::serialization::IStream>(ros::serialization::IStream&, test_roscpp::TestArray_<std::allocator<void> >&) /opt/ros/melodic/include/ros/serialization.h:163 (test_roscpp-sub_pub+0x3a053)
+    #6 ros::SubscriptionCallbackHelperT<boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&, void>::deserialize(ros::SubscriptionCallbackHelperDeserializeParams const&) /opt/ros/melodic/include/ros/subscription_callback_helper.h:136 (test_roscpp-sub_pub+0x398cb)
+    #7 ros::MessageDeserializer::deserialize() <null> (libroscpp.so+0x14d5d4)
+    #8 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #9 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #10 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #11 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #12 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #13 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #14 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #15 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #16 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #17 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-sub_pub+0x27164)
+    #18 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sub_pub.cpp:150 (test_roscpp-sub_pub+0x26760)
+
+  Mutex M688 (0x7b5400010240) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::TransportTCP::TransportTCP(ros::PollSet*, int) <null> (libroscpp.so+0x112d4f)
+
+  Mutex M689 (0x7b50000200b0) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 boost::recursive_mutex::recursive_mutex() <null> (libroscpp.so+0xa47ed)
+
+  Mutex M671 (0x7b4400000360) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::SubscriptionQueue::SubscriptionQueue(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int, bool) <null> (libroscpp.so+0x146fa8)
+    #2 Subscriptions_subPub_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sub_pub.cpp:112 (test_roscpp-sub_pub+0x25b97)
+    #3 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #4 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #5 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #6 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #7 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #8 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #9 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #10 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #11 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #12 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-sub_pub+0x27164)
+    #13 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sub_pub.cpp:150 (test_roscpp-sub_pub+0x26760)
+
+  Mutex M839493809460062904 is already destroyed.
+
+  Thread T1 (tid=2545, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: data race (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x742ad) in operator delete[](void*)
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=2515)
+  Cycle in lock order graph: M424 (0x7f44c5557720) => M448 (0x7f44c6e830a8) => M451 (0x7f44c6e83148) => M424
+
+  Mutex M448 acquired here while holding mutex M424 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M451 acquired here while holding mutex M448 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+  Mutex M424 acquired here while holding mutex M451 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::mutex>::lock() <null> (libroscpp.so+0xa52a7)
+    #2 boost::_mfi::mf1<void, Subscriptions, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&>::operator()(Subscriptions*, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&) const /usr/include/boost/bind/mem_fn_template.hpp:165 (test_roscpp-sub_pub+0x37240)
+    #3 void boost::_bi::list2<boost::_bi::value<Subscriptions*>, boost::arg<1> >::operator()<boost::_mfi::mf1<void, Subscriptions, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&>, boost::_bi::rrlist1<boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&> >(boost::_bi::type<void>, boost::_mfi::mf1<void, Subscriptions, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&>&, boost::_bi::rrlist1<boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&>&, int) /usr/include/boost/bind/bind.hpp:319 (test_roscpp-sub_pub+0x35b46)
+    #4 void boost::_bi::bind_t<void, boost::_mfi::mf1<void, Subscriptions, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&>, boost::_bi::list2<boost::_bi::value<Subscriptions*>, boost::arg<1> > >::operator()<boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&>(boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&) /usr/include/boost/bind/bind.hpp:1306 (test_roscpp-sub_pub+0x3490a)
+    #5 boost::detail::function::void_function_obj_invoker1<boost::_bi::bind_t<void, boost::_mfi::mf1<void, Subscriptions, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&>, boost::_bi::list2<boost::_bi::value<Subscriptions*>, boost::arg<1> > >, void, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&>::invoke(boost::detail::function::function_buffer&, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&) /usr/include/boost/function/function_template.hpp:159 (test_roscpp-sub_pub+0x33594)
+    #6 boost::function1<void, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&>::operator()(boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&) const /usr/include/boost/function/function_template.hpp:759 (test_roscpp-sub_pub+0x37828)
+    #7 boost::detail::function::void_function_obj_invoker1<boost::function<void (boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&)>, void, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> >::invoke(boost::detail::function::function_buffer&, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const>) /usr/include/boost/function/function_template.hpp:159 (test_roscpp-sub_pub+0x35f64)
+    #8 boost::function1<void, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> >::operator()(boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const>) const /usr/include/boost/function/function_template.hpp:759 (test_roscpp-sub_pub+0x3a481)
+    #9 ros::SubscriptionCallbackHelperT<boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&, void>::call(ros::SubscriptionCallbackHelperCallParams&) /opt/ros/melodic/include/ros/subscription_callback_helper.h:144 (test_roscpp-sub_pub+0x39a9a)
+    #10 ros::SubscriptionQueue::call() <null> (libroscpp.so+0x1450e1)
+    #11 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #12 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #13 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #14 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #15 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #16 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #17 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #18 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #19 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #20 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-sub_pub+0x27164)
+    #21 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sub_pub.cpp:150 (test_roscpp-sub_pub+0x26760)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=2515)
+  Cycle in lock order graph: M448 (0x7f44c6e830a8) => M451 (0x7f44c6e83148) => M448
+
+  Mutex M451 acquired here while holding mutex M448 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M448 acquired here while holding mutex M451 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=2515)
+  Cycle in lock order graph: M678 (0x7b5000001330) => M706 (0x7b540001fec0) => M603 (0x7b4400000560) => M678
+
+  Mutex M706 acquired here while holding mutex M678 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::TransportTCP::enableWrite() <null> (libroscpp.so+0x113147)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M603 acquired here while holding mutex M706 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+
+  Mutex M678 acquired here while holding mutex M603 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::Publication::addCallbacks(boost::shared_ptr<ros::SubscriberCallbacks> const&) <null> (libroscpp.so+0xe4597)
+    #2 Subscriptions_subPub_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sub_pub.cpp:114 (test_roscpp-sub_pub+0x25ddd)
+    #3 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #4 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #5 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #6 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #7 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #8 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #9 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #10 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #11 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #12 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-sub_pub+0x27164)
+    #13 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sub_pub.cpp:150 (test_roscpp-sub_pub+0x26760)
+
+  Thread T1 (tid=2545, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=2515)
+  Cycle in lock order graph: M602 (0x7b4400000520) => M603 (0x7b4400000560) => M602
+
+  Mutex M603 acquired here while holding mutex M602 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 Subscriptions_subPub_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sub_pub.cpp:112 (test_roscpp-sub_pub+0x25b97)
+    #3 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #4 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #5 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #6 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #7 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #8 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #9 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #10 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #11 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #12 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-sub_pub+0x27164)
+    #13 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sub_pub.cpp:150 (test_roscpp-sub_pub+0x26760)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M602 acquired here while holding mutex M603 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::mutex>::lock() <null> (libroscpp.so+0xa52a7)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=2515)
+  Cycle in lock order graph: M448 (0x7f44c6e830a8) => M451 (0x7f44c6e83148) => M424 (0x7f44c5557720) => M448
+
+  Mutex M451 acquired here while holding mutex M448 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M424 acquired here while holding mutex M451 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::mutex>::lock() <null> (libroscpp.so+0xa52a7)
+    #2 boost::_mfi::mf1<void, Subscriptions, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&>::operator()(Subscriptions*, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&) const /usr/include/boost/bind/mem_fn_template.hpp:165 (test_roscpp-sub_pub+0x37240)
+    #3 void boost::_bi::list2<boost::_bi::value<Subscriptions*>, boost::arg<1> >::operator()<boost::_mfi::mf1<void, Subscriptions, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&>, boost::_bi::rrlist1<boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&> >(boost::_bi::type<void>, boost::_mfi::mf1<void, Subscriptions, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&>&, boost::_bi::rrlist1<boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&>&, int) /usr/include/boost/bind/bind.hpp:319 (test_roscpp-sub_pub+0x35b46)
+    #4 void boost::_bi::bind_t<void, boost::_mfi::mf1<void, Subscriptions, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&>, boost::_bi::list2<boost::_bi::value<Subscriptions*>, boost::arg<1> > >::operator()<boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&>(boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&) /usr/include/boost/bind/bind.hpp:1306 (test_roscpp-sub_pub+0x3490a)
+    #5 boost::detail::function::void_function_obj_invoker1<boost::_bi::bind_t<void, boost::_mfi::mf1<void, Subscriptions, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&>, boost::_bi::list2<boost::_bi::value<Subscriptions*>, boost::arg<1> > >, void, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&>::invoke(boost::detail::function::function_buffer&, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&) /usr/include/boost/function/function_template.hpp:159 (test_roscpp-sub_pub+0x33594)
+    #6 boost::function1<void, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&>::operator()(boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&) const /usr/include/boost/function/function_template.hpp:759 (test_roscpp-sub_pub+0x37828)
+    #7 boost::detail::function::void_function_obj_invoker1<boost::function<void (boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&)>, void, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> >::invoke(boost::detail::function::function_buffer&, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const>) /usr/include/boost/function/function_template.hpp:159 (test_roscpp-sub_pub+0x35f64)
+    #8 boost::function1<void, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> >::operator()(boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const>) const /usr/include/boost/function/function_template.hpp:759 (test_roscpp-sub_pub+0x3a481)
+    #9 ros::SubscriptionCallbackHelperT<boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&, void>::call(ros::SubscriptionCallbackHelperCallParams&) /opt/ros/melodic/include/ros/subscription_callback_helper.h:144 (test_roscpp-sub_pub+0x39a9a)
+    #10 ros::SubscriptionQueue::call() <null> (libroscpp.so+0x1450e1)
+    #11 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #12 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #13 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #14 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #15 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #16 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #17 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #18 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #19 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #20 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-sub_pub+0x27164)
+    #21 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sub_pub.cpp:150 (test_roscpp-sub_pub+0x26760)
+
+  Mutex M448 acquired here while holding mutex M424 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=2515)
+  Cycle in lock order graph: M448 (0x7f44c6e830a8) => M451 (0x7f44c6e83148) => M424 (0x7f44c5557720) => M448
+
+  Mutex M451 acquired here while holding mutex M448 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M424 acquired here while holding mutex M451 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::mutex>::lock() <null> (libroscpp.so+0xa52a7)
+    #2 boost::_mfi::mf1<void, Subscriptions, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&>::operator()(Subscriptions*, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&) const /usr/include/boost/bind/mem_fn_template.hpp:165 (test_roscpp-sub_pub+0x37240)
+    #3 void boost::_bi::list2<boost::_bi::value<Subscriptions*>, boost::arg<1> >::operator()<boost::_mfi::mf1<void, Subscriptions, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&>, boost::_bi::rrlist1<boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&> >(boost::_bi::type<void>, boost::_mfi::mf1<void, Subscriptions, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&>&, boost::_bi::rrlist1<boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&>&, int) /usr/include/boost/bind/bind.hpp:319 (test_roscpp-sub_pub+0x35b46)
+    #4 void boost::_bi::bind_t<void, boost::_mfi::mf1<void, Subscriptions, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&>, boost::_bi::list2<boost::_bi::value<Subscriptions*>, boost::arg<1> > >::operator()<boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&>(boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&) /usr/include/boost/bind/bind.hpp:1306 (test_roscpp-sub_pub+0x3490a)
+    #5 boost::detail::function::void_function_obj_invoker1<boost::_bi::bind_t<void, boost::_mfi::mf1<void, Subscriptions, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&>, boost::_bi::list2<boost::_bi::value<Subscriptions*>, boost::arg<1> > >, void, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&>::invoke(boost::detail::function::function_buffer&, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&) /usr/include/boost/function/function_template.hpp:159 (test_roscpp-sub_pub+0x33594)
+    #6 boost::function1<void, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&>::operator()(boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&) const /usr/include/boost/function/function_template.hpp:759 (test_roscpp-sub_pub+0x37828)
+    #7 boost::detail::function::void_function_obj_invoker1<boost::function<void (boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&)>, void, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> >::invoke(boost::detail::function::function_buffer&, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const>) /usr/include/boost/function/function_template.hpp:159 (test_roscpp-sub_pub+0x35f64)
+    #8 boost::function1<void, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> >::operator()(boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const>) const /usr/include/boost/function/function_template.hpp:759 (test_roscpp-sub_pub+0x3a481)
+    #9 ros::SubscriptionCallbackHelperT<boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&, void>::call(ros::SubscriptionCallbackHelperCallParams&) /opt/ros/melodic/include/ros/subscription_callback_helper.h:144 (test_roscpp-sub_pub+0x39a9a)
+    #10 ros::SubscriptionQueue::call() <null> (libroscpp.so+0x1450e1)
+    #11 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #12 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #13 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #14 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #15 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #16 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #17 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #18 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #19 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #20 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-sub_pub+0x27164)
+    #21 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sub_pub.cpp:150 (test_roscpp-sub_pub+0x26760)
+
+  Mutex M448 acquired here while holding mutex M424 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=2515)
+  Cycle in lock order graph: M448 (0x7f44c6e830a8) => M451 (0x7f44c6e83148) => M424 (0x7f44c5557720) => M448
+
+  Mutex M451 acquired here while holding mutex M448 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M424 acquired here while holding mutex M451 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::mutex>::lock() <null> (libroscpp.so+0xa52a7)
+    #2 boost::_mfi::mf1<void, Subscriptions, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&>::operator()(Subscriptions*, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&) const /usr/include/boost/bind/mem_fn_template.hpp:165 (test_roscpp-sub_pub+0x37240)
+    #3 void boost::_bi::list2<boost::_bi::value<Subscriptions*>, boost::arg<1> >::operator()<boost::_mfi::mf1<void, Subscriptions, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&>, boost::_bi::rrlist1<boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&> >(boost::_bi::type<void>, boost::_mfi::mf1<void, Subscriptions, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&>&, boost::_bi::rrlist1<boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&>&, int) /usr/include/boost/bind/bind.hpp:319 (test_roscpp-sub_pub+0x35b46)
+    #4 void boost::_bi::bind_t<void, boost::_mfi::mf1<void, Subscriptions, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&>, boost::_bi::list2<boost::_bi::value<Subscriptions*>, boost::arg<1> > >::operator()<boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&>(boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&) /usr/include/boost/bind/bind.hpp:1306 (test_roscpp-sub_pub+0x3490a)
+    #5 boost::detail::function::void_function_obj_invoker1<boost::_bi::bind_t<void, boost::_mfi::mf1<void, Subscriptions, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&>, boost::_bi::list2<boost::_bi::value<Subscriptions*>, boost::arg<1> > >, void, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&>::invoke(boost::detail::function::function_buffer&, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&) /usr/include/boost/function/function_template.hpp:159 (test_roscpp-sub_pub+0x33594)
+    #6 boost::function1<void, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&>::operator()(boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&) const /usr/include/boost/function/function_template.hpp:759 (test_roscpp-sub_pub+0x37828)
+    #7 boost::detail::function::void_function_obj_invoker1<boost::function<void (boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&)>, void, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> >::invoke(boost::detail::function::function_buffer&, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const>) /usr/include/boost/function/function_template.hpp:159 (test_roscpp-sub_pub+0x35f64)
+    #8 boost::function1<void, boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> >::operator()(boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const>) const /usr/include/boost/function/function_template.hpp:759 (test_roscpp-sub_pub+0x3a481)
+    #9 ros::SubscriptionCallbackHelperT<boost::shared_ptr<test_roscpp::TestArray_<std::allocator<void> > const> const&, void>::call(ros::SubscriptionCallbackHelperCallParams&) /opt/ros/melodic/include/ros/subscription_callback_helper.h:144 (test_roscpp-sub_pub+0x39a9a)
+    #10 ros::SubscriptionQueue::call() <null> (libroscpp.so+0x1450e1)
+    #11 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #12 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #13 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #14 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #15 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #16 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #17 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #18 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #19 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #20 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-sub_pub+0x27164)
+    #21 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/sub_pub.cpp:150 (test_roscpp-sub_pub+0x26760)
+
+  Mutex M448 acquired here while holding mutex M424 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+ThreadSanitizer: reported 12 warnings

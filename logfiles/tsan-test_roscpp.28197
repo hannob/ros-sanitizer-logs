@@ -1,0 +1,431 @@
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=28197)
+  Cycle in lock order graph: M448 (0x7f78f7ddf0a8) => M451 (0x7f78f7ddf148) => M448
+
+  Mutex M451 acquired here while holding mutex M448 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M448 acquired here while holding mutex M451 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=28197)
+  Write of size 8 at 0x7b08000033e8 by main thread (mutexes: write M672, write M709):
+    #0 operator delete(void*) <null> (libtsan.so.0+0x741fd)
+    #1 boost::detail::sp_counted_impl_pd<unsigned char*, boost::checked_array_deleter<unsigned char> >::~sp_counted_impl_pd() /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp:146 (test_roscpp-subscribe_retry_tcp+0x307a4)
+    #2 ros::MessageDeserializer::deserialize() <null> (libroscpp.so+0x14d705)
+    #3 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #4 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #5 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #6 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #7 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #8 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #9 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #10 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #11 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #12 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-subscribe_retry_tcp+0x234c0)
+    #13 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/subscribe_retry_tcp.cpp:156 (test_roscpp-subscribe_retry_tcp+0x226d2)
+
+  Previous atomic write of size 4 at 0x7b08000033e8 by thread T1 (mutexes: write M683, write M684):
+    #0 __tsan_atomic32_fetch_sub <null> (libtsan.so.0+0x68aed)
+    #1 std::__atomic_base<int>::fetch_sub(int, std::memory_order) /usr/include/c++/7/bits/atomic_base.h:524 (test_roscpp-subscribe_retry_tcp+0x239d8)
+    #2 boost::detail::atomic_decrement(std::atomic<int>*) /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:35 (test_roscpp-subscribe_retry_tcp+0x239d8)
+    #3 boost::detail::sp_counted_base::release() /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:108 (test_roscpp-subscribe_retry_tcp+0x23b88)
+    #4 ros::Connection::readTransport() <null> (libroscpp.so+0x9f87d)
+
+  As if synchronized via sleep:
+    #0 nanosleep <null> (libtsan.so.0+0x4dd60)
+    #1 ros::ros_wallsleep(unsigned int, unsigned int) <null> (librostime.so+0x10228)
+    #2 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #3 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #4 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #5 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #6 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #7 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #8 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #9 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #10 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #11 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-subscribe_retry_tcp+0x234c0)
+    #12 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/subscribe_retry_tcp.cpp:156 (test_roscpp-subscribe_retry_tcp+0x226d2)
+
+  Mutex M672 (0x7b44000005e0) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::SubscriptionQueue::SubscriptionQueue(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int, bool) <null> (libroscpp.so+0x146fa8)
+    #2 SubscribeRetryTCP_localDisconnect_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/subscribe_retry_tcp.cpp:52 (test_roscpp-subscribe_retry_tcp+0x20a85)
+    #3 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #4 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #5 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #6 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #7 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #8 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #9 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #10 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #11 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #12 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-subscribe_retry_tcp+0x234c0)
+    #13 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/subscribe_retry_tcp.cpp:156 (test_roscpp-subscribe_retry_tcp+0x226d2)
+
+  Mutex M709 (0x7b2c00005878) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::MessageDeserializer::MessageDeserializer(boost::shared_ptr<ros::SubscriptionCallbackHelper> const&, ros::SerializedMessage const&, boost::shared_ptr<std::map<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > > > const&) <null> (libroscpp.so+0x14d289)
+
+  Mutex M683 (0x7b5400010240) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::TransportTCP::TransportTCP(ros::PollSet*, int) <null> (libroscpp.so+0x112d4f)
+
+  Mutex M684 (0x7b50000200b0) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 boost::recursive_mutex::recursive_mutex() <null> (libroscpp.so+0xa47ed)
+
+  Thread T1 (tid=28225, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: data race (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x741fd) in operator delete(void*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=28197)
+  Write of size 8 at 0x7b0800003188 by thread T1 (mutexes: write M755, write M756):
+    #0 operator delete(void*) <null> (libtsan.so.0+0x741fd)
+    #1 ros::PublisherLink::setHeader(ros::Header const&) <null> (libroscpp.so+0x95f45)
+
+  Previous atomic write of size 4 at 0x7b0800003188 by main thread (mutexes: write M672):
+    #0 __tsan_atomic32_fetch_sub <null> (libtsan.so.0+0x68aed)
+    #1 std::__atomic_base<int>::fetch_sub(int, std::memory_order) /usr/include/c++/7/bits/atomic_base.h:524 (test_roscpp-subscribe_retry_tcp+0x239d8)
+    #2 boost::detail::atomic_decrement(std::atomic<int>*) /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:35 (test_roscpp-subscribe_retry_tcp+0x239d8)
+    #3 boost::detail::sp_counted_base::release() /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:108 (test_roscpp-subscribe_retry_tcp+0x23b88)
+    #4 boost::detail::sp_counted_impl_pd<ros::MessageDeserializer*, boost::detail::sp_ms_deleter<ros::MessageDeserializer> >::dispose() <null> (libroscpp.so+0x1426ca)
+    #5 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #6 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #7 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #8 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #9 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #10 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #11 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #12 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #13 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #14 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-subscribe_retry_tcp+0x234c0)
+    #15 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/subscribe_retry_tcp.cpp:156 (test_roscpp-subscribe_retry_tcp+0x226d2)
+
+  Mutex M755 (0x7b540001fec0) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::TransportTCP::TransportTCP(ros::PollSet*, int) <null> (libroscpp.so+0x112d4f)
+
+  Mutex M756 (0x7b50000100b0) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 boost::recursive_mutex::recursive_mutex() <null> (libroscpp.so+0xa47ed)
+
+  Mutex M672 (0x7b44000005e0) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::SubscriptionQueue::SubscriptionQueue(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int, bool) <null> (libroscpp.so+0x146fa8)
+    #2 SubscribeRetryTCP_localDisconnect_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/subscribe_retry_tcp.cpp:52 (test_roscpp-subscribe_retry_tcp+0x20a85)
+    #3 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #4 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #5 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #6 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #7 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #8 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #9 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #10 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #11 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #12 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-subscribe_retry_tcp+0x234c0)
+    #13 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/subscribe_retry_tcp.cpp:156 (test_roscpp-subscribe_retry_tcp+0x226d2)
+
+  Thread T1 (tid=28225, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: data race (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x741fd) in operator delete(void*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=28197)
+  Write of size 8 at 0x7b4800010088 by thread T1 (mutexes: write M595):
+    #0 operator delete(void*) <null> (libtsan.so.0+0x741fd)
+    #1 boost::signals2::slot<void (boost::shared_ptr<ros::Connection> const&, ros::Connection::DropReason), boost::function<void (boost::shared_ptr<ros::Connection> const&, ros::Connection::DropReason)> >::~slot() <null> (libroscpp.so+0xa46e6)
+    #2 boost::detail::sp_counted_impl_p<boost::signals2::detail::connection_body<std::pair<boost::signals2::detail::slot_meta_group, boost::optional<int> >, boost::signals2::slot<void (boost::shared_ptr<ros::Connection> const&, ros::Connection::DropReason), boost::function<void (boost::shared_ptr<ros::Connection> const&, ros::Connection::DropReason)> >, boost::signals2::mutex> >::dispose() <null> (libroscpp.so+0xa4393)
+    #3 boost::detail::sp_counted_impl_p<boost::signals2::detail::signal_impl<void (boost::shared_ptr<ros::Connection> const&, ros::Connection::DropReason), boost::signals2::optional_last_value<void>, int, std::less<int>, boost::function<void (boost::shared_ptr<ros::Connection> const&, ros::Connection::DropReason)>, boost::function<void (boost::signals2::connection const&, boost::shared_ptr<ros::Connection> const&, ros::Connection::DropReason)>, boost::signals2::mutex>::invocation_state>::dispose() <null> (libroscpp.so+0xa4215)
+    #4 boost::detail::sp_counted_impl_p<boost::signals2::detail::signal_impl<void (boost::shared_ptr<ros::Connection> const&, ros::Connection::DropReason), boost::signals2::optional_last_value<void>, int, std::less<int>, boost::function<void (boost::shared_ptr<ros::Connection> const&, ros::Connection::DropReason)>, boost::function<void (boost::signals2::connection const&, boost::shared_ptr<ros::Connection> const&, ros::Connection::DropReason)>, boost::signals2::mutex> >::dispose() <null> (libroscpp.so+0xa4255)
+    #5 ros::Connection::~Connection() <null> (libroscpp.so+0xa2cf0)
+
+  Previous atomic write of size 4 at 0x7b480001008c by main thread:
+    #0 __tsan_atomic32_fetch_sub <null> (libtsan.so.0+0x68aed)
+    #1 std::__atomic_base<int>::fetch_sub(int, std::memory_order) /usr/include/c++/7/bits/atomic_base.h:524 (test_roscpp-subscribe_retry_tcp+0x239d8)
+    #2 boost::detail::atomic_decrement(std::atomic<int>*) /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:35 (test_roscpp-subscribe_retry_tcp+0x239d8)
+    #3 boost::detail::sp_counted_base::weak_release() /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:122 (test_roscpp-subscribe_retry_tcp+0x23c14)
+    #4 std::vector<boost::shared_ptr<ros::PublisherLink>, std::allocator<boost::shared_ptr<ros::PublisherLink> > >::~vector() <null> (libroscpp.so+0x14295e)
+    #5 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #6 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #7 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #8 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #9 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #10 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #11 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #12 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #13 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #14 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-subscribe_retry_tcp+0x234c0)
+    #15 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/subscribe_retry_tcp.cpp:156 (test_roscpp-subscribe_retry_tcp+0x226d2)
+
+  Mutex M595 (0x7b48000002b0) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::PollManager::PollManager() <null> (libroscpp.so+0xda4ae)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+  Thread T1 (tid=28225, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: data race (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x741fd) in operator delete(void*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=28197)
+  Write of size 8 at 0x7b5000010008 by thread T1 (mutexes: write M595):
+    #0 operator delete(void*) <null> (libtsan.so.0+0x741fd)
+    #1 ros::ConnectionManager::removeDroppedConnections() <null> (libroscpp.so+0x1064a8)
+
+  Previous atomic write of size 4 at 0x7b5000010008 by main thread:
+    #0 __tsan_atomic32_fetch_sub <null> (libtsan.so.0+0x68aed)
+    #1 std::__atomic_base<int>::fetch_sub(int, std::memory_order) /usr/include/c++/7/bits/atomic_base.h:524 (test_roscpp-subscribe_retry_tcp+0x239d8)
+    #2 boost::detail::atomic_decrement(std::atomic<int>*) /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:35 (test_roscpp-subscribe_retry_tcp+0x239d8)
+    #3 boost::detail::sp_counted_base::release() /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:108 (test_roscpp-subscribe_retry_tcp+0x23b88)
+    #4 ros::TransportPublisherLink::~TransportPublisherLink() <null> (libroscpp.so+0x11ec17)
+    #5 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #6 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #7 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #8 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #9 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #10 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #11 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #12 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #13 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #14 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-subscribe_retry_tcp+0x234c0)
+    #15 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/subscribe_retry_tcp.cpp:156 (test_roscpp-subscribe_retry_tcp+0x226d2)
+
+  Mutex M595 (0x7b48000002b0) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::PollManager::PollManager() <null> (libroscpp.so+0xda4ae)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+  Thread T1 (tid=28225, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: data race (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x741fd) in operator delete(void*)
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=28197)
+  Cycle in lock order graph: M617 (0x7b40000003a8) => M946 (0x7b50000202b0) => M617
+
+  Mutex M946 acquired here while holding mutex M617 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<roscpp::EmptyRequest_<std::allocator<void> >, roscpp::EmptyResponse_<std::allocator<void> > >(roscpp::EmptyRequest_<std::allocator<void> >&, roscpp::EmptyResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-subscribe_retry_tcp+0x28315)
+    #3 bool ros::service::call<roscpp::EmptyRequest_<std::allocator<void> >, roscpp::EmptyResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, roscpp::EmptyRequest_<std::allocator<void> >&, roscpp::EmptyResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-subscribe_retry_tcp+0x26d58)
+    #4 SubscribeRetryTCP_remoteDisconnect_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/subscribe_retry_tcp.cpp:134 (test_roscpp-subscribe_retry_tcp+0x22075)
+    #5 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #6 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #7 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #8 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #9 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #10 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #11 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #12 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #13 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #14 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-subscribe_retry_tcp+0x234c0)
+    #15 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/subscribe_retry_tcp.cpp:156 (test_roscpp-subscribe_retry_tcp+0x226d2)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M617 acquired here while holding mutex M946 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=28225, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=28197)
+  Write of size 8 at 0x7b08000012a8 by thread T1 (mutexes: write M945, write M946):
+    #0 operator delete(void*) <null> (libtsan.so.0+0x741fd)
+    #1 boost::detail::sp_counted_impl_pd<unsigned char*, boost::checked_array_deleter<unsigned char> >::~sp_counted_impl_pd() /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp:146 (test_roscpp-subscribe_retry_tcp+0x307a4)
+    #2 boost::detail::sp_counted_impl_pd<ros::ServiceServerLink::CallInfo*, boost::detail::sp_ms_deleter<ros::ServiceServerLink::CallInfo> >::dispose() <null> (libroscpp.so+0xfb967)
+
+  Previous atomic write of size 4 at 0x7b08000012a8 by main thread:
+    #0 __tsan_atomic32_fetch_sub <null> (libtsan.so.0+0x68aed)
+    #1 std::__atomic_base<int>::fetch_sub(int, std::memory_order) /usr/include/c++/7/bits/atomic_base.h:524 (test_roscpp-subscribe_retry_tcp+0x239d8)
+    #2 boost::detail::atomic_decrement(std::atomic<int>*) /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:35 (test_roscpp-subscribe_retry_tcp+0x239d8)
+    #3 boost::detail::sp_counted_base::release() /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:108 (test_roscpp-subscribe_retry_tcp+0x23b88)
+    #4 boost::detail::shared_count::~shared_count() /usr/include/boost/smart_ptr/detail/shared_count.hpp:426 (test_roscpp-subscribe_retry_tcp+0x23cee)
+    #5 boost::shared_array<unsigned char>::~shared_array() /usr/include/boost/smart_ptr/shared_array.hpp:45 (test_roscpp-subscribe_retry_tcp+0x2414b)
+    #6 ros::SerializedMessage::~SerializedMessage() /opt/ros/melodic/include/ros/serialized_message.h:39 (test_roscpp-subscribe_retry_tcp+0x29e8f)
+    #7 bool ros::ServiceClient::call<roscpp::EmptyRequest_<std::allocator<void> >, roscpp::EmptyResponse_<std::allocator<void> > >(roscpp::EmptyRequest_<std::allocator<void> > const&, roscpp::EmptyResponse_<std::allocator<void> >&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /opt/ros/melodic/include/ros/service_client.h:100 (test_roscpp-subscribe_retry_tcp+0x29f71)
+    #8 bool ros::ServiceClient::call<roscpp::EmptyRequest_<std::allocator<void> >, roscpp::EmptyResponse_<std::allocator<void> > >(roscpp::EmptyRequest_<std::allocator<void> >&, roscpp::EmptyResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-subscribe_retry_tcp+0x28315)
+    #9 bool ros::service::call<roscpp::EmptyRequest_<std::allocator<void> >, roscpp::EmptyResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, roscpp::EmptyRequest_<std::allocator<void> >&, roscpp::EmptyResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-subscribe_retry_tcp+0x26d58)
+    #10 SubscribeRetryTCP_remoteDisconnect_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/subscribe_retry_tcp.cpp:134 (test_roscpp-subscribe_retry_tcp+0x22075)
+    #11 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #12 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #13 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #14 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #15 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #16 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #17 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #18 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #19 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #20 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-subscribe_retry_tcp+0x234c0)
+    #21 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/subscribe_retry_tcp.cpp:156 (test_roscpp-subscribe_retry_tcp+0x226d2)
+
+  Mutex M945 (0x7b54000104c0) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::TransportTCP::TransportTCP(ros::PollSet*, int) <null> (libroscpp.so+0x112d4f)
+    #2 bool ros::ServiceClient::call<roscpp::EmptyRequest_<std::allocator<void> >, roscpp::EmptyResponse_<std::allocator<void> > >(roscpp::EmptyRequest_<std::allocator<void> >&, roscpp::EmptyResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-subscribe_retry_tcp+0x28315)
+    #3 bool ros::service::call<roscpp::EmptyRequest_<std::allocator<void> >, roscpp::EmptyResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, roscpp::EmptyRequest_<std::allocator<void> >&, roscpp::EmptyResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-subscribe_retry_tcp+0x26d58)
+    #4 SubscribeRetryTCP_remoteDisconnect_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/subscribe_retry_tcp.cpp:134 (test_roscpp-subscribe_retry_tcp+0x22075)
+    #5 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #6 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #7 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #8 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #9 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #10 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #11 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #12 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #13 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #14 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-subscribe_retry_tcp+0x234c0)
+    #15 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/subscribe_retry_tcp.cpp:156 (test_roscpp-subscribe_retry_tcp+0x226d2)
+
+  Mutex M946 (0x7b50000202b0) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 boost::recursive_mutex::recursive_mutex() <null> (libroscpp.so+0xa47ed)
+    #2 bool ros::ServiceClient::call<roscpp::EmptyRequest_<std::allocator<void> >, roscpp::EmptyResponse_<std::allocator<void> > >(roscpp::EmptyRequest_<std::allocator<void> >&, roscpp::EmptyResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-subscribe_retry_tcp+0x28315)
+    #3 bool ros::service::call<roscpp::EmptyRequest_<std::allocator<void> >, roscpp::EmptyResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, roscpp::EmptyRequest_<std::allocator<void> >&, roscpp::EmptyResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-subscribe_retry_tcp+0x26d58)
+    #4 SubscribeRetryTCP_remoteDisconnect_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/subscribe_retry_tcp.cpp:134 (test_roscpp-subscribe_retry_tcp+0x22075)
+    #5 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #6 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #7 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #8 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #9 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #10 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #11 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #12 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #13 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #14 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-subscribe_retry_tcp+0x234c0)
+    #15 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/subscribe_retry_tcp.cpp:156 (test_roscpp-subscribe_retry_tcp+0x226d2)
+
+  Thread T1 (tid=28225, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: data race (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x741fd) in operator delete(void*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=28197)
+  Write of size 8 at 0x7b4400001048 by thread T1 (mutexes: write M945, write M946):
+    #0 operator delete(void*) <null> (libtsan.so.0+0x741fd)
+    #1 ros::ServiceServerLink::~ServiceServerLink() <null> (libroscpp.so+0xf9153)
+
+  Previous atomic write of size 4 at 0x7b4400001048 by main thread:
+    #0 __tsan_atomic32_fetch_sub <null> (libtsan.so.0+0x68aed)
+    #1 std::__atomic_base<int>::fetch_sub(int, std::memory_order) /usr/include/c++/7/bits/atomic_base.h:524 (test_roscpp-subscribe_retry_tcp+0x239d8)
+    #2 boost::detail::atomic_decrement(std::atomic<int>*) /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:35 (test_roscpp-subscribe_retry_tcp+0x239d8)
+    #3 boost::detail::sp_counted_base::release() /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:108 (test_roscpp-subscribe_retry_tcp+0x23b88)
+    #4 ros::ServiceServerLink::call(ros::SerializedMessage const&, ros::SerializedMessage&) <null> (libroscpp.so+0xf9354)
+    #5 bool ros::ServiceClient::call<roscpp::EmptyRequest_<std::allocator<void> >, roscpp::EmptyResponse_<std::allocator<void> > >(roscpp::EmptyRequest_<std::allocator<void> >&, roscpp::EmptyResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-subscribe_retry_tcp+0x28315)
+    #6 bool ros::service::call<roscpp::EmptyRequest_<std::allocator<void> >, roscpp::EmptyResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, roscpp::EmptyRequest_<std::allocator<void> >&, roscpp::EmptyResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-subscribe_retry_tcp+0x26d58)
+    #7 SubscribeRetryTCP_remoteDisconnect_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/subscribe_retry_tcp.cpp:134 (test_roscpp-subscribe_retry_tcp+0x22075)
+    #8 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #9 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #10 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #11 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #12 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #13 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #14 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #15 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #16 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #17 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-subscribe_retry_tcp+0x234c0)
+    #18 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/subscribe_retry_tcp.cpp:156 (test_roscpp-subscribe_retry_tcp+0x226d2)
+
+  Mutex M945 (0x7b54000104c0) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::TransportTCP::TransportTCP(ros::PollSet*, int) <null> (libroscpp.so+0x112d4f)
+    #2 bool ros::ServiceClient::call<roscpp::EmptyRequest_<std::allocator<void> >, roscpp::EmptyResponse_<std::allocator<void> > >(roscpp::EmptyRequest_<std::allocator<void> >&, roscpp::EmptyResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-subscribe_retry_tcp+0x28315)
+    #3 bool ros::service::call<roscpp::EmptyRequest_<std::allocator<void> >, roscpp::EmptyResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, roscpp::EmptyRequest_<std::allocator<void> >&, roscpp::EmptyResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-subscribe_retry_tcp+0x26d58)
+    #4 SubscribeRetryTCP_remoteDisconnect_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/subscribe_retry_tcp.cpp:134 (test_roscpp-subscribe_retry_tcp+0x22075)
+    #5 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #6 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #7 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #8 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #9 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #10 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #11 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #12 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #13 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #14 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-subscribe_retry_tcp+0x234c0)
+    #15 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/subscribe_retry_tcp.cpp:156 (test_roscpp-subscribe_retry_tcp+0x226d2)
+
+  Mutex M946 (0x7b50000202b0) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 boost::recursive_mutex::recursive_mutex() <null> (libroscpp.so+0xa47ed)
+    #2 bool ros::ServiceClient::call<roscpp::EmptyRequest_<std::allocator<void> >, roscpp::EmptyResponse_<std::allocator<void> > >(roscpp::EmptyRequest_<std::allocator<void> >&, roscpp::EmptyResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-subscribe_retry_tcp+0x28315)
+    #3 bool ros::service::call<roscpp::EmptyRequest_<std::allocator<void> >, roscpp::EmptyResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, roscpp::EmptyRequest_<std::allocator<void> >&, roscpp::EmptyResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-subscribe_retry_tcp+0x26d58)
+    #4 SubscribeRetryTCP_remoteDisconnect_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/subscribe_retry_tcp.cpp:134 (test_roscpp-subscribe_retry_tcp+0x22075)
+    #5 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #6 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #7 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #8 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #9 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #10 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #11 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #12 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #13 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #14 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-subscribe_retry_tcp+0x234c0)
+    #15 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/subscribe_retry_tcp.cpp:156 (test_roscpp-subscribe_retry_tcp+0x226d2)
+
+  Thread T1 (tid=28225, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: data race (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x741fd) in operator delete(void*)
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=28197)
+  Cycle in lock order graph: M603 (0x7b44000007a0) => M604 (0x7b44000007e0) => M603
+
+  Mutex M604 acquired here while holding mutex M603 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 SubscribeRetryTCP_localDisconnect_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/subscribe_retry_tcp.cpp:52 (test_roscpp-subscribe_retry_tcp+0x20a85)
+    #3 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #4 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #5 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #6 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #7 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #8 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #9 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #10 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #11 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #12 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-subscribe_retry_tcp+0x234c0)
+    #13 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/subscribe_retry_tcp.cpp:156 (test_roscpp-subscribe_retry_tcp+0x226d2)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M603 acquired here while holding mutex M604 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::mutex>::lock() <null> (libroscpp.so+0xa52a7)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+ThreadSanitizer: reported 9 warnings

@@ -1,0 +1,13 @@
+
+=================================================================
+==31045==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 48 byte(s) in 1 object(s) allocated from:
+    #0 0x7f508b467458 in operator new(unsigned long) (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xe0458)
+    #1 0x7f50878e1780 in class_loader::impl::loadLibrary(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, class_loader::ClassLoader*) (/opt/ros/melodic/lib/libclass_loader.so+0x15780)
+
+Indirect leak of 78 byte(s) in 1 object(s) allocated from:
+    #0 0x7f508b467458 in operator new(unsigned long) (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xe0458)
+    #1 0x7f508a344c36 in std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_assign(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (/usr/lib/x86_64-linux-gnu/libstdc++.so.6+0x124c36)
+
+SUMMARY: AddressSanitizer: 126 byte(s) leaked in 2 allocation(s).

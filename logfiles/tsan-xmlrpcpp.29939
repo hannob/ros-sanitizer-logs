@@ -1,0 +1,58 @@
+==================
+WARNING: ThreadSanitizer: data race (pid=29939)
+  Read of size 1 at 0x7b4800000144 by thread T1:
+    #0 XmlRpcTest::work() /catkin/buildtmp/xmlrpcpp/src/xmlrpcpp/test/HelloTest.cpp:98 (HelloTest+0x1e9b4)
+    #1 boost::_mfi::mf0<void, XmlRpcTest>::operator()(XmlRpcTest*) const /usr/include/boost/bind/mem_fn_template.hpp:49 (HelloTest+0x27075)
+    #2 void boost::_bi::list1<boost::_bi::value<XmlRpcTest*> >::operator()<boost::_mfi::mf0<void, XmlRpcTest>, boost::_bi::list0>(boost::_bi::type<void>, boost::_mfi::mf0<void, XmlRpcTest>&, boost::_bi::list0&, int) /usr/include/boost/bind/bind.hpp:259 (HelloTest+0x26f39)
+    #3 boost::_bi::bind_t<void, boost::_mfi::mf0<void, XmlRpcTest>, boost::_bi::list1<boost::_bi::value<XmlRpcTest*> > >::operator()() /usr/include/boost/bind/bind.hpp:1294 (HelloTest+0x26d99)
+    #4 boost::detail::thread_data<boost::_bi::bind_t<void, boost::_mfi::mf0<void, XmlRpcTest>, boost::_bi::list1<boost::_bi::value<XmlRpcTest*> > > >::run() /usr/include/boost/thread/detail/thread.hpp:116 (HelloTest+0x26944)
+    #5 <null> <null> (libboost_thread.so.1.65.1+0x11bcc)
+
+  Previous write of size 1 at 0x7b4800000144 by main thread:
+    #0 XmlRpcTest::TearDown() /catkin/buildtmp/xmlrpcpp/src/xmlrpcpp/test/HelloTest.cpp:125 (HelloTest+0x1eb5e)
+    #1 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #2 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #3 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2482 (libgtest.so+0x6c43c)
+    #4 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #5 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #6 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #7 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #8 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #9 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #10 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (HelloTest+0x1e1be)
+    #11 main /catkin/buildtmp/xmlrpcpp/src/xmlrpcpp/test/HelloTest.cpp:275 (HelloTest+0x1a4ea)
+
+  Location is heap block of size 344 at 0x7b4800000000 allocated by main thread:
+    #0 operator new(unsigned long) <null> (libtsan.so.0+0x73f0a)
+    #1 testing::internal::TestFactoryImpl<XmlRpcTest_Introspection_Test>::CreateTest() /usr/src/googletest/googletest/include/gtest/internal/gtest-internal.h:484 (HelloTest+0x26cfc)
+    #2 testing::Test* testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::TestFactoryBase, testing::Test*>(testing::internal::TestFactoryBase*, testing::Test* (testing::internal::TestFactoryBase::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9b045)
+    #3 testing::Test* testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::TestFactoryBase, testing::Test*>(testing::internal::TestFactoryBase*, testing::Test* (testing::internal::TestFactoryBase::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x920ff)
+    #4 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2649 (libgtest.so+0x6cf84)
+    #5 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #6 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #7 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #8 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #9 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #10 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (HelloTest+0x1e1be)
+    #11 main /catkin/buildtmp/xmlrpcpp/src/xmlrpcpp/test/HelloTest.cpp:275 (HelloTest+0x1a4ea)
+
+  Thread T1 (tid=30051, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 boost::thread::thread<boost::_mfi::mf0<void, XmlRpcTest>, XmlRpcTest*>(boost::_mfi::mf0<void, XmlRpcTest>, XmlRpcTest*, boost::disable_if<boost::thread_detail::is_convertible<boost::_mfi::mf0<void, XmlRpcTest>&, boost::thread_attributes>, boost::thread::dummy*>::type) /usr/include/boost/thread/detail/thread.hpp:401 (HelloTest+0x20078)
+    #3 XmlRpcTest::SetUp() /catkin/buildtmp/xmlrpcpp/src/xmlrpcpp/test/HelloTest.cpp:118 (HelloTest+0x1ead3)
+    #4 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #5 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #6 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2470 (libgtest.so+0x6c36a)
+    #7 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #8 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #9 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #10 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #11 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #12 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #13 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (HelloTest+0x1e1be)
+    #14 main /catkin/buildtmp/xmlrpcpp/src/xmlrpcpp/test/HelloTest.cpp:275 (HelloTest+0x1a4ea)
+
+SUMMARY: ThreadSanitizer: data race /catkin/buildtmp/xmlrpcpp/src/xmlrpcpp/test/HelloTest.cpp:98 in XmlRpcTest::work()
+==================
+ThreadSanitizer: reported 1 warnings

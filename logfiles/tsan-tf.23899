@@ -1,0 +1,87 @@
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=23899)
+  Cycle in lock order graph: M431 (0x7f14e88620a8) => M434 (0x7f14e8862148) => M431
+
+  Mutex M434 acquired here while holding mutex M431 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M431 acquired here while holding mutex M434 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=23899)
+  Cycle in lock order graph: M672 (0x7b5000000f30) => M677 (0x7b540000ffc0) => M672
+
+  Mutex M677 acquired here while holding mutex M672 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::TransportTCP::enableWrite() <null> (libroscpp.so+0x113147)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M672 acquired here while holding mutex M677 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::Publication::removeSubscriberLink(boost::shared_ptr<ros::SubscriberLink> const&) <null> (libroscpp.so+0xe4047)
+
+  Thread T1 (tid=23920, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 testBroadcaster::testBroadcaster() /catkin/buildtmp/tf/src/tf/test/testBroadcaster.cpp:37 (testBroadcaster+0xcde4)
+    #3 main /catkin/buildtmp/tf/src/tf/test/testBroadcaster.cpp:87 (testBroadcaster+0xa132)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=23899)
+  Cycle in lock order graph: M672 (0x7b5000000f30) => M772 (0x7b540000ffc0) => M672
+
+  Mutex M772 acquired here while holding mutex M672 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::TransportTCP::enableWrite() <null> (libroscpp.so+0x113147)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M672 acquired here while holding mutex M772 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::Publication::removeSubscriberLink(boost::shared_ptr<ros::SubscriberLink> const&) <null> (libroscpp.so+0xe4047)
+
+  Thread T1 (tid=23920, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 testBroadcaster::testBroadcaster() /catkin/buildtmp/tf/src/tf/test/testBroadcaster.cpp:37 (testBroadcaster+0xcde4)
+    #3 main /catkin/buildtmp/tf/src/tf/test/testBroadcaster.cpp:87 (testBroadcaster+0xa132)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=23899)
+  Cycle in lock order graph: M615 (0x7b4400000d68) => M604 (0x7b48000002b0) => M615
+
+  Mutex M604 acquired here while holding mutex M615 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::PollManager::addPollThreadListener(boost::function<void ()> const&) <null> (libroscpp.so+0xdaab2)
+    #2 testBroadcaster::testBroadcaster() /catkin/buildtmp/tf/src/tf/test/testBroadcaster.cpp:37 (testBroadcaster+0xcde4)
+    #3 main /catkin/buildtmp/tf/src/tf/test/testBroadcaster.cpp:87 (testBroadcaster+0xa132)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M615 acquired here while holding mutex M604 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::mutex::lock() <null> (libtf.so+0x37d4b)
+    #2 boost::unique_lock<boost::mutex>::lock() <null> (libtf.so+0x3d0d2)
+    #3 ros::TopicManager::shutdown() <null> (libroscpp.so+0xd26f6)
+
+  Thread T1 (tid=23920, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 testBroadcaster::testBroadcaster() /catkin/buildtmp/tf/src/tf/test/testBroadcaster.cpp:37 (testBroadcaster+0xcde4)
+    #3 main /catkin/buildtmp/tf/src/tf/test/testBroadcaster.cpp:87 (testBroadcaster+0xa132)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+ThreadSanitizer: reported 4 warnings

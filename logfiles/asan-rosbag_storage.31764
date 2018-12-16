@@ -1,0 +1,42 @@
+
+=================================================================
+==31764==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 104 byte(s) in 1 object(s) allocated from:
+    #0 0x7f239bd6bd38 in __interceptor_calloc (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xded38)
+    #1 0x7f239a6b5b02  (/usr/lib/x86_64-linux-gnu/libgpgme.so.11+0x12b02)
+
+Direct leak of 48 byte(s) in 1 object(s) allocated from:
+    #0 0x7f239bd6d458 in operator new(unsigned long) (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xe0458)
+    #1 0x7f2399136780 in class_loader::impl::loadLibrary(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, class_loader::ClassLoader*) (/opt/ros/melodic/lib/libclass_loader.so+0x15780)
+
+Indirect leak of 175 byte(s) in 1 object(s) allocated from:
+    #0 0x7f239bd6bb50 in __interceptor_malloc (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xdeb50)
+    #1 0x7f239a6b5c09  (/usr/lib/x86_64-linux-gnu/libgpgme.so.11+0x12c09)
+
+Indirect leak of 104 byte(s) in 1 object(s) allocated from:
+    #0 0x7f239bd6bd38 in __interceptor_calloc (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xded38)
+    #1 0x7f239a6b5b5a  (/usr/lib/x86_64-linux-gnu/libgpgme.so.11+0x12b5a)
+
+Indirect leak of 104 byte(s) in 1 object(s) allocated from:
+    #0 0x7f239bd6bd38 in __interceptor_calloc (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xded38)
+    #1 0x7f239a6b5b5a  (/usr/lib/x86_64-linux-gnu/libgpgme.so.11+0x12b5a)
+    #2 0x61900000a5bb  (<unknown module>)
+
+Indirect leak of 82 byte(s) in 2 object(s) allocated from:
+    #0 0x7f239bd04538 in strdup (/usr/lib/x86_64-linux-gnu/libasan.so.4+0x77538)
+    #1 0x7f239a6b74f5  (/usr/lib/x86_64-linux-gnu/libgpgme.so.11+0x144f5)
+
+Indirect leak of 64 byte(s) in 1 object(s) allocated from:
+    #0 0x7f239bd6d458 in operator new(unsigned long) (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xe0458)
+    #1 0x7f239a43ec36 in std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_assign(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (/usr/lib/x86_64-linux-gnu/libstdc++.so.6+0x124c36)
+
+Indirect leak of 41 byte(s) in 1 object(s) allocated from:
+    #0 0x7f239bd04538 in strdup (/usr/lib/x86_64-linux-gnu/libasan.so.4+0x77538)
+    #1 0x7f239a6b7a51  (/usr/lib/x86_64-linux-gnu/libgpgme.so.11+0x14a51)
+
+Indirect leak of 8 byte(s) in 1 object(s) allocated from:
+    #0 0x7f239bd6bb50 in __interceptor_malloc (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xdeb50)
+    #1 0x7f239a6ab30b  (/usr/lib/x86_64-linux-gnu/libgpgme.so.11+0x830b)
+
+SUMMARY: AddressSanitizer: 730 byte(s) leaked in 10 allocation(s).

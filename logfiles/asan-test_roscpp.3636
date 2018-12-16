@@ -1,0 +1,9 @@
+
+=================================================================
+==3636==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 136 byte(s) in 1 object(s) allocated from:
+    #0 0x7fa2dc1ac458 in operator new(unsigned long) (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xe0458)
+    #1 0x7fa2dbb06396 in ros::NodeHandle::construct(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, bool) (/opt/ros/melodic/lib/libroscpp.so+0x101396)
+
+SUMMARY: AddressSanitizer: 136 byte(s) leaked in 1 allocation(s).

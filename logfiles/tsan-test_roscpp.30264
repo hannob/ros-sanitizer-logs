@@ -1,0 +1,1317 @@
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M448 (0x7f4611ff50a8) => M451 (0x7f4611ff5148) => M448
+
+  Mutex M451 acquired here while holding mutex M448 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M448 acquired here while holding mutex M451 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M659 (0x7b5000000eb0) => M598
+
+  Mutex M659 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M659 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=30264)
+  Write of size 8 at 0x7b0800001408 by thread T1 (mutexes: write M658, write M659):
+    #0 operator delete(void*) <null> (libtsan.so.0+0x741fd)
+    #1 boost::detail::sp_counted_impl_pd<unsigned char*, boost::checked_array_deleter<unsigned char> >::~sp_counted_impl_pd() /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp:146 (test_roscpp-service_call_repeatedly+0xcecc)
+    #2 boost::detail::sp_counted_impl_pd<ros::ServiceServerLink::CallInfo*, boost::detail::sp_ms_deleter<ros::ServiceServerLink::CallInfo> >::dispose() <null> (libroscpp.so+0xfb967)
+
+  Previous atomic write of size 4 at 0x7b0800001408 by main thread:
+    #0 __tsan_atomic32_fetch_sub <null> (libtsan.so.0+0x68aed)
+    #1 std::__atomic_base<int>::fetch_sub(int, std::memory_order) /usr/include/c++/7/bits/atomic_base.h:524 (test_roscpp-service_call_repeatedly+0x94d4)
+    #2 boost::detail::atomic_decrement(std::atomic<int>*) /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:35 (test_roscpp-service_call_repeatedly+0x94d4)
+    #3 boost::detail::sp_counted_base::release() /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:108 (test_roscpp-service_call_repeatedly+0x9654)
+    #4 boost::detail::shared_count::~shared_count() /usr/include/boost/smart_ptr/detail/shared_count.hpp:426 (test_roscpp-service_call_repeatedly+0x97ba)
+    #5 boost::shared_array<unsigned char>::~shared_array() /usr/include/boost/smart_ptr/shared_array.hpp:45 (test_roscpp-service_call_repeatedly+0x9899)
+    #6 ros::SerializedMessage::~SerializedMessage() /opt/ros/melodic/include/ros/serialized_message.h:39 (test_roscpp-service_call_repeatedly+0xb11d)
+    #7 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> > const&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /opt/ros/melodic/include/ros/service_client.h:100 (test_roscpp-service_call_repeatedly+0xb1ff)
+    #8 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #9 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #10 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+  Mutex M658 (0x7b5400000340) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::TransportTCP::TransportTCP(ros::PollSet*, int) <null> (libroscpp.so+0x112d4f)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+  Mutex M659 (0x7b5000000eb0) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 boost::recursive_mutex::recursive_mutex() <null> (libroscpp.so+0xa47ed)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: data race (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x741fd) in operator delete(void*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=30264)
+  Write of size 8 at 0x7b4400000b48 by thread T1 (mutexes: write M658, write M659):
+    #0 operator delete(void*) <null> (libtsan.so.0+0x741fd)
+    #1 ros::ServiceServerLink::~ServiceServerLink() <null> (libroscpp.so+0xf9153)
+
+  Previous atomic write of size 4 at 0x7b4400000b48 by main thread:
+    #0 __tsan_atomic32_fetch_sub <null> (libtsan.so.0+0x68aed)
+    #1 std::__atomic_base<int>::fetch_sub(int, std::memory_order) /usr/include/c++/7/bits/atomic_base.h:524 (test_roscpp-service_call_repeatedly+0x94d4)
+    #2 boost::detail::atomic_decrement(std::atomic<int>*) /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:35 (test_roscpp-service_call_repeatedly+0x94d4)
+    #3 boost::detail::sp_counted_base::release() /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:108 (test_roscpp-service_call_repeatedly+0x9654)
+    #4 ros::ServiceServerLink::call(ros::SerializedMessage const&, ros::SerializedMessage&) <null> (libroscpp.so+0xf9354)
+    #5 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #6 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #7 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+  Mutex M658 (0x7b5400000340) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::TransportTCP::TransportTCP(ros::PollSet*, int) <null> (libroscpp.so+0x112d4f)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+  Mutex M659 (0x7b5000000eb0) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 boost::recursive_mutex::recursive_mutex() <null> (libroscpp.so+0xa47ed)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: data race (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x741fd) in operator delete(void*)
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M705 (0x7b50000012b0) => M598
+
+  Mutex M705 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M705 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M753 (0x7b50000016b0) => M598
+
+  Mutex M753 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M753 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M798 (0x7b5000001ab0) => M598
+
+  Mutex M798 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M798 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M843 (0x7b5000001eb0) => M598
+
+  Mutex M843 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M843 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M891 (0x7b50000022b0) => M598
+
+  Mutex M891 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M891 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M936 (0x7b50000026b0) => M598
+
+  Mutex M936 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M936 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M984 (0x7b5000002ab0) => M598
+
+  Mutex M984 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M984 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M1029 (0x7b5000002eb0) => M598
+
+  Mutex M1029 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M1029 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M1077 (0x7b50000032b0) => M598
+
+  Mutex M1077 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M1077 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M1122 (0x7b50000036b0) => M598
+
+  Mutex M1122 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M1122 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M1170 (0x7b5000003ab0) => M598
+
+  Mutex M1170 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M1170 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M1215 (0x7b5000003eb0) => M598
+
+  Mutex M1215 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M1215 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M1263 (0x7b50000042b0) => M598
+
+  Mutex M1263 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M1263 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M1308 (0x7b50000046b0) => M598
+
+  Mutex M1308 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M1308 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M1356 (0x7b5000004ab0) => M598
+
+  Mutex M1356 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M1356 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M1401 (0x7b5000004eb0) => M598
+
+  Mutex M1401 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M1401 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M1449 (0x7b50000052b0) => M598
+
+  Mutex M1449 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M1449 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M1494 (0x7b50000056b0) => M598
+
+  Mutex M1494 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M1494 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M1542 (0x7b5000005ab0) => M598
+
+  Mutex M1542 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M1542 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M1587 (0x7b5000005eb0) => M598
+
+  Mutex M1587 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M1587 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M1635 (0x7b50000062b0) => M598
+
+  Mutex M1635 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M1635 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M1683 (0x7b50000066b0) => M598
+
+  Mutex M1683 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M1683 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M1728 (0x7b5000006ab0) => M598
+
+  Mutex M1728 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M1728 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M1776 (0x7b5000006eb0) => M598
+
+  Mutex M1776 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M1776 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M1821 (0x7b50000072b0) => M598
+
+  Mutex M1821 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M1821 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M1869 (0x7b50000076b0) => M598
+
+  Mutex M1869 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M1869 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M1914 (0x7b5000007ab0) => M598
+
+  Mutex M1914 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M1914 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M1962 (0x7b5000007eb0) => M598
+
+  Mutex M1962 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M1962 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M2007 (0x7b50000082b0) => M598
+
+  Mutex M2007 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M2007 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M2055 (0x7b50000086b0) => M598
+
+  Mutex M2055 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M2055 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M2103 (0x7b5000008ab0) => M598
+
+  Mutex M2103 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M2103 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M2148 (0x7b5000008eb0) => M598
+
+  Mutex M2148 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M2148 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M2196 (0x7b50000092b0) => M598
+
+  Mutex M2196 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M2196 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M2241 (0x7b50000096b0) => M598
+
+  Mutex M2241 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M2241 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M2289 (0x7b5000009ab0) => M598
+
+  Mutex M2289 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M2289 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M2334 (0x7b5000009eb0) => M598
+
+  Mutex M2334 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M2334 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M2382 (0x7b500000a2b0) => M598
+
+  Mutex M2382 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M2382 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M2427 (0x7b500000a6b0) => M598
+
+  Mutex M2427 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M2427 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M2475 (0x7b500000aab0) => M598
+
+  Mutex M2475 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M2475 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M2523 (0x7b500000aeb0) => M598
+
+  Mutex M2523 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M2523 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M2568 (0x7b500000b2b0) => M598
+
+  Mutex M2568 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M2568 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M2613 (0x7b500000b6b0) => M598
+
+  Mutex M2613 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M2613 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M2661 (0x7b500000bab0) => M598
+
+  Mutex M2661 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M2661 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M2706 (0x7b500000beb0) => M598
+
+  Mutex M2706 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M2706 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M2754 (0x7b500000c2b0) => M598
+
+  Mutex M2754 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M2754 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M2802 (0x7b500000c6b0) => M598
+
+  Mutex M2802 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M2802 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M2850 (0x7b500000cab0) => M598
+
+  Mutex M2850 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M2850 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M2895 (0x7b500000ceb0) => M598
+
+  Mutex M2895 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M2895 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M598 (0x7b40000002a8) => M2943 (0x7b500000d2b0) => M598
+
+  Mutex M2943 acquired here while holding mutex M598 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_repeatedly+0xaca9)
+    #3 bool ros::service::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringResponse_<std::allocator<void> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringResponse_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service.h:71 (test_roscpp-service_call_repeatedly+0xa646)
+    #4 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_repeatedly.cpp:53 (test_roscpp-service_call_repeatedly+0x8ef1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M598 acquired here while holding mutex M2943 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12ae3c)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=30264)
+  Cycle in lock order graph: M587 (0x7b44000004a8) => M576 (0x7b48000002b0) => M587
+
+  Mutex M576 acquired here while holding mutex M587 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::PollManager::addPollThreadListener(boost::function<void ()> const&) <null> (libroscpp.so+0xdaab2)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M587 acquired here while holding mutex M576 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::mutex>::lock() <null> (libroscpp.so+0xa52a7)
+
+  Thread T1 (tid=30289, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+ThreadSanitizer: reported 54 warnings

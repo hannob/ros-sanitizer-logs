@@ -1,0 +1,5 @@
+/usr/include/boost/format/alt_sstream.hpp:146:60: runtime error: member call on address 0x7ffeb0705470 which does not point to an object of type 'basic_oaltstringstream'
+0x7ffeb0705470: note: object has invalid vptr
+ a1 d4 b5 4d  00 00 00 00 00 00 00 00  a8 58 70 b0 fe 7f 00 00  c0 e3 22 56 6c 55 00 00  08 2b 6c ce
+              ^~~~~~~~~~~~~~~~~~~~~~~
+              invalid vptr

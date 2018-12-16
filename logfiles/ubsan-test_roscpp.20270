@@ -1,0 +1,24 @@
+/catkin/buildtmp/test_roscpp/src/test_roscpp/test_serialization/src/serialization.cpp:103:1: runtime error: reference binding to misaligned address 0x560ca0acab14 for type 'const long unsigned int', which requires 8 byte alignment
+0x560ca0acab14: note: pointer points here
+  08 00 00 00 00 00 00 00  00 00 00 00 64 00 00 00  00 00 00 00 c8 00 00 00  00 00 00 00 2c 01 00 00
+              ^ 
+/usr/src/googletest/googletest/include/gtest/gtest.h:1392:11: runtime error: load of misaligned address 0x560ca0acab14 for type 'const long unsigned int', which requires 8 byte alignment
+0x560ca0acab14: note: pointer points here
+  08 00 00 00 00 00 00 00  00 00 00 00 64 00 00 00  00 00 00 00 c8 00 00 00  00 00 00 00 2c 01 00 00
+              ^ 
+/catkin/buildtmp/test_roscpp/src/test_roscpp/test_serialization/src/serialization.cpp:104:1: runtime error: reference binding to misaligned address 0x560ca0acab64 for type 'const long int', which requires 8 byte alignment
+0x560ca0acab64: note: pointer points here
+  08 00 00 00 00 00 00 00  00 00 00 00 64 00 00 00  00 00 00 00 c8 00 00 00  00 00 00 00 2c 01 00 00
+              ^ 
+/usr/src/googletest/googletest/include/gtest/gtest.h:1392:11: runtime error: load of misaligned address 0x560ca0acab64 for type 'const long int', which requires 8 byte alignment
+0x560ca0acab64: note: pointer points here
+  08 00 00 00 00 00 00 00  00 00 00 00 64 00 00 00  00 00 00 00 c8 00 00 00  00 00 00 00 2c 01 00 00
+              ^ 
+/catkin/buildtmp/test_roscpp/src/test_roscpp/test_serialization/src/serialization.cpp:106:1: runtime error: reference binding to misaligned address 0x560ca0acab14 for type 'const double', which requires 8 byte alignment
+0x560ca0acab14: note: pointer points here
+  08 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  00 00 59 40 00 00 00 00  00 00 69 40 00 00 00 00
+              ^ 
+/usr/src/googletest/googletest/include/gtest/gtest.h:1392:11: runtime error: load of misaligned address 0x560ca0acab14 for type 'const double', which requires 8 byte alignment
+0x560ca0acab14: note: pointer points here
+  08 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  00 00 59 40 00 00 00 00  00 00 69 40 00 00 00 00
+              ^ 

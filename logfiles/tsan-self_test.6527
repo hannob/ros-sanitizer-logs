@@ -1,0 +1,346 @@
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=6527)
+  Cycle in lock order graph: M450 (0x7efefd3480a8) => M453 (0x7efefd348148) => M450
+
+  Mutex M453 acquired here while holding mutex M450 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M450 acquired here while holding mutex M453 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=6527)
+  Cycle in lock order graph: M658 (0x7b50000200b0) => M657 (0x7b540000ffc0) => M658
+
+  Mutex M657 acquired here while holding mutex M658 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::TransportTCP::read(unsigned char*, unsigned int) <null> (libroscpp.so+0x113801)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M658 acquired here while holding mutex M657 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+
+  Thread T1 (tid=6552, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 main /catkin/buildtmp/self_test/src/self_test/test/nominal_selftest.cpp:141 (nominal_selftest+0x2f2e8)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=6527)
+  Cycle in lock order graph: M696 (0x7b50000200b0) => M695 (0x7b540000ffc0) => M696
+
+  Mutex M695 acquired here while holding mutex M696 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::TransportTCP::read(unsigned char*, unsigned int) <null> (libroscpp.so+0x113801)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M696 acquired here while holding mutex M695 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+
+  Thread T1 (tid=6552, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 main /catkin/buildtmp/self_test/src/self_test/test/nominal_selftest.cpp:141 (nominal_selftest+0x2f2e8)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=6527)
+  Cycle in lock order graph: M426 (0x7efefbcf5720) => M450 (0x7efefd3480a8) => M453 (0x7efefd348148) => M426
+
+  Mutex M450 acquired here while holding mutex M426 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M453 acquired here while holding mutex M450 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+  Mutex M426 acquired here while holding mutex M453 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::posix::pthread_mutex_lock(pthread_mutex_t*) /usr/include/boost/thread/pthread/mutex.hpp:62 (nominal_selftest+0x3211f)
+    #2 boost::mutex::lock() /usr/include/boost/thread/pthread/mutex.hpp:116 (nominal_selftest+0x3211f)
+    #3 boost::unique_lock<boost::mutex>::lock() /usr/include/boost/thread/lock_types.hpp:346 (nominal_selftest+0x37442)
+    #4 ros::console::initializeLogLocation(ros::console::LogLocation*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, ros::console::levels::Level) <null> (librosconsole.so+0x1d98c)
+    #5 boost::_mfi::mf2<bool, self_test::TestRunner, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>::operator()(self_test::TestRunner*, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&) const /usr/include/boost/bind/mem_fn_template.hpp:280 (nominal_selftest+0x44f04)
+    #6 bool boost::_bi::list3<boost::_bi::value<self_test::TestRunner*>, boost::arg<1>, boost::arg<2> >::operator()<bool, boost::_mfi::mf2<bool, self_test::TestRunner, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>, boost::_bi::rrlist2<diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&> >(boost::_bi::type<bool>, boost::_mfi::mf2<bool, self_test::TestRunner, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>&, boost::_bi::rrlist2<diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>&, long) /usr/include/boost/bind/bind.hpp:388 (nominal_selftest+0x435bc)
+    #7 bool boost::_bi::bind_t<bool, boost::_mfi::mf2<bool, self_test::TestRunner, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>, boost::_bi::list3<boost::_bi::value<self_test::TestRunner*>, boost::arg<1>, boost::arg<2> > >::operator()<diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>(diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&) /usr/include/boost/bind/bind.hpp:1318 (nominal_selftest+0x41d1e)
+    #8 boost::detail::function::function_obj_invoker2<boost::_bi::bind_t<bool, boost::_mfi::mf2<bool, self_test::TestRunner, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>, boost::_bi::list3<boost::_bi::value<self_test::TestRunner*>, boost::arg<1>, boost::arg<2> > >, bool, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>::invoke(boost::detail::function::function_buffer&, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&) /usr/include/boost/function/function_template.hpp:138 (nominal_selftest+0x40484)
+    #9 boost::function2<bool, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>::operator()(diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&) const /usr/include/boost/function/function_template.hpp:760 (nominal_selftest+0x4a0f5)
+    #10 ros::ServiceSpec<diagnostic_msgs::SelfTestRequest_<std::allocator<void> >, diagnostic_msgs::SelfTestResponse_<std::allocator<void> > >::call(boost::function<bool (diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&)> const&, ros::ServiceSpecCallParams<diagnostic_msgs::SelfTestRequest_<std::allocator<void> >, diagnostic_msgs::SelfTestResponse_<std::allocator<void> > >&) /opt/ros/melodic/include/ros/service_callback_helper.h:125 (nominal_selftest+0x495c0)
+    #11 ros::ServiceCallbackHelperT<ros::ServiceSpec<diagnostic_msgs::SelfTestRequest_<std::allocator<void> >, diagnostic_msgs::SelfTestResponse_<std::allocator<void> > > >::call(ros::ServiceCallbackHelperCallParams&) /opt/ros/melodic/include/ros/service_callback_helper.h:182 (nominal_selftest+0x48886)
+    #12 ros::ServiceCallback::call() <null> (libroscpp.so+0x9aa03)
+    #13 MyNode::spin() /catkin/buildtmp/self_test/src/self_test/test/nominal_selftest.cpp:131 (nominal_selftest+0x35a85)
+    #14 main /catkin/buildtmp/self_test/src/self_test/test/nominal_selftest.cpp:143 (nominal_selftest+0x2f2f7)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=6527)
+  Cycle in lock order graph: M450 (0x7efefd3480a8) => M453 (0x7efefd348148) => M450
+
+  Mutex M453 acquired here while holding mutex M450 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M450 acquired here while holding mutex M453 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=6527)
+  Cycle in lock order graph: M450 (0x7efefd3480a8) => M453 (0x7efefd348148) => M426 (0x7efefbcf5720) => M450
+
+  Mutex M453 acquired here while holding mutex M450 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M426 acquired here while holding mutex M453 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::posix::pthread_mutex_lock(pthread_mutex_t*) /usr/include/boost/thread/pthread/mutex.hpp:62 (nominal_selftest+0x3211f)
+    #2 boost::mutex::lock() /usr/include/boost/thread/pthread/mutex.hpp:116 (nominal_selftest+0x3211f)
+    #3 boost::unique_lock<boost::mutex>::lock() /usr/include/boost/thread/lock_types.hpp:346 (nominal_selftest+0x37442)
+    #4 ros::console::initializeLogLocation(ros::console::LogLocation*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, ros::console::levels::Level) <null> (librosconsole.so+0x1d98c)
+    #5 boost::_mfi::mf2<bool, self_test::TestRunner, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>::operator()(self_test::TestRunner*, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&) const /usr/include/boost/bind/mem_fn_template.hpp:280 (nominal_selftest+0x44f04)
+    #6 bool boost::_bi::list3<boost::_bi::value<self_test::TestRunner*>, boost::arg<1>, boost::arg<2> >::operator()<bool, boost::_mfi::mf2<bool, self_test::TestRunner, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>, boost::_bi::rrlist2<diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&> >(boost::_bi::type<bool>, boost::_mfi::mf2<bool, self_test::TestRunner, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>&, boost::_bi::rrlist2<diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>&, long) /usr/include/boost/bind/bind.hpp:388 (nominal_selftest+0x435bc)
+    #7 bool boost::_bi::bind_t<bool, boost::_mfi::mf2<bool, self_test::TestRunner, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>, boost::_bi::list3<boost::_bi::value<self_test::TestRunner*>, boost::arg<1>, boost::arg<2> > >::operator()<diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>(diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&) /usr/include/boost/bind/bind.hpp:1318 (nominal_selftest+0x41d1e)
+    #8 boost::detail::function::function_obj_invoker2<boost::_bi::bind_t<bool, boost::_mfi::mf2<bool, self_test::TestRunner, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>, boost::_bi::list3<boost::_bi::value<self_test::TestRunner*>, boost::arg<1>, boost::arg<2> > >, bool, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>::invoke(boost::detail::function::function_buffer&, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&) /usr/include/boost/function/function_template.hpp:138 (nominal_selftest+0x40484)
+    #9 boost::function2<bool, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>::operator()(diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&) const /usr/include/boost/function/function_template.hpp:760 (nominal_selftest+0x4a0f5)
+    #10 ros::ServiceSpec<diagnostic_msgs::SelfTestRequest_<std::allocator<void> >, diagnostic_msgs::SelfTestResponse_<std::allocator<void> > >::call(boost::function<bool (diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&)> const&, ros::ServiceSpecCallParams<diagnostic_msgs::SelfTestRequest_<std::allocator<void> >, diagnostic_msgs::SelfTestResponse_<std::allocator<void> > >&) /opt/ros/melodic/include/ros/service_callback_helper.h:125 (nominal_selftest+0x495c0)
+    #11 ros::ServiceCallbackHelperT<ros::ServiceSpec<diagnostic_msgs::SelfTestRequest_<std::allocator<void> >, diagnostic_msgs::SelfTestResponse_<std::allocator<void> > > >::call(ros::ServiceCallbackHelperCallParams&) /opt/ros/melodic/include/ros/service_callback_helper.h:182 (nominal_selftest+0x48886)
+    #12 ros::ServiceCallback::call() <null> (libroscpp.so+0x9aa03)
+    #13 MyNode::spin() /catkin/buildtmp/self_test/src/self_test/test/nominal_selftest.cpp:131 (nominal_selftest+0x35a85)
+    #14 main /catkin/buildtmp/self_test/src/self_test/test/nominal_selftest.cpp:143 (nominal_selftest+0x2f2f7)
+
+  Mutex M450 acquired here while holding mutex M426 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=6527)
+  Cycle in lock order graph: M695 (0x7b540000ffc0) => M697 (0x7b5000020118) => M695
+
+  Mutex M697 acquired here while holding mutex M695 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::posix::pthread_mutex_lock(pthread_mutex_t*) /usr/include/boost/thread/pthread/mutex.hpp:62 (nominal_selftest+0x3211f)
+    #2 boost::mutex::lock() /usr/include/boost/thread/pthread/mutex.hpp:116 (nominal_selftest+0x3211f)
+    #3 boost::unique_lock<boost::mutex>::lock() /usr/include/boost/thread/lock_types.hpp:346 (nominal_selftest+0x37442)
+    #4 ros::Connection::writeTransport() <null> (libroscpp.so+0xa096c)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M695 acquired here while holding mutex M697 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::TransportTCP::disableWrite() <null> (libroscpp.so+0x112fc7)
+    #2 MyNode::spin() /catkin/buildtmp/self_test/src/self_test/test/nominal_selftest.cpp:131 (nominal_selftest+0x35a85)
+    #3 main /catkin/buildtmp/self_test/src/self_test/test/nominal_selftest.cpp:143 (nominal_selftest+0x2f2f7)
+
+  Thread T1 (tid=6552, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 main /catkin/buildtmp/self_test/src/self_test/test/nominal_selftest.cpp:141 (nominal_selftest+0x2f2e8)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=6527)
+  Cycle in lock order graph: M589 (0x7b44000004a8) => M578 (0x7b48000002b0) => M589
+
+  Mutex M578 acquired here while holding mutex M589 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::PollManager::addPollThreadListener(boost::function<void ()> const&) <null> (libroscpp.so+0xdaab2)
+    #2 main /catkin/buildtmp/self_test/src/self_test/test/nominal_selftest.cpp:141 (nominal_selftest+0x2f2e8)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M589 acquired here while holding mutex M578 in thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::posix::pthread_mutex_lock(pthread_mutex_t*) /usr/include/boost/thread/pthread/mutex.hpp:62 (nominal_selftest+0x3211f)
+    #2 boost::mutex::lock() /usr/include/boost/thread/pthread/mutex.hpp:116 (nominal_selftest+0x3211f)
+    #3 boost::unique_lock<boost::mutex>::lock() /usr/include/boost/thread/lock_types.hpp:346 (nominal_selftest+0x37442)
+    #4 ros::TopicManager::shutdown() <null> (libroscpp.so+0xd26f6)
+
+  Thread T1 (tid=6552, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 main /catkin/buildtmp/self_test/src/self_test/test/nominal_selftest.cpp:141 (nominal_selftest+0x2f2e8)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=6527)
+  Cycle in lock order graph: M450 (0x7efefd3480a8) => M453 (0x7efefd348148) => M426 (0x7efefbcf5720) => M450
+
+  Mutex M453 acquired here while holding mutex M450 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M426 acquired here while holding mutex M453 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::posix::pthread_mutex_lock(pthread_mutex_t*) /usr/include/boost/thread/pthread/mutex.hpp:62 (nominal_selftest+0x3211f)
+    #2 boost::mutex::lock() /usr/include/boost/thread/pthread/mutex.hpp:116 (nominal_selftest+0x3211f)
+    #3 boost::unique_lock<boost::mutex>::lock() /usr/include/boost/thread/lock_types.hpp:346 (nominal_selftest+0x37442)
+    #4 ros::console::initializeLogLocation(ros::console::LogLocation*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, ros::console::levels::Level) <null> (librosconsole.so+0x1d98c)
+    #5 boost::_mfi::mf2<bool, self_test::TestRunner, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>::operator()(self_test::TestRunner*, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&) const /usr/include/boost/bind/mem_fn_template.hpp:280 (nominal_selftest+0x44f04)
+    #6 bool boost::_bi::list3<boost::_bi::value<self_test::TestRunner*>, boost::arg<1>, boost::arg<2> >::operator()<bool, boost::_mfi::mf2<bool, self_test::TestRunner, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>, boost::_bi::rrlist2<diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&> >(boost::_bi::type<bool>, boost::_mfi::mf2<bool, self_test::TestRunner, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>&, boost::_bi::rrlist2<diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>&, long) /usr/include/boost/bind/bind.hpp:388 (nominal_selftest+0x435bc)
+    #7 bool boost::_bi::bind_t<bool, boost::_mfi::mf2<bool, self_test::TestRunner, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>, boost::_bi::list3<boost::_bi::value<self_test::TestRunner*>, boost::arg<1>, boost::arg<2> > >::operator()<diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>(diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&) /usr/include/boost/bind/bind.hpp:1318 (nominal_selftest+0x41d1e)
+    #8 boost::detail::function::function_obj_invoker2<boost::_bi::bind_t<bool, boost::_mfi::mf2<bool, self_test::TestRunner, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>, boost::_bi::list3<boost::_bi::value<self_test::TestRunner*>, boost::arg<1>, boost::arg<2> > >, bool, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>::invoke(boost::detail::function::function_buffer&, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&) /usr/include/boost/function/function_template.hpp:138 (nominal_selftest+0x40484)
+    #9 boost::function2<bool, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>::operator()(diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&) const /usr/include/boost/function/function_template.hpp:760 (nominal_selftest+0x4a0f5)
+    #10 ros::ServiceSpec<diagnostic_msgs::SelfTestRequest_<std::allocator<void> >, diagnostic_msgs::SelfTestResponse_<std::allocator<void> > >::call(boost::function<bool (diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&)> const&, ros::ServiceSpecCallParams<diagnostic_msgs::SelfTestRequest_<std::allocator<void> >, diagnostic_msgs::SelfTestResponse_<std::allocator<void> > >&) /opt/ros/melodic/include/ros/service_callback_helper.h:125 (nominal_selftest+0x495c0)
+    #11 ros::ServiceCallbackHelperT<ros::ServiceSpec<diagnostic_msgs::SelfTestRequest_<std::allocator<void> >, diagnostic_msgs::SelfTestResponse_<std::allocator<void> > > >::call(ros::ServiceCallbackHelperCallParams&) /opt/ros/melodic/include/ros/service_callback_helper.h:182 (nominal_selftest+0x48886)
+    #12 ros::ServiceCallback::call() <null> (libroscpp.so+0x9aa03)
+    #13 MyNode::spin() /catkin/buildtmp/self_test/src/self_test/test/nominal_selftest.cpp:131 (nominal_selftest+0x35a85)
+    #14 main /catkin/buildtmp/self_test/src/self_test/test/nominal_selftest.cpp:143 (nominal_selftest+0x2f2f7)
+
+  Mutex M450 acquired here while holding mutex M426 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=6527)
+  Cycle in lock order graph: M450 (0x7efefd3480a8) => M453 (0x7efefd348148) => M426 (0x7efefbcf5720) => M450
+
+  Mutex M453 acquired here while holding mutex M450 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M426 acquired here while holding mutex M453 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::posix::pthread_mutex_lock(pthread_mutex_t*) /usr/include/boost/thread/pthread/mutex.hpp:62 (nominal_selftest+0x3211f)
+    #2 boost::mutex::lock() /usr/include/boost/thread/pthread/mutex.hpp:116 (nominal_selftest+0x3211f)
+    #3 boost::unique_lock<boost::mutex>::lock() /usr/include/boost/thread/lock_types.hpp:346 (nominal_selftest+0x37442)
+    #4 ros::console::initializeLogLocation(ros::console::LogLocation*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, ros::console::levels::Level) <null> (librosconsole.so+0x1d98c)
+    #5 boost::_mfi::mf2<bool, self_test::TestRunner, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>::operator()(self_test::TestRunner*, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&) const /usr/include/boost/bind/mem_fn_template.hpp:280 (nominal_selftest+0x44f04)
+    #6 bool boost::_bi::list3<boost::_bi::value<self_test::TestRunner*>, boost::arg<1>, boost::arg<2> >::operator()<bool, boost::_mfi::mf2<bool, self_test::TestRunner, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>, boost::_bi::rrlist2<diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&> >(boost::_bi::type<bool>, boost::_mfi::mf2<bool, self_test::TestRunner, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>&, boost::_bi::rrlist2<diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>&, long) /usr/include/boost/bind/bind.hpp:388 (nominal_selftest+0x435bc)
+    #7 bool boost::_bi::bind_t<bool, boost::_mfi::mf2<bool, self_test::TestRunner, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>, boost::_bi::list3<boost::_bi::value<self_test::TestRunner*>, boost::arg<1>, boost::arg<2> > >::operator()<diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>(diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&) /usr/include/boost/bind/bind.hpp:1318 (nominal_selftest+0x41d1e)
+    #8 boost::detail::function::function_obj_invoker2<boost::_bi::bind_t<bool, boost::_mfi::mf2<bool, self_test::TestRunner, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>, boost::_bi::list3<boost::_bi::value<self_test::TestRunner*>, boost::arg<1>, boost::arg<2> > >, bool, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>::invoke(boost::detail::function::function_buffer&, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&) /usr/include/boost/function/function_template.hpp:138 (nominal_selftest+0x40484)
+    #9 boost::function2<bool, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>::operator()(diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&) const /usr/include/boost/function/function_template.hpp:760 (nominal_selftest+0x4a0f5)
+    #10 ros::ServiceSpec<diagnostic_msgs::SelfTestRequest_<std::allocator<void> >, diagnostic_msgs::SelfTestResponse_<std::allocator<void> > >::call(boost::function<bool (diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&)> const&, ros::ServiceSpecCallParams<diagnostic_msgs::SelfTestRequest_<std::allocator<void> >, diagnostic_msgs::SelfTestResponse_<std::allocator<void> > >&) /opt/ros/melodic/include/ros/service_callback_helper.h:125 (nominal_selftest+0x495c0)
+    #11 ros::ServiceCallbackHelperT<ros::ServiceSpec<diagnostic_msgs::SelfTestRequest_<std::allocator<void> >, diagnostic_msgs::SelfTestResponse_<std::allocator<void> > > >::call(ros::ServiceCallbackHelperCallParams&) /opt/ros/melodic/include/ros/service_callback_helper.h:182 (nominal_selftest+0x48886)
+    #12 ros::ServiceCallback::call() <null> (libroscpp.so+0x9aa03)
+    #13 MyNode::spin() /catkin/buildtmp/self_test/src/self_test/test/nominal_selftest.cpp:131 (nominal_selftest+0x35a85)
+    #14 main /catkin/buildtmp/self_test/src/self_test/test/nominal_selftest.cpp:143 (nominal_selftest+0x2f2f7)
+
+  Mutex M450 acquired here while holding mutex M426 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=6527)
+  Cycle in lock order graph: M450 (0x7efefd3480a8) => M453 (0x7efefd348148) => M426 (0x7efefbcf5720) => M450
+
+  Mutex M453 acquired here while holding mutex M450 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M426 acquired here while holding mutex M453 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::posix::pthread_mutex_lock(pthread_mutex_t*) /usr/include/boost/thread/pthread/mutex.hpp:62 (nominal_selftest+0x3211f)
+    #2 boost::mutex::lock() /usr/include/boost/thread/pthread/mutex.hpp:116 (nominal_selftest+0x3211f)
+    #3 boost::unique_lock<boost::mutex>::lock() /usr/include/boost/thread/lock_types.hpp:346 (nominal_selftest+0x37442)
+    #4 ros::console::initializeLogLocation(ros::console::LogLocation*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, ros::console::levels::Level) <null> (librosconsole.so+0x1d98c)
+    #5 boost::_mfi::mf2<bool, self_test::TestRunner, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>::operator()(self_test::TestRunner*, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&) const /usr/include/boost/bind/mem_fn_template.hpp:280 (nominal_selftest+0x44f04)
+    #6 bool boost::_bi::list3<boost::_bi::value<self_test::TestRunner*>, boost::arg<1>, boost::arg<2> >::operator()<bool, boost::_mfi::mf2<bool, self_test::TestRunner, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>, boost::_bi::rrlist2<diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&> >(boost::_bi::type<bool>, boost::_mfi::mf2<bool, self_test::TestRunner, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>&, boost::_bi::rrlist2<diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>&, long) /usr/include/boost/bind/bind.hpp:388 (nominal_selftest+0x435bc)
+    #7 bool boost::_bi::bind_t<bool, boost::_mfi::mf2<bool, self_test::TestRunner, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>, boost::_bi::list3<boost::_bi::value<self_test::TestRunner*>, boost::arg<1>, boost::arg<2> > >::operator()<diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>(diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&) /usr/include/boost/bind/bind.hpp:1318 (nominal_selftest+0x41d1e)
+    #8 boost::detail::function::function_obj_invoker2<boost::_bi::bind_t<bool, boost::_mfi::mf2<bool, self_test::TestRunner, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>, boost::_bi::list3<boost::_bi::value<self_test::TestRunner*>, boost::arg<1>, boost::arg<2> > >, bool, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>::invoke(boost::detail::function::function_buffer&, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&) /usr/include/boost/function/function_template.hpp:138 (nominal_selftest+0x40484)
+    #9 boost::function2<bool, diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&>::operator()(diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&) const /usr/include/boost/function/function_template.hpp:760 (nominal_selftest+0x4a0f5)
+    #10 ros::ServiceSpec<diagnostic_msgs::SelfTestRequest_<std::allocator<void> >, diagnostic_msgs::SelfTestResponse_<std::allocator<void> > >::call(boost::function<bool (diagnostic_msgs::SelfTestRequest_<std::allocator<void> >&, diagnostic_msgs::SelfTestResponse_<std::allocator<void> >&)> const&, ros::ServiceSpecCallParams<diagnostic_msgs::SelfTestRequest_<std::allocator<void> >, diagnostic_msgs::SelfTestResponse_<std::allocator<void> > >&) /opt/ros/melodic/include/ros/service_callback_helper.h:125 (nominal_selftest+0x495c0)
+    #11 ros::ServiceCallbackHelperT<ros::ServiceSpec<diagnostic_msgs::SelfTestRequest_<std::allocator<void> >, diagnostic_msgs::SelfTestResponse_<std::allocator<void> > > >::call(ros::ServiceCallbackHelperCallParams&) /opt/ros/melodic/include/ros/service_callback_helper.h:182 (nominal_selftest+0x48886)
+    #12 ros::ServiceCallback::call() <null> (libroscpp.so+0x9aa03)
+    #13 MyNode::spin() /catkin/buildtmp/self_test/src/self_test/test/nominal_selftest.cpp:131 (nominal_selftest+0x35a85)
+    #14 main /catkin/buildtmp/self_test/src/self_test/test/nominal_selftest.cpp:143 (nominal_selftest+0x2f2f7)
+
+  Mutex M450 acquired here while holding mutex M426 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=6527)
+  Write of size 1 at 0x7ffe57131d38 by main thread:
+    #0 pthread_mutex_destroy <null> (libtsan.so.0+0x2c709)
+    #1 ros::CallbackQueue::~CallbackQueue() <null> (libroscpp.so+0xef7ef)
+    #2 MyNode::~MyNode() /catkin/buildtmp/self_test/src/self_test/test/nominal_selftest.cpp:41 (nominal_selftest+0x35b0b)
+    #3 main /catkin/buildtmp/self_test/src/self_test/test/nominal_selftest.cpp:141 (nominal_selftest+0x2f30b)
+
+  Previous atomic read of size 1 at 0x7ffe57131d38 by thread T1 (mutexes: write M578, write M538, write M600, write M598):
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::posix::pthread_mutex_lock(pthread_mutex_t*) /usr/include/boost/thread/pthread/mutex.hpp:62 (nominal_selftest+0x3211f)
+    #2 boost::mutex::lock() /usr/include/boost/thread/pthread/mutex.hpp:116 (nominal_selftest+0x3211f)
+    #3 boost::unique_lock<boost::mutex>::lock() /usr/include/boost/thread/lock_types.hpp:346 (nominal_selftest+0x37442)
+    #4 ros::CallbackQueue::removeByID(unsigned long) <null> (libroscpp.so+0xee351)
+
+  As if synchronized via sleep:
+    #0 nanosleep <null> (libtsan.so.0+0x4dd60)
+    #1 ros::ros_wallsleep(unsigned int, unsigned int) <null> (librostime.so+0x10228)
+    #2 main /catkin/buildtmp/self_test/src/self_test/test/nominal_selftest.cpp:143 (nominal_selftest+0x2f2f7)
+
+  Location is stack of main thread.
+
+  Location is global '<null>' at 0x000000000000 ([stack]+0x00000001fd38)
+
+  Mutex M578 (0x7b48000002b0) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::PollManager::PollManager() <null> (libroscpp.so+0xda4ae)
+    #2 main /catkin/buildtmp/self_test/src/self_test/test/nominal_selftest.cpp:141 (nominal_selftest+0x2f2e8)
+
+  Mutex M538 (0x7efefc092a60) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 boost::recursive_mutex::recursive_mutex() <null> (libroscpp.so+0xa47ed)
+
+  Mutex M600 (0x7b40000002a8) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::ServiceManager::ServiceManager() <null> (libroscpp.so+0x12b949)
+    #2 main /catkin/buildtmp/self_test/src/self_test/test/nominal_selftest.cpp:141 (nominal_selftest+0x2f2e8)
+
+  Mutex M598 (0x7b4000000238) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::ServiceManager::ServiceManager() <null> (libroscpp.so+0x12b8c3)
+    #2 main /catkin/buildtmp/self_test/src/self_test/test/nominal_selftest.cpp:141 (nominal_selftest+0x2f2e8)
+
+  Thread T1 (tid=6552, finished) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 main /catkin/buildtmp/self_test/src/self_test/test/nominal_selftest.cpp:141 (nominal_selftest+0x2f2e8)
+
+SUMMARY: ThreadSanitizer: data race (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x2c709) in __interceptor_pthread_mutex_destroy
+==================
+ThreadSanitizer: reported 12 warnings

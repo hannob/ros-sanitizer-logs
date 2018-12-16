@@ -1,0 +1,55 @@
+=================================================================
+==3161==ERROR: AddressSanitizer: global-buffer-overflow on address 0x55db09219818 at pc 0x55db08fb85c5 bp 0x7ffd573e5e70 sp 0x7ffd573e5e60
+READ of size 8 at 0x55db09219818 thread T0
+    #0 0x55db08fb85c4 in in_cb(boost::shared_ptr<topic_tools::ShapeShifter const> const&, topic_tools::ShapeShifter*) /catkin/buildtmp/topic_tools/src/topic_tools/src/mux.cpp:171
+    #1 0x55db08fdcef8 in void boost::_bi::list2<boost::arg<1>, boost::_bi::value<topic_tools::ShapeShifter*> >::operator()<void (*)(boost::shared_ptr<topic_tools::ShapeShifter const> const&, topic_tools::ShapeShifter*), boost::_bi::rrlist1<boost::shared_ptr<topic_tools::ShapeShifter const> const&> >(boost::_bi::type<void>, void (*&)(boost::shared_ptr<topic_tools::ShapeShifter const> const&, topic_tools::ShapeShifter*), boost::_bi::rrlist1<boost::shared_ptr<topic_tools::ShapeShifter const> const&>&, int) /usr/include/boost/bind/bind.hpp:319
+    #2 0x55db08fd7af4 in void boost::_bi::bind_t<void, void (*)(boost::shared_ptr<topic_tools::ShapeShifter const> const&, topic_tools::ShapeShifter*), boost::_bi::list2<boost::arg<1>, boost::_bi::value<topic_tools::ShapeShifter*> > >::operator()<boost::shared_ptr<topic_tools::ShapeShifter const> const&>(boost::shared_ptr<topic_tools::ShapeShifter const> const&) /usr/include/boost/bind/bind.hpp:1306
+    #3 0x55db08fd3db8 in boost::detail::function::void_function_obj_invoker1<boost::_bi::bind_t<void, void (*)(boost::shared_ptr<topic_tools::ShapeShifter const> const&, topic_tools::ShapeShifter*), boost::_bi::list2<boost::arg<1>, boost::_bi::value<topic_tools::ShapeShifter*> > >, void, boost::shared_ptr<topic_tools::ShapeShifter const> const&>::invoke(boost::detail::function::function_buffer&, boost::shared_ptr<topic_tools::ShapeShifter const> const&) /usr/include/boost/function/function_template.hpp:159
+    #4 0x55db08fe8316 in boost::function1<void, boost::shared_ptr<topic_tools::ShapeShifter const> const&>::operator()(boost::shared_ptr<topic_tools::ShapeShifter const> const&) const /usr/include/boost/function/function_template.hpp:759
+    #5 0x55db08fe13a4 in boost::detail::function::void_function_obj_invoker1<boost::function<void (boost::shared_ptr<topic_tools::ShapeShifter const> const&)>, void, boost::shared_ptr<topic_tools::ShapeShifter const> >::invoke(boost::detail::function::function_buffer&, boost::shared_ptr<topic_tools::ShapeShifter const>) /usr/include/boost/function/function_template.hpp:159
+    #6 0x55db08ff6daf in boost::function1<void, boost::shared_ptr<topic_tools::ShapeShifter const> >::operator()(boost::shared_ptr<topic_tools::ShapeShifter const>) const /usr/include/boost/function/function_template.hpp:759
+    #7 0x55db08ff1ed2 in ros::SubscriptionCallbackHelperT<boost::shared_ptr<topic_tools::ShapeShifter const> const&, void>::call(ros::SubscriptionCallbackHelperCallParams&) /opt/ros/melodic/include/ros/subscription_callback_helper.h:144
+    #8 0x7f27ff8160e1 in ros::SubscriptionQueue::call() (/opt/ros/melodic/lib/libroscpp.so+0x1450e1)
+    #9 0x7f27ff7c0f1b in ros::CallbackQueue::callOneCB(ros::CallbackQueue::TLS*) (/opt/ros/melodic/lib/libroscpp.so+0xeff1b)
+    #10 0x7f27ff7c230a in ros::CallbackQueue::callAvailable(ros::WallDuration) (/opt/ros/melodic/lib/libroscpp.so+0xf130a)
+    #11 0x7f27ff819bf8 in ros::SingleThreadedSpinner::spin(ros::CallbackQueue*) (/opt/ros/melodic/lib/libroscpp.so+0x148bf8)
+    #12 0x7f27ff80247a in ros::spin() (/opt/ros/melodic/lib/libroscpp.so+0x13147a)
+    #13 0x55db08fbdefd in main /catkin/buildtmp/topic_tools/src/topic_tools/src/mux.cpp:369
+    #14 0x7f27fe927b96 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x21b96)
+    #15 0x55db08fb5889 in _start (/catkin/buildtmp/topic_tools/devel/lib/topic_tools/mux+0x55889)
+
+0x55db09219818 is located 32 bytes to the right of global variable 'g_subs' defined in '/catkin/buildtmp/topic_tools/src/topic_tools/src/mux.cpp:68:32' (0x55db092197e0) of size 24
+0x55db09219818 is located 8 bytes to the left of global variable 'g_selected' defined in '/catkin/buildtmp/topic_tools/src/topic_tools/src/mux.cpp:69:42' (0x55db09219820) of size 8
+SUMMARY: AddressSanitizer: global-buffer-overflow /catkin/buildtmp/topic_tools/src/topic_tools/src/mux.cpp:171 in in_cb(boost::shared_ptr<topic_tools::ShapeShifter const> const&, topic_tools::ShapeShifter*)
+Shadow bytes around the buggy address:
+  0x0abbe123b2b0: 00 00 00 00 01 f9 f9 f9 f9 f9 f9 f9 00 00 00 00
+  0x0abbe123b2c0: f9 f9 f9 f9 00 f9 f9 f9 f9 f9 f9 f9 01 f9 f9 f9
+  0x0abbe123b2d0: f9 f9 f9 f9 01 f9 f9 f9 f9 f9 f9 f9 01 f9 f9 f9
+  0x0abbe123b2e0: f9 f9 f9 f9 00 00 00 00 f9 f9 f9 f9 00 00 f9 f9
+  0x0abbe123b2f0: f9 f9 f9 f9 00 00 f9 f9 f9 f9 f9 f9 00 00 00 f9
+=>0x0abbe123b300: f9 f9 f9[f9]00 f9 f9 f9 f9 f9 f9 f9 00 f9 f9 f9
+  0x0abbe123b310: f9 f9 f9 f9 00 f9 f9 f9 f9 f9 f9 f9 00 00 00 00
+  0x0abbe123b320: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0abbe123b330: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0abbe123b340: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0abbe123b350: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+Shadow byte legend (one shadow byte represents 8 application bytes):
+  Addressable:           00
+  Partially addressable: 01 02 03 04 05 06 07 
+  Heap left redzone:       fa
+  Freed heap region:       fd
+  Stack left redzone:      f1
+  Stack mid redzone:       f2
+  Stack right redzone:     f3
+  Stack after return:      f5
+  Stack use after scope:   f8
+  Global redzone:          f9
+  Global init order:       f6
+  Poisoned by user:        f7
+  Container overflow:      fc
+  Array cookie:            ac
+  Intra object redzone:    bb
+  ASan internal:           fe
+  Left alloca redzone:     ca
+  Right alloca redzone:    cb
+==3161==ABORTING

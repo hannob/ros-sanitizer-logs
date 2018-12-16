@@ -1,0 +1,141 @@
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=23457)
+  Cycle in lock order graph: M448 (0x7fde1059e0a8) => M451 (0x7fde1059e148) => M448
+
+  Mutex M451 acquired here while holding mutex M448 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M448 acquired here while holding mutex M451 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=23457)
+  Write of size 8 at 0x7b5000001008 by main thread:
+    #0 operator delete(void*) <null> (libtsan.so.0+0x741fd)
+    #1 ros::ServiceServerLink::~ServiceServerLink() <null> (libroscpp.so+0xf9182)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringRequest_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_zombie+0xe74b)
+    #3 SrvCall_callPhantomService_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_zombie.cpp:56 (test_roscpp-service_call_zombie+0xb8b9)
+    #4 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #5 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #6 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #7 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #8 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #9 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #10 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #11 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #12 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #13 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-service_call_zombie+0xc714)
+    #14 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_zombie.cpp:74 (test_roscpp-service_call_zombie+0xbd61)
+
+  Previous atomic write of size 4 at 0x7b5000001008 by thread T1:
+    #0 __tsan_atomic32_fetch_sub <null> (libtsan.so.0+0x68aed)
+    #1 std::__atomic_base<int>::fetch_sub(int, std::memory_order) /usr/include/c++/7/bits/atomic_base.h:524 (test_roscpp-service_call_zombie+0xc7b0)
+    #2 boost::detail::atomic_decrement(std::atomic<int>*) /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:35 (test_roscpp-service_call_zombie+0xc7b0)
+    #3 boost::detail::sp_counted_base::release() /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:108 (test_roscpp-service_call_zombie+0xc930)
+    #4 ros::Connection::drop(ros::Connection::DropReason) <null> (libroscpp.so+0xa2a7e)
+
+  Thread T1 (tid=23486, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: data race (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x741fd) in operator delete(void*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=23457)
+  Write of size 8 at 0x7b4800000788 by main thread:
+    #0 operator delete(void*) <null> (libtsan.so.0+0x741fd)
+    #1 ros::ServiceClient::call(ros::SerializedMessage const&, ros::SerializedMessage&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) <null> (libroscpp.so+0xfc769)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringRequest_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_zombie+0xe74b)
+    #3 SrvCall_callPhantomService_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_zombie.cpp:56 (test_roscpp-service_call_zombie+0xb8b9)
+    #4 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #5 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #6 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #7 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #8 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #9 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #10 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #11 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #12 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #13 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-service_call_zombie+0xc714)
+    #14 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_zombie.cpp:74 (test_roscpp-service_call_zombie+0xbd61)
+
+  Previous atomic write of size 4 at 0x7b4800000788 by thread T1 (mutexes: write M615, write M614):
+    #0 __tsan_atomic32_fetch_sub <null> (libtsan.so.0+0x68aed)
+    #1 std::__atomic_base<int>::fetch_sub(int, std::memory_order) /usr/include/c++/7/bits/atomic_base.h:524 (test_roscpp-service_call_zombie+0xc7b0)
+    #2 boost::detail::atomic_decrement(std::atomic<int>*) /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:35 (test_roscpp-service_call_zombie+0xc7b0)
+    #3 boost::detail::sp_counted_base::release() /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:108 (test_roscpp-service_call_zombie+0xc930)
+    #4 ros::ServiceManager::removeServiceServerLink(boost::shared_ptr<ros::ServiceServerLink> const&) <null> (libroscpp.so+0x12aeda)
+
+  Mutex M615 (0x7b40000003a8) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::ServiceManager::ServiceManager() <null> (libroscpp.so+0x12b949)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+  Mutex M614 (0x7b4000000378) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::ServiceManager::ServiceManager() <null> (libroscpp.so+0x12b8ed)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+  Thread T1 (tid=23486, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: data race (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x741fd) in operator delete(void*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=23457)
+  Write of size 1 at 0x7b540000c140 by main thread:
+    #0 pthread_mutex_destroy <null> (libtsan.so.0+0x2c709)
+    #1 ros::TransportTCP::~TransportTCP() <null> (libroscpp.so+0x111dfd)
+    #2 ros::Connection::~Connection() <null> (libroscpp.so+0xa2daf)
+    #3 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringRequest_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_zombie+0xe74b)
+    #4 SrvCall_callPhantomService_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_zombie.cpp:56 (test_roscpp-service_call_zombie+0xb8b9)
+    #5 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #6 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #7 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #8 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #9 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #10 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #11 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #12 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #13 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #14 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-service_call_zombie+0xc714)
+    #15 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_zombie.cpp:74 (test_roscpp-service_call_zombie+0xbd61)
+
+  Previous atomic read of size 1 at 0x7b540000c140 by thread T1:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 ros::TransportTCP::socketUpdate(int) <null> (libroscpp.so+0x119308)
+
+  Location is heap block of size 640 at 0x7b540000c080 allocated by main thread:
+    #0 operator new(unsigned long) <null> (libtsan.so.0+0x73f0a)
+    #1 boost::detail::sp_if_not_array<ros::TransportTCP>::type boost::make_shared<ros::TransportTCP, ros::PollSet*>(ros::PollSet*&&) <null> (libroscpp.so+0x107dd7)
+    #2 bool ros::ServiceClient::call<test_roscpp::TestStringStringRequest_<std::allocator<void> >, test_roscpp::TestStringStringRequest_<std::allocator<void> > >(test_roscpp::TestStringStringRequest_<std::allocator<void> >&, test_roscpp::TestStringStringRequest_<std::allocator<void> >&) /opt/ros/melodic/include/ros/service_client.h:74 (test_roscpp-service_call_zombie+0xe74b)
+    #3 SrvCall_callPhantomService_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_zombie.cpp:56 (test_roscpp-service_call_zombie+0xb8b9)
+    #4 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #5 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #6 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #7 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #8 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #9 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #10 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #11 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #12 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #13 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-service_call_zombie+0xc714)
+    #14 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/service_call_zombie.cpp:74 (test_roscpp-service_call_zombie+0xbd61)
+
+  Thread T1 (tid=23486, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: data race (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x2c709) in __interceptor_pthread_mutex_destroy
+==================
+ThreadSanitizer: reported 4 warnings

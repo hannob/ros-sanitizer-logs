@@ -1,0 +1,589 @@
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=16176)
+  Cycle in lock order graph: M450 (0x7fd24b9f30a8) => M453 (0x7fd24b9f3148) => M450
+
+  Mutex M453 acquired here while holding mutex M450 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M450 acquired here while holding mutex M453 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=16176)
+  Read of size 1 at 0x7ffde086a9c3 by thread T2:
+    #0 callAvailableThread(ros::CallbackQueue*, bool&) /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:263 (test_roscpp-test_callback_queue+0x3d89e)
+    #1 boost::detail::function::void_function_invoker2<void (*)(ros::CallbackQueue*, bool&), void, ros::CallbackQueue*, bool&>::invoke(boost::detail::function::function_buffer&, ros::CallbackQueue*, bool&) /usr/include/boost/function/function_template.hpp:118 (test_roscpp-test_callback_queue+0x56043)
+    #2 boost::function2<void, ros::CallbackQueue*, bool&>::operator()(ros::CallbackQueue*, bool&) const /usr/include/boost/function/function_template.hpp:759 (test_roscpp-test_callback_queue+0x5dbdb)
+    #3 void boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> >::operator()<boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list0>(boost::_bi::type<void>, boost::function<void (ros::CallbackQueue*, bool&)>&, boost::_bi::list0&, int) /usr/include/boost/bind/bind.hpp:319 (test_roscpp-test_callback_queue+0x5d9da)
+    #4 boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > >::operator()() /usr/include/boost/bind/bind.hpp:1294 (test_roscpp-test_callback_queue+0x5cc55)
+    #5 boost::detail::thread_data<boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > > >::run() /usr/include/boost/thread/detail/thread.hpp:116 (test_roscpp-test_callback_queue+0x5b1b0)
+    #6 <null> <null> (libboost_thread.so.1.65.1+0x11bcc)
+
+  Previous write of size 1 at 0x7ffde086a9c3 by main thread:
+    #0 runThreadedTest(boost::shared_ptr<CountingCallback> const&, boost::function<void (ros::CallbackQueue*, bool&)> const&) /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:293 (test_roscpp-test_callback_queue+0x3dbeb)
+    #1 CallbackQueue_threadedCallAvailable_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:302 (test_roscpp-test_callback_queue+0x3dd78)
+    #2 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #3 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #4 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #5 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #6 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #7 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #8 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #9 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #10 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #11 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-test_callback_queue+0x4120e)
+    #12 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:480 (test_roscpp-test_callback_queue+0x3faeb)
+
+  Location is stack of main thread.
+
+  Location is global '<null>' at 0x000000000000 ([stack]+0x00000001e9c3)
+
+  Thread T2 (tid=16217, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 boost::thread::thread<boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > >&>(boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > >&) /usr/include/boost/thread/detail/thread.hpp:273 (test_roscpp-test_callback_queue+0x505d3)
+    #3 boost::thread* boost::thread_group::create_thread<boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > > >(boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > >) /usr/include/boost/thread/detail/thread_group.hpp:79 (test_roscpp-test_callback_queue+0x4bf08)
+    #4 runThreadedTest(boost::shared_ptr<CountingCallback> const&, boost::function<void (ros::CallbackQueue*, bool&)> const&) /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:277 (test_roscpp-test_callback_queue+0x3da55)
+    #5 CallbackQueue_threadedCallAvailable_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:302 (test_roscpp-test_callback_queue+0x3dd78)
+    #6 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #7 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #8 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #9 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #10 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #11 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #12 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #13 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #14 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #15 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-test_callback_queue+0x4120e)
+    #16 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:480 (test_roscpp-test_callback_queue+0x3faeb)
+
+SUMMARY: ThreadSanitizer: data race /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:263 in callAvailableThread(ros::CallbackQueue*, bool&)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=16176)
+  Read of size 1 at 0x7ffde086a9c3 by thread T4:
+    #0 callAvailableThread(ros::CallbackQueue*, bool&) /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:263 (test_roscpp-test_callback_queue+0x3d89e)
+    #1 boost::detail::function::void_function_invoker2<void (*)(ros::CallbackQueue*, bool&), void, ros::CallbackQueue*, bool&>::invoke(boost::detail::function::function_buffer&, ros::CallbackQueue*, bool&) /usr/include/boost/function/function_template.hpp:118 (test_roscpp-test_callback_queue+0x56043)
+    #2 boost::function2<void, ros::CallbackQueue*, bool&>::operator()(ros::CallbackQueue*, bool&) const /usr/include/boost/function/function_template.hpp:759 (test_roscpp-test_callback_queue+0x5dbdb)
+    #3 void boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> >::operator()<boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list0>(boost::_bi::type<void>, boost::function<void (ros::CallbackQueue*, bool&)>&, boost::_bi::list0&, int) /usr/include/boost/bind/bind.hpp:319 (test_roscpp-test_callback_queue+0x5d9da)
+    #4 boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > >::operator()() /usr/include/boost/bind/bind.hpp:1294 (test_roscpp-test_callback_queue+0x5cc55)
+    #5 boost::detail::thread_data<boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > > >::run() /usr/include/boost/thread/detail/thread.hpp:116 (test_roscpp-test_callback_queue+0x5b1b0)
+    #6 <null> <null> (libboost_thread.so.1.65.1+0x11bcc)
+
+  Previous write of size 1 at 0x7ffde086a9c3 by main thread:
+    #0 runThreadedTest(boost::shared_ptr<CountingCallback> const&, boost::function<void (ros::CallbackQueue*, bool&)> const&) /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:293 (test_roscpp-test_callback_queue+0x3dbeb)
+    #1 CallbackQueue_threadedCallAvailable_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:302 (test_roscpp-test_callback_queue+0x3dd78)
+    #2 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #3 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #4 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #5 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #6 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #7 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #8 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #9 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #10 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #11 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-test_callback_queue+0x4120e)
+    #12 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:480 (test_roscpp-test_callback_queue+0x3faeb)
+
+  Location is stack of main thread.
+
+  Location is global '<null>' at 0x000000000000 ([stack]+0x00000001e9c3)
+
+  Thread T4 (tid=16229, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 boost::thread::thread<boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > >&>(boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > >&) /usr/include/boost/thread/detail/thread.hpp:273 (test_roscpp-test_callback_queue+0x505d3)
+    #3 boost::thread* boost::thread_group::create_thread<boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > > >(boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > >) /usr/include/boost/thread/detail/thread_group.hpp:79 (test_roscpp-test_callback_queue+0x4bf08)
+    #4 runThreadedTest(boost::shared_ptr<CountingCallback> const&, boost::function<void (ros::CallbackQueue*, bool&)> const&) /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:277 (test_roscpp-test_callback_queue+0x3da55)
+    #5 CallbackQueue_threadedCallAvailable_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:302 (test_roscpp-test_callback_queue+0x3dd78)
+    #6 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #7 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #8 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #9 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #10 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #11 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #12 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #13 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #14 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #15 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-test_callback_queue+0x4120e)
+    #16 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:480 (test_roscpp-test_callback_queue+0x3faeb)
+
+SUMMARY: ThreadSanitizer: data race /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:263 in callAvailableThread(ros::CallbackQueue*, bool&)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=16176)
+  Read of size 1 at 0x7ffde086a9c3 by thread T6:
+    #0 callAvailableThread(ros::CallbackQueue*, bool&) /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:263 (test_roscpp-test_callback_queue+0x3d89e)
+    #1 boost::detail::function::void_function_invoker2<void (*)(ros::CallbackQueue*, bool&), void, ros::CallbackQueue*, bool&>::invoke(boost::detail::function::function_buffer&, ros::CallbackQueue*, bool&) /usr/include/boost/function/function_template.hpp:118 (test_roscpp-test_callback_queue+0x56043)
+    #2 boost::function2<void, ros::CallbackQueue*, bool&>::operator()(ros::CallbackQueue*, bool&) const /usr/include/boost/function/function_template.hpp:759 (test_roscpp-test_callback_queue+0x5dbdb)
+    #3 void boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> >::operator()<boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list0>(boost::_bi::type<void>, boost::function<void (ros::CallbackQueue*, bool&)>&, boost::_bi::list0&, int) /usr/include/boost/bind/bind.hpp:319 (test_roscpp-test_callback_queue+0x5d9da)
+    #4 boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > >::operator()() /usr/include/boost/bind/bind.hpp:1294 (test_roscpp-test_callback_queue+0x5cc55)
+    #5 boost::detail::thread_data<boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > > >::run() /usr/include/boost/thread/detail/thread.hpp:116 (test_roscpp-test_callback_queue+0x5b1b0)
+    #6 <null> <null> (libboost_thread.so.1.65.1+0x11bcc)
+
+  Previous write of size 1 at 0x7ffde086a9c3 by main thread:
+    #0 runThreadedTest(boost::shared_ptr<CountingCallback> const&, boost::function<void (ros::CallbackQueue*, bool&)> const&) /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:293 (test_roscpp-test_callback_queue+0x3dbeb)
+    #1 CallbackQueue_threadedCallAvailable_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:302 (test_roscpp-test_callback_queue+0x3dd78)
+    #2 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #3 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #4 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #5 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #6 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #7 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #8 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #9 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #10 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #11 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-test_callback_queue+0x4120e)
+    #12 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:480 (test_roscpp-test_callback_queue+0x3faeb)
+
+  Location is stack of main thread.
+
+  Location is global '<null>' at 0x000000000000 ([stack]+0x00000001e9c3)
+
+  Thread T6 (tid=16237, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 boost::thread::thread<boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > >&>(boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > >&) /usr/include/boost/thread/detail/thread.hpp:273 (test_roscpp-test_callback_queue+0x505d3)
+    #3 boost::thread* boost::thread_group::create_thread<boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > > >(boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > >) /usr/include/boost/thread/detail/thread_group.hpp:79 (test_roscpp-test_callback_queue+0x4bf08)
+    #4 runThreadedTest(boost::shared_ptr<CountingCallback> const&, boost::function<void (ros::CallbackQueue*, bool&)> const&) /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:277 (test_roscpp-test_callback_queue+0x3da55)
+    #5 CallbackQueue_threadedCallAvailable_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:302 (test_roscpp-test_callback_queue+0x3dd78)
+    #6 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #7 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #8 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #9 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #10 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #11 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #12 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #13 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #14 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #15 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-test_callback_queue+0x4120e)
+    #16 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:480 (test_roscpp-test_callback_queue+0x3faeb)
+
+SUMMARY: ThreadSanitizer: data race /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:263 in callAvailableThread(ros::CallbackQueue*, bool&)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=16176)
+  Read of size 1 at 0x7ffde086a9c3 by thread T5:
+    #0 callAvailableThread(ros::CallbackQueue*, bool&) /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:263 (test_roscpp-test_callback_queue+0x3d89e)
+    #1 boost::detail::function::void_function_invoker2<void (*)(ros::CallbackQueue*, bool&), void, ros::CallbackQueue*, bool&>::invoke(boost::detail::function::function_buffer&, ros::CallbackQueue*, bool&) /usr/include/boost/function/function_template.hpp:118 (test_roscpp-test_callback_queue+0x56043)
+    #2 boost::function2<void, ros::CallbackQueue*, bool&>::operator()(ros::CallbackQueue*, bool&) const /usr/include/boost/function/function_template.hpp:759 (test_roscpp-test_callback_queue+0x5dbdb)
+    #3 void boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> >::operator()<boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list0>(boost::_bi::type<void>, boost::function<void (ros::CallbackQueue*, bool&)>&, boost::_bi::list0&, int) /usr/include/boost/bind/bind.hpp:319 (test_roscpp-test_callback_queue+0x5d9da)
+    #4 boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > >::operator()() /usr/include/boost/bind/bind.hpp:1294 (test_roscpp-test_callback_queue+0x5cc55)
+    #5 boost::detail::thread_data<boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > > >::run() /usr/include/boost/thread/detail/thread.hpp:116 (test_roscpp-test_callback_queue+0x5b1b0)
+    #6 <null> <null> (libboost_thread.so.1.65.1+0x11bcc)
+
+  Previous write of size 1 at 0x7ffde086a9c3 by main thread:
+    #0 runThreadedTest(boost::shared_ptr<CountingCallback> const&, boost::function<void (ros::CallbackQueue*, bool&)> const&) /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:293 (test_roscpp-test_callback_queue+0x3dbeb)
+    #1 CallbackQueue_threadedCallAvailable_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:302 (test_roscpp-test_callback_queue+0x3dd78)
+    #2 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #3 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #4 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #5 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #6 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #7 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #8 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #9 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #10 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #11 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-test_callback_queue+0x4120e)
+    #12 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:480 (test_roscpp-test_callback_queue+0x3faeb)
+
+  Location is stack of main thread.
+
+  Location is global '<null>' at 0x000000000000 ([stack]+0x00000001e9c3)
+
+  Thread T5 (tid=16232, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 boost::thread::thread<boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > >&>(boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > >&) /usr/include/boost/thread/detail/thread.hpp:273 (test_roscpp-test_callback_queue+0x505d3)
+    #3 boost::thread* boost::thread_group::create_thread<boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > > >(boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > >) /usr/include/boost/thread/detail/thread_group.hpp:79 (test_roscpp-test_callback_queue+0x4bf08)
+    #4 runThreadedTest(boost::shared_ptr<CountingCallback> const&, boost::function<void (ros::CallbackQueue*, bool&)> const&) /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:277 (test_roscpp-test_callback_queue+0x3da55)
+    #5 CallbackQueue_threadedCallAvailable_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:302 (test_roscpp-test_callback_queue+0x3dd78)
+    #6 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #7 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #8 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #9 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #10 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #11 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #12 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #13 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #14 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #15 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-test_callback_queue+0x4120e)
+    #16 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:480 (test_roscpp-test_callback_queue+0x3faeb)
+
+SUMMARY: ThreadSanitizer: data race /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:263 in callAvailableThread(ros::CallbackQueue*, bool&)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=16176)
+  Read of size 1 at 0x7ffde086a9c3 by thread T8:
+    #0 callAvailableThread(ros::CallbackQueue*, bool&) /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:263 (test_roscpp-test_callback_queue+0x3d89e)
+    #1 boost::detail::function::void_function_invoker2<void (*)(ros::CallbackQueue*, bool&), void, ros::CallbackQueue*, bool&>::invoke(boost::detail::function::function_buffer&, ros::CallbackQueue*, bool&) /usr/include/boost/function/function_template.hpp:118 (test_roscpp-test_callback_queue+0x56043)
+    #2 boost::function2<void, ros::CallbackQueue*, bool&>::operator()(ros::CallbackQueue*, bool&) const /usr/include/boost/function/function_template.hpp:759 (test_roscpp-test_callback_queue+0x5dbdb)
+    #3 void boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> >::operator()<boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list0>(boost::_bi::type<void>, boost::function<void (ros::CallbackQueue*, bool&)>&, boost::_bi::list0&, int) /usr/include/boost/bind/bind.hpp:319 (test_roscpp-test_callback_queue+0x5d9da)
+    #4 boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > >::operator()() /usr/include/boost/bind/bind.hpp:1294 (test_roscpp-test_callback_queue+0x5cc55)
+    #5 boost::detail::thread_data<boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > > >::run() /usr/include/boost/thread/detail/thread.hpp:116 (test_roscpp-test_callback_queue+0x5b1b0)
+    #6 <null> <null> (libboost_thread.so.1.65.1+0x11bcc)
+
+  Previous write of size 1 at 0x7ffde086a9c3 by main thread:
+    #0 runThreadedTest(boost::shared_ptr<CountingCallback> const&, boost::function<void (ros::CallbackQueue*, bool&)> const&) /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:293 (test_roscpp-test_callback_queue+0x3dbeb)
+    #1 CallbackQueue_threadedCallAvailable_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:302 (test_roscpp-test_callback_queue+0x3dd78)
+    #2 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #3 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #4 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #5 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #6 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #7 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #8 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #9 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #10 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #11 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-test_callback_queue+0x4120e)
+    #12 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:480 (test_roscpp-test_callback_queue+0x3faeb)
+
+  Location is stack of main thread.
+
+  Location is global '<null>' at 0x000000000000 ([stack]+0x00000001e9c3)
+
+  Thread T8 (tid=16245, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 boost::thread::thread<boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > >&>(boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > >&) /usr/include/boost/thread/detail/thread.hpp:273 (test_roscpp-test_callback_queue+0x505d3)
+    #3 boost::thread* boost::thread_group::create_thread<boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > > >(boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > >) /usr/include/boost/thread/detail/thread_group.hpp:79 (test_roscpp-test_callback_queue+0x4bf08)
+    #4 runThreadedTest(boost::shared_ptr<CountingCallback> const&, boost::function<void (ros::CallbackQueue*, bool&)> const&) /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:277 (test_roscpp-test_callback_queue+0x3da55)
+    #5 CallbackQueue_threadedCallAvailable_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:302 (test_roscpp-test_callback_queue+0x3dd78)
+    #6 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #7 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #8 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #9 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #10 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #11 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #12 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #13 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #14 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #15 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-test_callback_queue+0x4120e)
+    #16 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:480 (test_roscpp-test_callback_queue+0x3faeb)
+
+SUMMARY: ThreadSanitizer: data race /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:263 in callAvailableThread(ros::CallbackQueue*, bool&)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=16176)
+  Read of size 1 at 0x7ffde086a9c3 by thread T3:
+    #0 callAvailableThread(ros::CallbackQueue*, bool&) /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:263 (test_roscpp-test_callback_queue+0x3d89e)
+    #1 boost::detail::function::void_function_invoker2<void (*)(ros::CallbackQueue*, bool&), void, ros::CallbackQueue*, bool&>::invoke(boost::detail::function::function_buffer&, ros::CallbackQueue*, bool&) /usr/include/boost/function/function_template.hpp:118 (test_roscpp-test_callback_queue+0x56043)
+    #2 boost::function2<void, ros::CallbackQueue*, bool&>::operator()(ros::CallbackQueue*, bool&) const /usr/include/boost/function/function_template.hpp:759 (test_roscpp-test_callback_queue+0x5dbdb)
+    #3 void boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> >::operator()<boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list0>(boost::_bi::type<void>, boost::function<void (ros::CallbackQueue*, bool&)>&, boost::_bi::list0&, int) /usr/include/boost/bind/bind.hpp:319 (test_roscpp-test_callback_queue+0x5d9da)
+    #4 boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > >::operator()() /usr/include/boost/bind/bind.hpp:1294 (test_roscpp-test_callback_queue+0x5cc55)
+    #5 boost::detail::thread_data<boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > > >::run() /usr/include/boost/thread/detail/thread.hpp:116 (test_roscpp-test_callback_queue+0x5b1b0)
+    #6 <null> <null> (libboost_thread.so.1.65.1+0x11bcc)
+
+  Previous write of size 1 at 0x7ffde086a9c3 by main thread:
+    #0 runThreadedTest(boost::shared_ptr<CountingCallback> const&, boost::function<void (ros::CallbackQueue*, bool&)> const&) /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:293 (test_roscpp-test_callback_queue+0x3dbeb)
+    #1 CallbackQueue_threadedCallAvailable_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:302 (test_roscpp-test_callback_queue+0x3dd78)
+    #2 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #3 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #4 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #5 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #6 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #7 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #8 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #9 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #10 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #11 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-test_callback_queue+0x4120e)
+    #12 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:480 (test_roscpp-test_callback_queue+0x3faeb)
+
+  Location is stack of main thread.
+
+  Location is global '<null>' at 0x000000000000 ([stack]+0x00000001e9c3)
+
+  Thread T3 (tid=16226, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 boost::thread::thread<boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > >&>(boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > >&) /usr/include/boost/thread/detail/thread.hpp:273 (test_roscpp-test_callback_queue+0x505d3)
+    #3 boost::thread* boost::thread_group::create_thread<boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > > >(boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > >) /usr/include/boost/thread/detail/thread_group.hpp:79 (test_roscpp-test_callback_queue+0x4bf08)
+    #4 runThreadedTest(boost::shared_ptr<CountingCallback> const&, boost::function<void (ros::CallbackQueue*, bool&)> const&) /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:277 (test_roscpp-test_callback_queue+0x3da55)
+    #5 CallbackQueue_threadedCallAvailable_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:302 (test_roscpp-test_callback_queue+0x3dd78)
+    #6 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #7 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #8 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #9 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #10 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #11 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #12 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #13 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #14 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #15 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-test_callback_queue+0x4120e)
+    #16 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:480 (test_roscpp-test_callback_queue+0x3faeb)
+
+SUMMARY: ThreadSanitizer: data race /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:263 in callAvailableThread(ros::CallbackQueue*, bool&)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=16176)
+  Read of size 1 at 0x7ffde086a9c3 by thread T9:
+    #0 callAvailableThread(ros::CallbackQueue*, bool&) /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:263 (test_roscpp-test_callback_queue+0x3d89e)
+    #1 boost::detail::function::void_function_invoker2<void (*)(ros::CallbackQueue*, bool&), void, ros::CallbackQueue*, bool&>::invoke(boost::detail::function::function_buffer&, ros::CallbackQueue*, bool&) /usr/include/boost/function/function_template.hpp:118 (test_roscpp-test_callback_queue+0x56043)
+    #2 boost::function2<void, ros::CallbackQueue*, bool&>::operator()(ros::CallbackQueue*, bool&) const /usr/include/boost/function/function_template.hpp:759 (test_roscpp-test_callback_queue+0x5dbdb)
+    #3 void boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> >::operator()<boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list0>(boost::_bi::type<void>, boost::function<void (ros::CallbackQueue*, bool&)>&, boost::_bi::list0&, int) /usr/include/boost/bind/bind.hpp:319 (test_roscpp-test_callback_queue+0x5d9da)
+    #4 boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > >::operator()() /usr/include/boost/bind/bind.hpp:1294 (test_roscpp-test_callback_queue+0x5cc55)
+    #5 boost::detail::thread_data<boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > > >::run() /usr/include/boost/thread/detail/thread.hpp:116 (test_roscpp-test_callback_queue+0x5b1b0)
+    #6 <null> <null> (libboost_thread.so.1.65.1+0x11bcc)
+
+  Previous write of size 1 at 0x7ffde086a9c3 by main thread:
+    #0 runThreadedTest(boost::shared_ptr<CountingCallback> const&, boost::function<void (ros::CallbackQueue*, bool&)> const&) /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:293 (test_roscpp-test_callback_queue+0x3dbeb)
+    #1 CallbackQueue_threadedCallAvailable_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:302 (test_roscpp-test_callback_queue+0x3dd78)
+    #2 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #3 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #4 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #5 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #6 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #7 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #8 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #9 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #10 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #11 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-test_callback_queue+0x4120e)
+    #12 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:480 (test_roscpp-test_callback_queue+0x3faeb)
+
+  Location is stack of main thread.
+
+  Location is global '<null>' at 0x000000000000 ([stack]+0x00000001e9c3)
+
+  Thread T9 (tid=16247, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 boost::thread::thread<boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > >&>(boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > >&) /usr/include/boost/thread/detail/thread.hpp:273 (test_roscpp-test_callback_queue+0x505d3)
+    #3 boost::thread* boost::thread_group::create_thread<boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > > >(boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > >) /usr/include/boost/thread/detail/thread_group.hpp:79 (test_roscpp-test_callback_queue+0x4bf08)
+    #4 runThreadedTest(boost::shared_ptr<CountingCallback> const&, boost::function<void (ros::CallbackQueue*, bool&)> const&) /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:277 (test_roscpp-test_callback_queue+0x3da55)
+    #5 CallbackQueue_threadedCallAvailable_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:302 (test_roscpp-test_callback_queue+0x3dd78)
+    #6 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #7 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #8 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #9 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #10 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #11 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #12 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #13 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #14 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #15 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-test_callback_queue+0x4120e)
+    #16 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:480 (test_roscpp-test_callback_queue+0x3faeb)
+
+SUMMARY: ThreadSanitizer: data race /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:263 in callAvailableThread(ros::CallbackQueue*, bool&)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=16176)
+  Read of size 1 at 0x7ffde086a9c3 by thread T10:
+    #0 callAvailableThread(ros::CallbackQueue*, bool&) /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:263 (test_roscpp-test_callback_queue+0x3d89e)
+    #1 boost::detail::function::void_function_invoker2<void (*)(ros::CallbackQueue*, bool&), void, ros::CallbackQueue*, bool&>::invoke(boost::detail::function::function_buffer&, ros::CallbackQueue*, bool&) /usr/include/boost/function/function_template.hpp:118 (test_roscpp-test_callback_queue+0x56043)
+    #2 boost::function2<void, ros::CallbackQueue*, bool&>::operator()(ros::CallbackQueue*, bool&) const /usr/include/boost/function/function_template.hpp:759 (test_roscpp-test_callback_queue+0x5dbdb)
+    #3 void boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> >::operator()<boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list0>(boost::_bi::type<void>, boost::function<void (ros::CallbackQueue*, bool&)>&, boost::_bi::list0&, int) /usr/include/boost/bind/bind.hpp:319 (test_roscpp-test_callback_queue+0x5d9da)
+    #4 boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > >::operator()() /usr/include/boost/bind/bind.hpp:1294 (test_roscpp-test_callback_queue+0x5cc55)
+    #5 boost::detail::thread_data<boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > > >::run() /usr/include/boost/thread/detail/thread.hpp:116 (test_roscpp-test_callback_queue+0x5b1b0)
+    #6 <null> <null> (libboost_thread.so.1.65.1+0x11bcc)
+
+  Previous write of size 1 at 0x7ffde086a9c3 by main thread:
+    #0 runThreadedTest(boost::shared_ptr<CountingCallback> const&, boost::function<void (ros::CallbackQueue*, bool&)> const&) /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:293 (test_roscpp-test_callback_queue+0x3dbeb)
+    #1 CallbackQueue_threadedCallAvailable_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:302 (test_roscpp-test_callback_queue+0x3dd78)
+    #2 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #3 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #4 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #5 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #6 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #7 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #8 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #9 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #10 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #11 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-test_callback_queue+0x4120e)
+    #12 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:480 (test_roscpp-test_callback_queue+0x3faeb)
+
+  Location is stack of main thread.
+
+  Location is global '<null>' at 0x000000000000 ([stack]+0x00000001e9c3)
+
+  Thread T10 (tid=16256, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 boost::thread::thread<boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > >&>(boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > >&) /usr/include/boost/thread/detail/thread.hpp:273 (test_roscpp-test_callback_queue+0x505d3)
+    #3 boost::thread* boost::thread_group::create_thread<boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > > >(boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > >) /usr/include/boost/thread/detail/thread_group.hpp:79 (test_roscpp-test_callback_queue+0x4bf08)
+    #4 runThreadedTest(boost::shared_ptr<CountingCallback> const&, boost::function<void (ros::CallbackQueue*, bool&)> const&) /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:277 (test_roscpp-test_callback_queue+0x3da55)
+    #5 CallbackQueue_threadedCallAvailable_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:302 (test_roscpp-test_callback_queue+0x3dd78)
+    #6 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #7 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #8 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #9 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #10 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #11 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #12 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #13 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #14 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #15 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-test_callback_queue+0x4120e)
+    #16 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:480 (test_roscpp-test_callback_queue+0x3faeb)
+
+SUMMARY: ThreadSanitizer: data race /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:263 in callAvailableThread(ros::CallbackQueue*, bool&)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=16176)
+  Read of size 1 at 0x7ffde086a9c3 by thread T7:
+    #0 callAvailableThread(ros::CallbackQueue*, bool&) /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:263 (test_roscpp-test_callback_queue+0x3d89e)
+    #1 boost::detail::function::void_function_invoker2<void (*)(ros::CallbackQueue*, bool&), void, ros::CallbackQueue*, bool&>::invoke(boost::detail::function::function_buffer&, ros::CallbackQueue*, bool&) /usr/include/boost/function/function_template.hpp:118 (test_roscpp-test_callback_queue+0x56043)
+    #2 boost::function2<void, ros::CallbackQueue*, bool&>::operator()(ros::CallbackQueue*, bool&) const /usr/include/boost/function/function_template.hpp:759 (test_roscpp-test_callback_queue+0x5dbdb)
+    #3 void boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> >::operator()<boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list0>(boost::_bi::type<void>, boost::function<void (ros::CallbackQueue*, bool&)>&, boost::_bi::list0&, int) /usr/include/boost/bind/bind.hpp:319 (test_roscpp-test_callback_queue+0x5d9da)
+    #4 boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > >::operator()() /usr/include/boost/bind/bind.hpp:1294 (test_roscpp-test_callback_queue+0x5cc55)
+    #5 boost::detail::thread_data<boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > > >::run() /usr/include/boost/thread/detail/thread.hpp:116 (test_roscpp-test_callback_queue+0x5b1b0)
+    #6 <null> <null> (libboost_thread.so.1.65.1+0x11bcc)
+
+  Previous write of size 1 at 0x7ffde086a9c3 by main thread:
+    #0 runThreadedTest(boost::shared_ptr<CountingCallback> const&, boost::function<void (ros::CallbackQueue*, bool&)> const&) /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:293 (test_roscpp-test_callback_queue+0x3dbeb)
+    #1 CallbackQueue_threadedCallAvailable_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:302 (test_roscpp-test_callback_queue+0x3dd78)
+    #2 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #3 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #4 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #5 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #6 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #7 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #8 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #9 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #10 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #11 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-test_callback_queue+0x4120e)
+    #12 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:480 (test_roscpp-test_callback_queue+0x3faeb)
+
+  Location is stack of main thread.
+
+  Location is global '<null>' at 0x000000000000 ([stack]+0x00000001e9c3)
+
+  Thread T7 (tid=16239, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 boost::thread::thread<boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > >&>(boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > >&) /usr/include/boost/thread/detail/thread.hpp:273 (test_roscpp-test_callback_queue+0x505d3)
+    #3 boost::thread* boost::thread_group::create_thread<boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > > >(boost::_bi::bind_t<boost::_bi::unspecified, boost::function<void (ros::CallbackQueue*, bool&)>, boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > >) /usr/include/boost/thread/detail/thread_group.hpp:79 (test_roscpp-test_callback_queue+0x4bf08)
+    #4 runThreadedTest(boost::shared_ptr<CountingCallback> const&, boost::function<void (ros::CallbackQueue*, bool&)> const&) /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:277 (test_roscpp-test_callback_queue+0x3da55)
+    #5 CallbackQueue_threadedCallAvailable_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:302 (test_roscpp-test_callback_queue+0x3dd78)
+    #6 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #7 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #8 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #9 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #10 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #11 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #12 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #13 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #14 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #15 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-test_callback_queue+0x4120e)
+    #16 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:480 (test_roscpp-test_callback_queue+0x3faeb)
+
+SUMMARY: ThreadSanitizer: data race /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:263 in callAvailableThread(ros::CallbackQueue*, bool&)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=16176)
+  Read of size 1 at 0x7ffde086ac0b by thread T2:
+    #0 callOneThread(ros::CallbackQueue*, bool&) /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:309 (test_roscpp-test_callback_queue+0x3e182)
+    #1 void boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> >::operator()<void (*)(ros::CallbackQueue*, bool&), boost::_bi::list0>(boost::_bi::type<void>, void (*&)(ros::CallbackQueue*, bool&), boost::_bi::list0&, int) /usr/include/boost/bind/bind.hpp:319 (test_roscpp-test_callback_queue+0x5d930)
+    #2 boost::_bi::bind_t<void, void (*)(ros::CallbackQueue*, bool&), boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > >::operator()() /usr/include/boost/bind/bind.hpp:1294 (test_roscpp-test_callback_queue+0x5cbc7)
+    #3 boost::detail::thread_data<boost::_bi::bind_t<void, void (*)(ros::CallbackQueue*, bool&), boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > > >::run() /usr/include/boost/thread/detail/thread.hpp:116 (test_roscpp-test_callback_queue+0x5b164)
+    #4 <null> <null> (libboost_thread.so.1.65.1+0x11bcc)
+
+  Previous write of size 1 at 0x7ffde086ac0b by main thread:
+    #0 CallbackQueue_recursiveTimer_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:398 (test_roscpp-test_callback_queue+0x3ea66)
+    #1 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #2 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #3 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #4 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #5 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #6 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #7 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #8 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #9 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #10 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-test_callback_queue+0x4120e)
+    #11 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:480 (test_roscpp-test_callback_queue+0x3faeb)
+
+  Location is stack of main thread.
+
+  Location is global '<null>' at 0x000000000000 ([stack]+0x00000001ec0b)
+
+  Thread T2 (tid=20963, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 boost::thread::thread<boost::_bi::bind_t<void, void (*)(ros::CallbackQueue*, bool&), boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > >&>(boost::_bi::bind_t<void, void (*)(ros::CallbackQueue*, bool&), boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > >&) /usr/include/boost/thread/detail/thread.hpp:273 (test_roscpp-test_callback_queue+0x50add)
+    #3 boost::thread* boost::thread_group::create_thread<boost::_bi::bind_t<void, void (*)(ros::CallbackQueue*, bool&), boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > > >(boost::_bi::bind_t<void, void (*)(ros::CallbackQueue*, bool&), boost::_bi::list2<boost::_bi::value<ros::CallbackQueue*>, boost::reference_wrapper<bool> > >) /usr/include/boost/thread/detail/thread_group.hpp:79 (test_roscpp-test_callback_queue+0x4c40b)
+    #4 CallbackQueue_recursiveTimer_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:390 (test_roscpp-test_callback_queue+0x3e9ec)
+    #5 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #6 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #7 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #8 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #9 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #10 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #11 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #12 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #13 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #14 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-test_callback_queue+0x4120e)
+    #15 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:480 (test_roscpp-test_callback_queue+0x3faeb)
+
+SUMMARY: ThreadSanitizer: data race /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:309 in callOneThread(ros::CallbackQueue*, bool&)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=16176)
+  Write of size 8 at 0x7b1000012108 by main thread (mutexes: write M0):
+    #0 operator delete(void*) <null> (libtsan.so.0+0x741fd)
+    #1 boost::detail::sp_counted_impl_pd<RaceConditionCallback*, boost::detail::sp_ms_deleter<RaceConditionCallback> >::~sp_counted_impl_pd() /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp:146 (test_roscpp-test_callback_queue+0x59e96)
+    #2 std::deque<ros::CallbackQueue::CallbackInfo, std::allocator<ros::CallbackQueue::CallbackInfo> >::_M_destroy_data_aux(std::_Deque_iterator<ros::CallbackQueue::CallbackInfo, ros::CallbackQueue::CallbackInfo&, ros::CallbackQueue::CallbackInfo*>, std::_Deque_iterator<ros::CallbackQueue::CallbackInfo, ros::CallbackQueue::CallbackInfo&, ros::CallbackQueue::CallbackInfo*>) <null> (libroscpp.so+0xf48f0)
+    #3 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #4 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #5 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #6 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #7 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #8 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #9 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #10 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #11 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #12 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-test_callback_queue+0x4120e)
+    #13 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:480 (test_roscpp-test_callback_queue+0x3faeb)
+
+  Previous atomic write of size 4 at 0x7b1000012108 by thread T4:
+    #0 __tsan_atomic32_fetch_sub <null> (libtsan.so.0+0x68aed)
+    #1 std::__atomic_base<int>::fetch_sub(int, std::memory_order) /usr/include/c++/7/bits/atomic_base.h:524 (test_roscpp-test_callback_queue+0x41820)
+    #2 boost::detail::atomic_decrement(std::atomic<int>*) /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:35 (test_roscpp-test_callback_queue+0x41820)
+    #3 boost::detail::sp_counted_base::release() /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:108 (test_roscpp-test_callback_queue+0x419d0)
+    #4 boost::detail::shared_count::~shared_count() /usr/include/boost/smart_ptr/detail/shared_count.hpp:426 (test_roscpp-test_callback_queue+0x41bc8)
+    #5 boost::shared_ptr<ros::CallbackInterface>::~shared_ptr() /usr/include/boost/smart_ptr/shared_ptr.hpp:341 (test_roscpp-test_callback_queue+0x45f4b)
+    #6 ConditionObject::add() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:446 (test_roscpp-test_callback_queue+0x3f036)
+    #7 boost::_mfi::mf0<void, ConditionObject>::operator()(ConditionObject*) const /usr/include/boost/bind/mem_fn_template.hpp:49 (test_roscpp-test_callback_queue+0x5dd3f)
+    #8 void boost::_bi::list1<boost::_bi::value<ConditionObject*> >::operator()<boost::_mfi::mf0<void, ConditionObject>, boost::_bi::list0>(boost::_bi::type<void>, boost::_mfi::mf0<void, ConditionObject>&, boost::_bi::list0&, int) /usr/include/boost/bind/bind.hpp:259 (test_roscpp-test_callback_queue+0x5da65)
+    #9 boost::_bi::bind_t<void, boost::_mfi::mf0<void, ConditionObject>, boost::_bi::list1<boost::_bi::value<ConditionObject*> > >::operator()() /usr/include/boost/bind/bind.hpp:1294 (test_roscpp-test_callback_queue+0x5cee7)
+    #10 boost::detail::thread_data<boost::_bi::bind_t<void, boost::_mfi::mf0<void, ConditionObject>, boost::_bi::list1<boost::_bi::value<ConditionObject*> > > >::run() /usr/include/boost/thread/detail/thread.hpp:116 (test_roscpp-test_callback_queue+0x5b598)
+    #11 <null> <null> (libboost_thread.so.1.65.1+0x11bcc)
+
+  Mutex M0 (0x7ffde086adf0) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::CallbackQueue::CallbackQueue(bool) <null> (libroscpp.so+0xef1ab)
+    #2 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #3 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #4 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #5 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #6 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #7 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #8 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #9 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #10 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #11 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-test_callback_queue+0x4120e)
+    #12 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:480 (test_roscpp-test_callback_queue+0x3faeb)
+
+  Thread T4 (tid=22227, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 boost::thread::thread<boost::_bi::bind_t<void, boost::_mfi::mf0<void, ConditionObject>, boost::_bi::list1<boost::_bi::value<ConditionObject*> > > >(boost::_bi::bind_t<void, boost::_mfi::mf0<void, ConditionObject>, boost::_bi::list1<boost::_bi::value<ConditionObject*> > >&&) /usr/include/boost/thread/detail/thread.hpp:273 (test_roscpp-test_callback_queue+0x4c8cb)
+    #3 CallbackQueue_raceConditionCallback_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:457 (test_roscpp-test_callback_queue+0x3f177)
+    #4 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #5 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #6 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #7 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #8 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #9 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #10 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #11 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #12 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #13 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-test_callback_queue+0x4120e)
+    #14 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_callback_queue.cpp:480 (test_roscpp-test_callback_queue+0x3faeb)
+
+SUMMARY: ThreadSanitizer: data race (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x741fd) in operator delete(void*)
+==================
+ThreadSanitizer: reported 12 warnings

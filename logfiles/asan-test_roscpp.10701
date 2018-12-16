@@ -1,0 +1,10 @@
+
+=================================================================
+==10701==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 10 byte(s) in 1 object(s) allocated from:
+    #0 0x7ff1c7fbe538 in strdup (/usr/lib/x86_64-linux-gnu/libasan.so.4+0x77538)
+    #1 0x564bcd3db029 in main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/src/inspection.cpp:110
+    #2 0x7ff1c6f0fb96 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x21b96)
+
+SUMMARY: AddressSanitizer: 10 byte(s) leaked in 1 allocation(s).

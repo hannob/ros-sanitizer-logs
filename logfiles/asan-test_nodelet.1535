@@ -1,0 +1,93 @@
+
+=================================================================
+==1535==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 160 byte(s) in 1 object(s) allocated from:
+    #0 0x7effe38ed458 in operator new(unsigned long) (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xe0458)
+    #1 0x7effd2852959 in void class_loader::impl::registerPlugin<test_nodelet::Plus, nodelet::Nodelet>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (/catkin/buildtmp/test_nodelet/devel/lib//libtest_nodelet.so+0x43959)
+    #2 0x7effd284abd8 in ProxyExec0 /catkin/buildtmp/test_nodelet/src/test_nodelet/src/plus.cpp:71
+    #3 0x7effd284aefb in __static_initialization_and_destruction_0 /catkin/buildtmp/test_nodelet/src/test_nodelet/src/plus.cpp:71
+    #4 0x7effd284af16 in _GLOBAL__sub_I_plus.cpp /catkin/buildtmp/test_nodelet/src/test_nodelet/src/plus.cpp:72
+    #5 0x7effe47d8732  (/lib64/ld-linux-x86-64.so.2+0x10732)
+
+Direct leak of 160 byte(s) in 1 object(s) allocated from:
+    #0 0x7effe38ed458 in operator new(unsigned long) (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xe0458)
+    #1 0x7effd288e7e9 in void class_loader::impl::registerPlugin<test_nodelet::ConsoleTest, nodelet::Nodelet>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /opt/ros/melodic/include/class_loader/class_loader_core.hpp:205
+    #2 0x7effd2867e8e in ProxyExec0 /catkin/buildtmp/test_nodelet/src/test_nodelet/src/console_tests.cpp:187
+    #3 0x7effd28681b1 in __static_initialization_and_destruction_0 /catkin/buildtmp/test_nodelet/src/test_nodelet/src/console_tests.cpp:187
+    #4 0x7effd28681cc in _GLOBAL__sub_I_console_tests.cpp /catkin/buildtmp/test_nodelet/src/test_nodelet/src/console_tests.cpp:188
+    #5 0x7effe47d8732  (/lib64/ld-linux-x86-64.so.2+0x10732)
+
+Direct leak of 160 byte(s) in 1 object(s) allocated from:
+    #0 0x7effe38ed458 in operator new(unsigned long) (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xe0458)
+    #1 0x7effd288f5fb in void class_loader::impl::registerPlugin<test_nodelet::FailingNodelet, nodelet::Nodelet>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /opt/ros/melodic/include/class_loader/class_loader_core.hpp:205
+    #2 0x7effd288efaa in ProxyExec0 /catkin/buildtmp/test_nodelet/src/test_nodelet/src/failing_nodelet.cpp:50
+    #3 0x7effd288f2cd in __static_initialization_and_destruction_0 /catkin/buildtmp/test_nodelet/src/test_nodelet/src/failing_nodelet.cpp:50
+    #4 0x7effd288f2e8 in _GLOBAL__sub_I_failing_nodelet.cpp /catkin/buildtmp/test_nodelet/src/test_nodelet/src/failing_nodelet.cpp:51
+    #5 0x7effe47d8732  (/lib64/ld-linux-x86-64.so.2+0x10732)
+
+Direct leak of 160 byte(s) in 1 object(s) allocated from:
+    #0 0x7effe38ed458 in operator new(unsigned long) (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xe0458)
+    #1 0x7effd289159b in void class_loader::impl::registerPlugin<test_nodelet::NodehandleTest, nodelet::Nodelet>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /opt/ros/melodic/include/class_loader/class_loader_core.hpp:205
+    #2 0x7effd288fd6e in ProxyExec0 /catkin/buildtmp/test_nodelet/src/test_nodelet/src/nodehandles.cpp:30
+    #3 0x7effd2890091 in __static_initialization_and_destruction_0 /catkin/buildtmp/test_nodelet/src/test_nodelet/src/nodehandles.cpp:30
+    #4 0x7effd28900ac in _GLOBAL__sub_I_nodehandles.cpp /catkin/buildtmp/test_nodelet/src/test_nodelet/src/nodehandles.cpp:30
+    #5 0x7effe47d8732  (/lib64/ld-linux-x86-64.so.2+0x10732)
+
+Indirect leak of 240 byte(s) in 4 object(s) allocated from:
+    #0 0x7effe38ed458 in operator new(unsigned long) (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xe0458)
+    #1 0x7effe2a75c36 in std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_assign(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (/usr/lib/x86_64-linux-gnu/libstdc++.so.6+0x124c36)
+
+Indirect leak of 171 byte(s) in 8 object(s) allocated from:
+    #0 0x7effe38ed458 in operator new(unsigned long) (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xe0458)
+    #1 0x7effe153ea0c  (/opt/ros/melodic/lib/libclass_loader.so+0x17a0c)
+
+Indirect leak of 32 byte(s) in 4 object(s) allocated from:
+    #0 0x7effe38ed458 in operator new(unsigned long) (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xe0458)
+    #1 0x7effe153f223 in void std::vector<class_loader::ClassLoader*, std::allocator<class_loader::ClassLoader*> >::_M_realloc_insert<class_loader::ClassLoader* const&>(__gnu_cxx::__normal_iterator<class_loader::ClassLoader**, std::vector<class_loader::ClassLoader*, std::allocator<class_loader::ClassLoader*> > >, class_loader::ClassLoader* const&) (/opt/ros/melodic/lib/libclass_loader.so+0x18223)
+
+Indirect leak of 19 byte(s) in 1 object(s) allocated from:
+    #0 0x7effe38ed458 in operator new(unsigned long) (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xe0458)
+    #1 0x7effe2dbf3f2 in void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*, std::forward_iterator_tag) /usr/include/c++/7/bits/basic_string.tcc:219
+    #2 0x7effd2857d7f in class_loader::impl::AbstractMetaObject<nodelet::Nodelet>::AbstractMetaObject(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /opt/ros/melodic/include/class_loader/meta_object.hpp:155
+    #3 0x7effd2891d5c in class_loader::impl::MetaObject<test_nodelet::NodehandleTest, nodelet::Nodelet>::MetaObject(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /opt/ros/melodic/include/class_loader/meta_object.hpp:186
+    #4 0x7effd28915b7 in void class_loader::impl::registerPlugin<test_nodelet::NodehandleTest, nodelet::Nodelet>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /opt/ros/melodic/include/class_loader/class_loader_core.hpp:205
+    #5 0x7effd288fd6e in ProxyExec0 /catkin/buildtmp/test_nodelet/src/test_nodelet/src/nodehandles.cpp:30
+    #6 0x7effd2890091 in __static_initialization_and_destruction_0 /catkin/buildtmp/test_nodelet/src/test_nodelet/src/nodehandles.cpp:30
+    #7 0x7effd28900ac in _GLOBAL__sub_I_nodehandles.cpp /catkin/buildtmp/test_nodelet/src/test_nodelet/src/nodehandles.cpp:30
+    #8 0x7effe47d8732  (/lib64/ld-linux-x86-64.so.2+0x10732)
+
+Indirect leak of 19 byte(s) in 1 object(s) allocated from:
+    #0 0x7effe38ed458 in operator new(unsigned long) (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xe0458)
+    #1 0x7effe2dbf3f2 in void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*, std::forward_iterator_tag) /usr/include/c++/7/bits/basic_string.tcc:219
+    #2 0x7effd2857d7f in class_loader::impl::AbstractMetaObject<nodelet::Nodelet>::AbstractMetaObject(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /opt/ros/melodic/include/class_loader/meta_object.hpp:155
+    #3 0x7effd288f9fc in class_loader::impl::MetaObject<test_nodelet::FailingNodelet, nodelet::Nodelet>::MetaObject(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /opt/ros/melodic/include/class_loader/meta_object.hpp:186
+    #4 0x7effd288f617 in void class_loader::impl::registerPlugin<test_nodelet::FailingNodelet, nodelet::Nodelet>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /opt/ros/melodic/include/class_loader/class_loader_core.hpp:205
+    #5 0x7effd288efaa in ProxyExec0 /catkin/buildtmp/test_nodelet/src/test_nodelet/src/failing_nodelet.cpp:50
+    #6 0x7effd288f2cd in __static_initialization_and_destruction_0 /catkin/buildtmp/test_nodelet/src/test_nodelet/src/failing_nodelet.cpp:50
+    #7 0x7effd288f2e8 in _GLOBAL__sub_I_failing_nodelet.cpp /catkin/buildtmp/test_nodelet/src/test_nodelet/src/failing_nodelet.cpp:51
+    #8 0x7effe47d8732  (/lib64/ld-linux-x86-64.so.2+0x10732)
+
+Indirect leak of 19 byte(s) in 1 object(s) allocated from:
+    #0 0x7effe38ed458 in operator new(unsigned long) (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xe0458)
+    #1 0x7effe2dbf3f2 in void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*, std::forward_iterator_tag) /usr/include/c++/7/bits/basic_string.tcc:219
+    #2 0x7effd2857d7f in class_loader::impl::AbstractMetaObject<nodelet::Nodelet>::AbstractMetaObject(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /opt/ros/melodic/include/class_loader/meta_object.hpp:155
+    #3 0x7effd288ebea in class_loader::impl::MetaObject<test_nodelet::ConsoleTest, nodelet::Nodelet>::MetaObject(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /opt/ros/melodic/include/class_loader/meta_object.hpp:186
+    #4 0x7effd288e805 in void class_loader::impl::registerPlugin<test_nodelet::ConsoleTest, nodelet::Nodelet>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /opt/ros/melodic/include/class_loader/class_loader_core.hpp:205
+    #5 0x7effd2867e8e in ProxyExec0 /catkin/buildtmp/test_nodelet/src/test_nodelet/src/console_tests.cpp:187
+    #6 0x7effd28681b1 in __static_initialization_and_destruction_0 /catkin/buildtmp/test_nodelet/src/test_nodelet/src/console_tests.cpp:187
+    #7 0x7effd28681cc in _GLOBAL__sub_I_console_tests.cpp /catkin/buildtmp/test_nodelet/src/test_nodelet/src/console_tests.cpp:188
+    #8 0x7effe47d8732  (/lib64/ld-linux-x86-64.so.2+0x10732)
+
+Indirect leak of 19 byte(s) in 1 object(s) allocated from:
+    #0 0x7effe38ed458 in operator new(unsigned long) (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xe0458)
+    #1 0x7effe2dbf3f2 in void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*, std::forward_iterator_tag) /usr/include/c++/7/bits/basic_string.tcc:219
+    #2 0x7effd2857d7f in class_loader::impl::AbstractMetaObject<nodelet::Nodelet>::AbstractMetaObject(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /opt/ros/melodic/include/class_loader/meta_object.hpp:155
+    #3 0x7effd2854b14 in class_loader::impl::MetaObject<test_nodelet::Plus, nodelet::Nodelet>::MetaObject(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (/catkin/buildtmp/test_nodelet/devel/lib//libtest_nodelet.so+0x45b14)
+    #4 0x7effd2852975 in void class_loader::impl::registerPlugin<test_nodelet::Plus, nodelet::Nodelet>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (/catkin/buildtmp/test_nodelet/devel/lib//libtest_nodelet.so+0x43975)
+    #5 0x7effd284abd8 in ProxyExec0 /catkin/buildtmp/test_nodelet/src/test_nodelet/src/plus.cpp:71
+    #6 0x7effd284aefb in __static_initialization_and_destruction_0 /catkin/buildtmp/test_nodelet/src/test_nodelet/src/plus.cpp:71
+    #7 0x7effd284af16 in _GLOBAL__sub_I_plus.cpp /catkin/buildtmp/test_nodelet/src/test_nodelet/src/plus.cpp:72
+    #8 0x7effe47d8732  (/lib64/ld-linux-x86-64.so.2+0x10732)
+
+SUMMARY: AddressSanitizer: 1159 byte(s) leaked in 24 allocation(s).

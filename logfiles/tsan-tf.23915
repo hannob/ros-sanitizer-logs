@@ -1,0 +1,504 @@
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=23915)
+  Cycle in lock order graph: M431 (0x7f7a39edb0a8) => M434 (0x7f7a39edb148) => M431
+
+  Mutex M434 acquired here while holding mutex M431 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M431 acquired here while holding mutex M434 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=23915)
+  Cycle in lock order graph: M407 (0x7f7a37f48720) => M431 (0x7f7a39edb0a8) => M434 (0x7f7a39edb148) => M407
+
+  Mutex M431 acquired here while holding mutex M407 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M434 acquired here while holding mutex M431 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+  Mutex M407 acquired here while holding mutex M434 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::posix::pthread_mutex_lock(pthread_mutex_t*) /usr/include/boost/thread/pthread/mutex.hpp:62 (test_message_filter+0x940ed)
+    #2 boost::mutex::lock() /usr/include/boost/thread/pthread/mutex.hpp:116 (test_message_filter+0x940ed)
+    #3 boost::unique_lock<boost::mutex>::lock() /usr/include/boost/thread/lock_types.hpp:346 (test_message_filter+0x99c68)
+    #4 ros::console::initializeLogLocation(ros::console::LogLocation*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, ros::console::levels::Level) <null> (librosconsole.so+0x1d98c)
+    #5 tf::MessageFilter<geometry_msgs::PointStamped_<std::allocator<void> > >::add(ros::MessageEvent<geometry_msgs::PointStamped_<std::allocator<void> > const> const&) /catkin/buildtmp/tf/src/tf/include/tf/message_filter.h:253 (test_message_filter+0x9fd10)
+    #6 tf::MessageFilter<geometry_msgs::PointStamped_<std::allocator<void> > >::add(boost::shared_ptr<geometry_msgs::PointStamped_<std::allocator<void> > const> const&) /catkin/buildtmp/tf/src/tf/include/tf/message_filter.h:295 (test_message_filter+0x9b187)
+    #7 MessageFilter_emptyFrameIDFailure_Test::TestBody() /catkin/buildtmp/tf/src/tf/test/test_message_filter.cpp:342 (test_message_filter+0x8f708)
+    #8 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #9 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #10 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #11 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #12 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #13 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #14 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #15 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #16 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #17 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_message_filter+0x965cc)
+    #18 main /catkin/buildtmp/tf/src/tf/test/test_message_filter.cpp:384 (test_message_filter+0x900d1)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=23915)
+  Cycle in lock order graph: M431 (0x7f7a39edb0a8) => M434 (0x7f7a39edb148) => M431
+
+  Mutex M434 acquired here while holding mutex M431 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M431 acquired here while holding mutex M434 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=23915)
+  Cycle in lock order graph: M431 (0x7f7a39edb0a8) => M434 (0x7f7a39edb148) => M407 (0x7f7a37f48720) => M431
+
+  Mutex M434 acquired here while holding mutex M431 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M407 acquired here while holding mutex M434 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::posix::pthread_mutex_lock(pthread_mutex_t*) /usr/include/boost/thread/pthread/mutex.hpp:62 (test_message_filter+0x940ed)
+    #2 boost::mutex::lock() /usr/include/boost/thread/pthread/mutex.hpp:116 (test_message_filter+0x940ed)
+    #3 boost::unique_lock<boost::mutex>::lock() /usr/include/boost/thread/lock_types.hpp:346 (test_message_filter+0x99c68)
+    #4 ros::console::initializeLogLocation(ros::console::LogLocation*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, ros::console::levels::Level) <null> (librosconsole.so+0x1d98c)
+    #5 tf::MessageFilter<geometry_msgs::PointStamped_<std::allocator<void> > >::add(ros::MessageEvent<geometry_msgs::PointStamped_<std::allocator<void> > const> const&) /catkin/buildtmp/tf/src/tf/include/tf/message_filter.h:253 (test_message_filter+0x9fd10)
+    #6 tf::MessageFilter<geometry_msgs::PointStamped_<std::allocator<void> > >::add(boost::shared_ptr<geometry_msgs::PointStamped_<std::allocator<void> > const> const&) /catkin/buildtmp/tf/src/tf/include/tf/message_filter.h:295 (test_message_filter+0x9b187)
+    #7 MessageFilter_emptyFrameIDFailure_Test::TestBody() /catkin/buildtmp/tf/src/tf/test/test_message_filter.cpp:342 (test_message_filter+0x8f708)
+    #8 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #9 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #10 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #11 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #12 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #13 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #14 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #15 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #16 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #17 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_message_filter+0x965cc)
+    #18 main /catkin/buildtmp/tf/src/tf/test/test_message_filter.cpp:384 (test_message_filter+0x900d1)
+
+  Mutex M431 acquired here while holding mutex M407 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=23915)
+  Write of size 1 at 0x7b3800000340 by main thread (mutexes: write M744):
+    #0 pthread_mutex_destroy <null> (libtsan.so.0+0x2c709)
+    #1 boost::detail::sp_counted_impl_pd<ros::TimerManager<ros::Time, ros::Duration, ros::TimerEvent>::TimerInfo*, boost::detail::sp_ms_deleter<ros::TimerManager<ros::Time, ros::Duration, ros::TimerEvent>::TimerInfo> >::dispose() <null> (libroscpp.so+0xc5c17)
+    #2 ros::TimerManager<ros::Time, ros::Duration, ros::TimerEvent>::remove(int) <null> (libroscpp.so+0xc62ba)
+    #3 tf::MessageFilter<geometry_msgs::PointStamped_<std::allocator<void> > >::~MessageFilter() /catkin/buildtmp/tf/src/tf/include/tf/message_filter.h:185 (test_message_filter+0x9a9f3)
+    #4 void boost::checked_delete<tf::MessageFilter<geometry_msgs::PointStamped_<std::allocator<void> > > >(tf::MessageFilter<geometry_msgs::PointStamped_<std::allocator<void> > >*) /usr/include/boost/core/checked_delete.hpp:34 (test_message_filter+0xa153d)
+    #5 boost::scoped_ptr<tf::MessageFilter<geometry_msgs::PointStamped_<std::allocator<void> > > >::~scoped_ptr() /usr/include/boost/smart_ptr/scoped_ptr.hpp:88 (test_message_filter+0x9bb82)
+    #6 boost::scoped_ptr<tf::MessageFilter<geometry_msgs::PointStamped_<std::allocator<void> > > >::reset(tf::MessageFilter<geometry_msgs::PointStamped_<std::allocator<void> > >*) /usr/include/boost/smart_ptr/scoped_ptr.hpp:94 (test_message_filter+0x9bd51)
+    #7 MessageFilter_removeCallback_Test::TestBody() /catkin/buildtmp/tf/src/tf/test/test_message_filter.cpp:370 (test_message_filter+0x8fd2a)
+    #8 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #9 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #10 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #11 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #12 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #13 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #14 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #15 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #16 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #17 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_message_filter+0x965cc)
+    #18 main /catkin/buildtmp/tf/src/tf/test/test_message_filter.cpp:384 (test_message_filter+0x900d1)
+
+  Previous atomic read of size 1 at 0x7b3800000340 by thread T16:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::posix::pthread_mutex_lock(pthread_mutex_t*) /usr/include/boost/thread/pthread/mutex.hpp:62 (test_message_filter+0x940ed)
+    #2 boost::mutex::lock() /usr/include/boost/thread/pthread/mutex.hpp:116 (test_message_filter+0x940ed)
+    #3 boost::unique_lock<boost::mutex>::lock() /usr/include/boost/thread/lock_types.hpp:346 (test_message_filter+0x99c68)
+    #4 ros::TimerManager<ros::Time, ros::Duration, ros::TimerEvent>::TimerQueueCallback::~TimerQueueCallback() <null> (libroscpp.so+0xc63f7)
+    #5 ros::CallbackQueue::callOneCB(ros::CallbackQueue::TLS*) <null> (libroscpp.so+0xf007b)
+
+  Location is heap block of size 216 at 0x7b38000002a0 allocated by main thread:
+    #0 operator new(unsigned long) <null> (libtsan.so.0+0x73f0a)
+    #1 boost::detail::sp_if_not_array<ros::TimerManager<ros::Time, ros::Duration, ros::TimerEvent>::TimerInfo>::type boost::make_shared<ros::TimerManager<ros::Time, ros::Duration, ros::TimerEvent>::TimerInfo>() <null> (libroscpp.so+0xc6618)
+    #2 tf::MessageFilter<geometry_msgs::PointStamped_<std::allocator<void> > >::init() /catkin/buildtmp/tf/src/tf/include/tf/message_filter.h:336 (test_message_filter+0x9eaa6)
+    #3 tf::MessageFilter<geometry_msgs::PointStamped_<std::allocator<void> > >::MessageFilter(tf::Transformer&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned int, ros::NodeHandle, ros::Duration) /catkin/buildtmp/tf/src/tf/include/tf/message_filter.h:129 (test_message_filter+0x9a302)
+    #4 MessageFilter_removeCallback_Test::TestBody() /catkin/buildtmp/tf/src/tf/test/test_message_filter.cpp:366 (test_message_filter+0x8fc85)
+    #5 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #6 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #7 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #8 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #9 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #10 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #11 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #12 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #13 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #14 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_message_filter+0x965cc)
+    #15 main /catkin/buildtmp/tf/src/tf/test/test_message_filter.cpp:384 (test_message_filter+0x900d1)
+
+  Mutex M744 (0x7f7a382e5738) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::TimerManager<ros::Time, ros::Duration, ros::TimerEvent>::TimerManager() <null> (libroscpp.so+0xc6ccb)
+    #2 tf::MessageFilter<geometry_msgs::PointStamped_<std::allocator<void> > >::init() /catkin/buildtmp/tf/src/tf/include/tf/message_filter.h:336 (test_message_filter+0x9eaa6)
+    #3 tf::MessageFilter<geometry_msgs::PointStamped_<std::allocator<void> > >::MessageFilter(tf::Transformer&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned int, ros::NodeHandle, ros::Duration) /catkin/buildtmp/tf/src/tf/include/tf/message_filter.h:129 (test_message_filter+0x9a302)
+    #4 MessageFilter_noTransforms_Test::TestBody() /catkin/buildtmp/tf/src/tf/test/test_message_filter.cpp:74 (test_message_filter+0x899bf)
+    #5 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #6 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #7 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #8 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #9 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #10 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #11 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #12 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #13 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #14 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_message_filter+0x965cc)
+    #15 main /catkin/buildtmp/tf/src/tf/test/test_message_filter.cpp:384 (test_message_filter+0x900d1)
+
+  Thread T16 (tid=24334, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #3 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #4 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #5 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #6 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #7 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #8 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #9 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #10 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #11 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_message_filter+0x965cc)
+    #12 main /catkin/buildtmp/tf/src/tf/test/test_message_filter.cpp:384 (test_message_filter+0x900d1)
+
+SUMMARY: ThreadSanitizer: data race (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x2c709) in __interceptor_pthread_mutex_destroy
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=23915)
+  Write of size 8 at 0x7b38000002a0 by thread T16:
+    #0 operator delete(void*) <null> (libtsan.so.0+0x741fd)
+    #1 ros::TimerManager<ros::Time, ros::Duration, ros::TimerEvent>::TimerQueueCallback::~TimerQueueCallback() <null> (libroscpp.so+0xc6445)
+    #2 ros::CallbackQueue::callOneCB(ros::CallbackQueue::TLS*) <null> (libroscpp.so+0xf007b)
+
+  Previous read of size 8 at 0x7b38000002a0 by main thread (mutexes: write M744):
+    #0 boost::detail::sp_counted_base::release() /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:110 (test_message_filter+0x92172)
+    #1 ros::TimerManager<ros::Time, ros::Duration, ros::TimerEvent>::remove(int) <null> (libroscpp.so+0xc62ba)
+    #2 tf::MessageFilter<geometry_msgs::PointStamped_<std::allocator<void> > >::~MessageFilter() /catkin/buildtmp/tf/src/tf/include/tf/message_filter.h:185 (test_message_filter+0x9a9f3)
+    #3 void boost::checked_delete<tf::MessageFilter<geometry_msgs::PointStamped_<std::allocator<void> > > >(tf::MessageFilter<geometry_msgs::PointStamped_<std::allocator<void> > >*) /usr/include/boost/core/checked_delete.hpp:34 (test_message_filter+0xa153d)
+    #4 boost::scoped_ptr<tf::MessageFilter<geometry_msgs::PointStamped_<std::allocator<void> > > >::~scoped_ptr() /usr/include/boost/smart_ptr/scoped_ptr.hpp:88 (test_message_filter+0x9bb82)
+    #5 boost::scoped_ptr<tf::MessageFilter<geometry_msgs::PointStamped_<std::allocator<void> > > >::reset(tf::MessageFilter<geometry_msgs::PointStamped_<std::allocator<void> > >*) /usr/include/boost/smart_ptr/scoped_ptr.hpp:94 (test_message_filter+0x9bd51)
+    #6 MessageFilter_removeCallback_Test::TestBody() /catkin/buildtmp/tf/src/tf/test/test_message_filter.cpp:370 (test_message_filter+0x8fd2a)
+    #7 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #8 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #9 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #10 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #11 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #12 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #13 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #14 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #15 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #16 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_message_filter+0x965cc)
+    #17 main /catkin/buildtmp/tf/src/tf/test/test_message_filter.cpp:384 (test_message_filter+0x900d1)
+
+  Mutex M744 (0x7f7a382e5738) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::TimerManager<ros::Time, ros::Duration, ros::TimerEvent>::TimerManager() <null> (libroscpp.so+0xc6ccb)
+    #2 tf::MessageFilter<geometry_msgs::PointStamped_<std::allocator<void> > >::init() /catkin/buildtmp/tf/src/tf/include/tf/message_filter.h:336 (test_message_filter+0x9eaa6)
+    #3 tf::MessageFilter<geometry_msgs::PointStamped_<std::allocator<void> > >::MessageFilter(tf::Transformer&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned int, ros::NodeHandle, ros::Duration) /catkin/buildtmp/tf/src/tf/include/tf/message_filter.h:129 (test_message_filter+0x9a302)
+    #4 MessageFilter_noTransforms_Test::TestBody() /catkin/buildtmp/tf/src/tf/test/test_message_filter.cpp:74 (test_message_filter+0x899bf)
+    #5 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #6 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #7 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #8 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #9 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #10 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #11 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #12 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #13 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #14 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_message_filter+0x965cc)
+    #15 main /catkin/buildtmp/tf/src/tf/test/test_message_filter.cpp:384 (test_message_filter+0x900d1)
+
+  Thread T16 (tid=24334, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #3 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #4 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #5 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #6 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #7 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #8 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #9 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #10 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #11 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_message_filter+0x965cc)
+    #12 main /catkin/buildtmp/tf/src/tf/test/test_message_filter.cpp:384 (test_message_filter+0x900d1)
+
+SUMMARY: ThreadSanitizer: data race (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x741fd) in operator delete(void*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=23915)
+  Write of size 8 at 0x7b38000002a8 by thread T16:
+    #0 operator delete(void*) <null> (libtsan.so.0+0x741fd)
+    #1 ros::TimerManager<ros::Time, ros::Duration, ros::TimerEvent>::TimerQueueCallback::~TimerQueueCallback() <null> (libroscpp.so+0xc6445)
+    #2 ros::CallbackQueue::callOneCB(ros::CallbackQueue::TLS*) <null> (libroscpp.so+0xf007b)
+
+  Previous atomic write of size 4 at 0x7b38000002a8 by main thread (mutexes: write M744):
+    #0 __tsan_atomic32_fetch_sub <null> (libtsan.so.0+0x68aed)
+    #1 std::__atomic_base<int>::fetch_sub(int, std::memory_order) /usr/include/c++/7/bits/atomic_base.h:524 (test_message_filter+0x91e3e)
+    #2 boost::detail::atomic_decrement(std::atomic<int>*) /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:35 (test_message_filter+0x91e3e)
+    #3 boost::detail::sp_counted_base::release() /usr/include/boost/smart_ptr/detail/sp_counted_base_std_atomic.hpp:108 (test_message_filter+0x9215c)
+    #4 ros::TimerManager<ros::Time, ros::Duration, ros::TimerEvent>::remove(int) <null> (libroscpp.so+0xc62ba)
+    #5 tf::MessageFilter<geometry_msgs::PointStamped_<std::allocator<void> > >::~MessageFilter() /catkin/buildtmp/tf/src/tf/include/tf/message_filter.h:185 (test_message_filter+0x9a9f3)
+    #6 void boost::checked_delete<tf::MessageFilter<geometry_msgs::PointStamped_<std::allocator<void> > > >(tf::MessageFilter<geometry_msgs::PointStamped_<std::allocator<void> > >*) /usr/include/boost/core/checked_delete.hpp:34 (test_message_filter+0xa153d)
+    #7 boost::scoped_ptr<tf::MessageFilter<geometry_msgs::PointStamped_<std::allocator<void> > > >::~scoped_ptr() /usr/include/boost/smart_ptr/scoped_ptr.hpp:88 (test_message_filter+0x9bb82)
+    #8 boost::scoped_ptr<tf::MessageFilter<geometry_msgs::PointStamped_<std::allocator<void> > > >::reset(tf::MessageFilter<geometry_msgs::PointStamped_<std::allocator<void> > >*) /usr/include/boost/smart_ptr/scoped_ptr.hpp:94 (test_message_filter+0x9bd51)
+    #9 MessageFilter_removeCallback_Test::TestBody() /catkin/buildtmp/tf/src/tf/test/test_message_filter.cpp:370 (test_message_filter+0x8fd2a)
+    #10 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #11 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #12 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #13 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #14 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #15 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #16 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #17 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #18 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #19 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_message_filter+0x965cc)
+    #20 main /catkin/buildtmp/tf/src/tf/test/test_message_filter.cpp:384 (test_message_filter+0x900d1)
+
+  Mutex M744 (0x7f7a382e5738) created at:
+    #0 pthread_mutex_init <null> (libtsan.so.0+0x2c5bd)
+    #1 ros::TimerManager<ros::Time, ros::Duration, ros::TimerEvent>::TimerManager() <null> (libroscpp.so+0xc6ccb)
+    #2 tf::MessageFilter<geometry_msgs::PointStamped_<std::allocator<void> > >::init() /catkin/buildtmp/tf/src/tf/include/tf/message_filter.h:336 (test_message_filter+0x9eaa6)
+    #3 tf::MessageFilter<geometry_msgs::PointStamped_<std::allocator<void> > >::MessageFilter(tf::Transformer&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned int, ros::NodeHandle, ros::Duration) /catkin/buildtmp/tf/src/tf/include/tf/message_filter.h:129 (test_message_filter+0x9a302)
+    #4 MessageFilter_noTransforms_Test::TestBody() /catkin/buildtmp/tf/src/tf/test/test_message_filter.cpp:74 (test_message_filter+0x899bf)
+    #5 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #6 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #7 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #8 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #9 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #10 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #11 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #12 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #13 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #14 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_message_filter+0x965cc)
+    #15 main /catkin/buildtmp/tf/src/tf/test/test_message_filter.cpp:384 (test_message_filter+0x900d1)
+
+  Thread T16 (tid=24334, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #3 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #4 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #5 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #6 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #7 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #8 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #9 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #10 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #11 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_message_filter+0x965cc)
+    #12 main /catkin/buildtmp/tf/src/tf/test/test_message_filter.cpp:384 (test_message_filter+0x900d1)
+
+SUMMARY: ThreadSanitizer: data race (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x741fd) in operator delete(void*)
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=23915)
+  Cycle in lock order graph: M640 (0x7b4400001a60) => M641 (0x7b4400001aa0) => M640
+
+  Mutex M641 acquired here while holding mutex M640 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::unique_lock<boost::recursive_mutex>::lock() <null> (libroscpp.so+0xa4ddf)
+    #2 MessageFilter_noTransforms_Test::TestBody() /catkin/buildtmp/tf/src/tf/test/test_message_filter.cpp:72 (test_message_filter+0x89842)
+    #3 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #4 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #5 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #6 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #7 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #8 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #9 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #10 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #11 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #12 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_message_filter+0x965cc)
+    #13 main /catkin/buildtmp/tf/src/tf/test/test_message_filter.cpp:384 (test_message_filter+0x900d1)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M640 acquired here while holding mutex M641 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::posix::pthread_mutex_lock(pthread_mutex_t*) /usr/include/boost/thread/pthread/mutex.hpp:62 (test_message_filter+0x940ed)
+    #2 boost::mutex::lock() /usr/include/boost/thread/pthread/mutex.hpp:116 (test_message_filter+0x940ed)
+    #3 boost::unique_lock<boost::mutex>::lock() /usr/include/boost/thread/lock_types.hpp:346 (test_message_filter+0x99c68)
+    #4 ros::TopicManager::shutdown() <null> (libroscpp.so+0xd278a)
+    #5 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=23915)
+  Cycle in lock order graph: M431 (0x7f7a39edb0a8) => M434 (0x7f7a39edb148) => M407 (0x7f7a37f48720) => M431
+
+  Mutex M434 acquired here while holding mutex M431 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M407 acquired here while holding mutex M434 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::posix::pthread_mutex_lock(pthread_mutex_t*) /usr/include/boost/thread/pthread/mutex.hpp:62 (test_message_filter+0x940ed)
+    #2 boost::mutex::lock() /usr/include/boost/thread/pthread/mutex.hpp:116 (test_message_filter+0x940ed)
+    #3 boost::unique_lock<boost::mutex>::lock() /usr/include/boost/thread/lock_types.hpp:346 (test_message_filter+0x99c68)
+    #4 ros::console::initializeLogLocation(ros::console::LogLocation*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, ros::console::levels::Level) <null> (librosconsole.so+0x1d98c)
+    #5 tf::MessageFilter<geometry_msgs::PointStamped_<std::allocator<void> > >::add(ros::MessageEvent<geometry_msgs::PointStamped_<std::allocator<void> > const> const&) /catkin/buildtmp/tf/src/tf/include/tf/message_filter.h:253 (test_message_filter+0x9fd10)
+    #6 tf::MessageFilter<geometry_msgs::PointStamped_<std::allocator<void> > >::add(boost::shared_ptr<geometry_msgs::PointStamped_<std::allocator<void> > const> const&) /catkin/buildtmp/tf/src/tf/include/tf/message_filter.h:295 (test_message_filter+0x9b187)
+    #7 MessageFilter_emptyFrameIDFailure_Test::TestBody() /catkin/buildtmp/tf/src/tf/test/test_message_filter.cpp:342 (test_message_filter+0x8f708)
+    #8 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #9 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #10 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #11 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #12 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #13 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #14 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #15 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #16 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #17 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_message_filter+0x965cc)
+    #18 main /catkin/buildtmp/tf/src/tf/test/test_message_filter.cpp:384 (test_message_filter+0x900d1)
+
+  Mutex M431 acquired here while holding mutex M407 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=23915)
+  Cycle in lock order graph: M431 (0x7f7a39edb0a8) => M434 (0x7f7a39edb148) => M407 (0x7f7a37f48720) => M431
+
+  Mutex M434 acquired here while holding mutex M431 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M407 acquired here while holding mutex M434 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::posix::pthread_mutex_lock(pthread_mutex_t*) /usr/include/boost/thread/pthread/mutex.hpp:62 (test_message_filter+0x940ed)
+    #2 boost::mutex::lock() /usr/include/boost/thread/pthread/mutex.hpp:116 (test_message_filter+0x940ed)
+    #3 boost::unique_lock<boost::mutex>::lock() /usr/include/boost/thread/lock_types.hpp:346 (test_message_filter+0x99c68)
+    #4 ros::console::initializeLogLocation(ros::console::LogLocation*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, ros::console::levels::Level) <null> (librosconsole.so+0x1d98c)
+    #5 tf::MessageFilter<geometry_msgs::PointStamped_<std::allocator<void> > >::add(ros::MessageEvent<geometry_msgs::PointStamped_<std::allocator<void> > const> const&) /catkin/buildtmp/tf/src/tf/include/tf/message_filter.h:253 (test_message_filter+0x9fd10)
+    #6 tf::MessageFilter<geometry_msgs::PointStamped_<std::allocator<void> > >::add(boost::shared_ptr<geometry_msgs::PointStamped_<std::allocator<void> > const> const&) /catkin/buildtmp/tf/src/tf/include/tf/message_filter.h:295 (test_message_filter+0x9b187)
+    #7 MessageFilter_emptyFrameIDFailure_Test::TestBody() /catkin/buildtmp/tf/src/tf/test/test_message_filter.cpp:342 (test_message_filter+0x8f708)
+    #8 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #9 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #10 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #11 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #12 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #13 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #14 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #15 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #16 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #17 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_message_filter+0x965cc)
+    #18 main /catkin/buildtmp/tf/src/tf/test/test_message_filter.cpp:384 (test_message_filter+0x900d1)
+
+  Mutex M431 acquired here while holding mutex M407 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=23915)
+  Cycle in lock order graph: M431 (0x7f7a39edb0a8) => M434 (0x7f7a39edb148) => M407 (0x7f7a37f48720) => M431
+
+  Mutex M434 acquired here while holding mutex M431 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M407 acquired here while holding mutex M434 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::posix::pthread_mutex_lock(pthread_mutex_t*) /usr/include/boost/thread/pthread/mutex.hpp:62 (test_message_filter+0x940ed)
+    #2 boost::mutex::lock() /usr/include/boost/thread/pthread/mutex.hpp:116 (test_message_filter+0x940ed)
+    #3 boost::unique_lock<boost::mutex>::lock() /usr/include/boost/thread/lock_types.hpp:346 (test_message_filter+0x99c68)
+    #4 ros::console::initializeLogLocation(ros::console::LogLocation*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, ros::console::levels::Level) <null> (librosconsole.so+0x1d98c)
+    #5 tf::MessageFilter<geometry_msgs::PointStamped_<std::allocator<void> > >::add(ros::MessageEvent<geometry_msgs::PointStamped_<std::allocator<void> > const> const&) /catkin/buildtmp/tf/src/tf/include/tf/message_filter.h:253 (test_message_filter+0x9fd10)
+    #6 tf::MessageFilter<geometry_msgs::PointStamped_<std::allocator<void> > >::add(boost::shared_ptr<geometry_msgs::PointStamped_<std::allocator<void> > const> const&) /catkin/buildtmp/tf/src/tf/include/tf/message_filter.h:295 (test_message_filter+0x9b187)
+    #7 MessageFilter_emptyFrameIDFailure_Test::TestBody() /catkin/buildtmp/tf/src/tf/test/test_message_filter.cpp:342 (test_message_filter+0x8f708)
+    #8 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #9 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #10 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #11 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #12 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #13 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #14 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #15 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #16 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #17 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_message_filter+0x965cc)
+    #18 main /catkin/buildtmp/tf/src/tf/test/test_message_filter.cpp:384 (test_message_filter+0x900d1)
+
+  Mutex M431 acquired here while holding mutex M407 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=23915)
+  Cycle in lock order graph: M431 (0x7f7a39edb0a8) => M434 (0x7f7a39edb148) => M407 (0x7f7a37f48720) => M431
+
+  Mutex M434 acquired here while holding mutex M431 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M407 acquired here while holding mutex M434 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 boost::posix::pthread_mutex_lock(pthread_mutex_t*) /usr/include/boost/thread/pthread/mutex.hpp:62 (test_message_filter+0x940ed)
+    #2 boost::mutex::lock() /usr/include/boost/thread/pthread/mutex.hpp:116 (test_message_filter+0x940ed)
+    #3 boost::unique_lock<boost::mutex>::lock() /usr/include/boost/thread/lock_types.hpp:346 (test_message_filter+0x99c68)
+    #4 ros::console::initializeLogLocation(ros::console::LogLocation*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, ros::console::levels::Level) <null> (librosconsole.so+0x1d98c)
+    #5 tf::MessageFilter<geometry_msgs::PointStamped_<std::allocator<void> > >::add(ros::MessageEvent<geometry_msgs::PointStamped_<std::allocator<void> > const> const&) /catkin/buildtmp/tf/src/tf/include/tf/message_filter.h:253 (test_message_filter+0x9fd10)
+    #6 tf::MessageFilter<geometry_msgs::PointStamped_<std::allocator<void> > >::add(boost::shared_ptr<geometry_msgs::PointStamped_<std::allocator<void> > const> const&) /catkin/buildtmp/tf/src/tf/include/tf/message_filter.h:295 (test_message_filter+0x9b187)
+    #7 MessageFilter_emptyFrameIDFailure_Test::TestBody() /catkin/buildtmp/tf/src/tf/test/test_message_filter.cpp:342 (test_message_filter+0x8f708)
+    #8 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #9 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #10 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #11 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #12 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #13 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #14 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #15 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #16 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #17 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_message_filter+0x965cc)
+    #18 main /catkin/buildtmp/tf/src/tf/test/test_message_filter.cpp:384 (test_message_filter+0x900d1)
+
+  Mutex M431 acquired here while holding mutex M407 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+    #2 __libc_start_main <null> (libc.so.6+0x21b96)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+ThreadSanitizer: reported 12 warnings

@@ -1,0 +1,1 @@
+/catkin/buildtmp/xmlrpcpp/src/xmlrpcpp/test/test_socket.cpp:724:11: runtime error: null pointer passed as argument 2, which is declared to never be null

@@ -1,0 +1,109 @@
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=16093)
+  Cycle in lock order graph: M449 (0x7f11b869a0a8) => M452 (0x7f11b869a148) => M449
+
+  Mutex M452 acquired here while holding mutex M449 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M449 acquired here while holding mutex M452 in main thread:
+    #0 pthread_mutex_lock <null> (libtsan.so.0+0x3faeb)
+    #1 log4cxx::helpers::synchronized::synchronized(log4cxx::helpers::Mutex const&) <null> (liblog4cxx.so.10+0x14acdb)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) (/usr/lib/x86_64-linux-gnu/libtsan.so.0+0x3faeb) in __interceptor_pthread_mutex_lock
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=16093)
+  Write of size 1 at 0x7ffe4d7fde2b by thread T1:
+    #0 addDelManyTimesThread(ros::PollSet*, SocketHelper*, SocketHelper*, boost::barrier*, int, bool volatile*) /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_poll_set.cpp:482 (test_roscpp-test_poll_set+0x38bce)
+    #1 void boost::_bi::list6<boost::_bi::value<ros::PollSet*>, boost::_bi::value<SocketHelper*>, boost::_bi::value<SocketHelper*>, boost::_bi::value<boost::barrier*>, boost::_bi::value<int>, boost::_bi::value<bool volatile*> >::operator()<void (*)(ros::PollSet*, SocketHelper*, SocketHelper*, boost::barrier*, int, bool volatile*), boost::_bi::list0>(boost::_bi::type<void>, void (*&)(ros::PollSet*, SocketHelper*, SocketHelper*, boost::barrier*, int, bool volatile*), boost::_bi::list0&, int) /usr/include/boost/bind/bind.hpp:602 (test_roscpp-test_poll_set+0x52fa5)
+    #2 boost::_bi::bind_t<void, void (*)(ros::PollSet*, SocketHelper*, SocketHelper*, boost::barrier*, int, bool volatile*), boost::_bi::list6<boost::_bi::value<ros::PollSet*>, boost::_bi::value<SocketHelper*>, boost::_bi::value<SocketHelper*>, boost::_bi::value<boost::barrier*>, boost::_bi::value<int>, boost::_bi::value<bool volatile*> > >::operator()() /usr/include/boost/bind/bind.hpp:1294 (test_roscpp-test_poll_set+0x524cb)
+    #3 boost::detail::thread_data<boost::_bi::bind_t<void, void (*)(ros::PollSet*, SocketHelper*, SocketHelper*, boost::barrier*, int, bool volatile*), boost::_bi::list6<boost::_bi::value<ros::PollSet*>, boost::_bi::value<SocketHelper*>, boost::_bi::value<SocketHelper*>, boost::_bi::value<boost::barrier*>, boost::_bi::value<int>, boost::_bi::value<bool volatile*> > > >::run() /usr/include/boost/thread/detail/thread.hpp:116 (test_roscpp-test_poll_set+0x51356)
+    #4 <null> <null> (libboost_thread.so.1.65.1+0x11bcc)
+
+  Previous read of size 1 at 0x7ffe4d7fde2b by main thread:
+    #0 Poller_updateWhileAddDel_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_poll_set.cpp:498 (test_roscpp-test_poll_set+0x38db3)
+    #1 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #2 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #3 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #4 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #5 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #6 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #7 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #8 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #9 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #10 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-test_poll_set+0x3a71a)
+    #11 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_poll_set.cpp:530 (test_roscpp-test_poll_set+0x39635)
+
+  Location is stack of main thread.
+
+  Location is global '<null>' at 0x000000000000 ([stack]+0x00000001ee2b)
+
+  Thread T1 (tid=16158, running) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 boost::thread::thread<boost::_bi::bind_t<void, void (*)(ros::PollSet*, SocketHelper*, SocketHelper*, boost::barrier*, int, bool volatile*), boost::_bi::list6<boost::_bi::value<ros::PollSet*>, boost::_bi::value<SocketHelper*>, boost::_bi::value<SocketHelper*>, boost::_bi::value<boost::barrier*>, boost::_bi::value<int>, boost::_bi::value<bool volatile*> > > >(boost::_bi::bind_t<void, void (*)(ros::PollSet*, SocketHelper*, SocketHelper*, boost::barrier*, int, bool volatile*), boost::_bi::list6<boost::_bi::value<ros::PollSet*>, boost::_bi::value<SocketHelper*>, boost::_bi::value<SocketHelper*>, boost::_bi::value<boost::barrier*>, boost::_bi::value<int>, boost::_bi::value<bool volatile*> > >&&) /usr/include/boost/thread/detail/thread.hpp:273 (test_roscpp-test_poll_set+0x447a5)
+    #3 Poller_updateWhileAddDel_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_poll_set.cpp:494 (test_roscpp-test_poll_set+0x38d95)
+    #4 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #5 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #6 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #7 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #8 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #9 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #10 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #11 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #12 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #13 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-test_poll_set+0x3a71a)
+    #14 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_poll_set.cpp:530 (test_roscpp-test_poll_set+0x39635)
+
+SUMMARY: ThreadSanitizer: data race /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_poll_set.cpp:482 in addDelManyTimesThread(ros::PollSet*, SocketHelper*, SocketHelper*, boost::barrier*, int, bool volatile*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=16093)
+  Read of size 1 at 0x7ffe4d7fde2b by main thread:
+    #0 Poller_updateWhileAddDel_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_poll_set.cpp:498 (test_roscpp-test_poll_set+0x38db3)
+    #1 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #2 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #3 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #4 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #5 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #6 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #7 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #8 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #9 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #10 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-test_poll_set+0x3a71a)
+    #11 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_poll_set.cpp:530 (test_roscpp-test_poll_set+0x39635)
+
+  Previous write of size 1 at 0x7ffe4d7fde2b by thread T1:
+    #0 addDelManyTimesThread(ros::PollSet*, SocketHelper*, SocketHelper*, boost::barrier*, int, bool volatile*) /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_poll_set.cpp:482 (test_roscpp-test_poll_set+0x38bce)
+    #1 void boost::_bi::list6<boost::_bi::value<ros::PollSet*>, boost::_bi::value<SocketHelper*>, boost::_bi::value<SocketHelper*>, boost::_bi::value<boost::barrier*>, boost::_bi::value<int>, boost::_bi::value<bool volatile*> >::operator()<void (*)(ros::PollSet*, SocketHelper*, SocketHelper*, boost::barrier*, int, bool volatile*), boost::_bi::list0>(boost::_bi::type<void>, void (*&)(ros::PollSet*, SocketHelper*, SocketHelper*, boost::barrier*, int, bool volatile*), boost::_bi::list0&, int) /usr/include/boost/bind/bind.hpp:602 (test_roscpp-test_poll_set+0x52fa5)
+    #2 boost::_bi::bind_t<void, void (*)(ros::PollSet*, SocketHelper*, SocketHelper*, boost::barrier*, int, bool volatile*), boost::_bi::list6<boost::_bi::value<ros::PollSet*>, boost::_bi::value<SocketHelper*>, boost::_bi::value<SocketHelper*>, boost::_bi::value<boost::barrier*>, boost::_bi::value<int>, boost::_bi::value<bool volatile*> > >::operator()() /usr/include/boost/bind/bind.hpp:1294 (test_roscpp-test_poll_set+0x524cb)
+    #3 boost::detail::thread_data<boost::_bi::bind_t<void, void (*)(ros::PollSet*, SocketHelper*, SocketHelper*, boost::barrier*, int, bool volatile*), boost::_bi::list6<boost::_bi::value<ros::PollSet*>, boost::_bi::value<SocketHelper*>, boost::_bi::value<SocketHelper*>, boost::_bi::value<boost::barrier*>, boost::_bi::value<int>, boost::_bi::value<bool volatile*> > > >::run() /usr/include/boost/thread/detail/thread.hpp:116 (test_roscpp-test_poll_set+0x51356)
+    #4 <null> <null> (libboost_thread.so.1.65.1+0x11bcc)
+
+  Location is stack of main thread.
+
+  Location is global '<null>' at 0x000000000000 ([stack]+0x00000001ee2b)
+
+  Thread T1 (tid=16158, finished) created by main thread at:
+    #0 pthread_create <null> (libtsan.so.0+0x2bcfe)
+    #1 boost::thread::start_thread_noexcept() <null> (libboost_thread.so.1.65.1+0x10b09)
+    #2 boost::thread::thread<boost::_bi::bind_t<void, void (*)(ros::PollSet*, SocketHelper*, SocketHelper*, boost::barrier*, int, bool volatile*), boost::_bi::list6<boost::_bi::value<ros::PollSet*>, boost::_bi::value<SocketHelper*>, boost::_bi::value<SocketHelper*>, boost::_bi::value<boost::barrier*>, boost::_bi::value<int>, boost::_bi::value<bool volatile*> > > >(boost::_bi::bind_t<void, void (*)(ros::PollSet*, SocketHelper*, SocketHelper*, boost::barrier*, int, bool volatile*), boost::_bi::list6<boost::_bi::value<ros::PollSet*>, boost::_bi::value<SocketHelper*>, boost::_bi::value<SocketHelper*>, boost::_bi::value<boost::barrier*>, boost::_bi::value<int>, boost::_bi::value<bool volatile*> > >&&) /usr/include/boost/thread/detail/thread.hpp:273 (test_roscpp-test_poll_set+0x447a5)
+    #3 Poller_updateWhileAddDel_Test::TestBody() /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_poll_set.cpp:494 (test_roscpp-test_poll_set+0x38d95)
+    #4 void testing::internal::HandleSehExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9aef1)
+    #5 void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x91daf)
+    #6 testing::Test::Run() /usr/src/googletest/googletest/src/gtest.cc:2474 (libgtest.so+0x6c3dd)
+    #7 testing::TestInfo::Run() /usr/src/googletest/googletest/src/gtest.cc:2656 (libgtest.so+0x6cfb7)
+    #8 testing::TestCase::Run() /usr/src/googletest/googletest/src/gtest.cc:2776 (libgtest.so+0x6d952)
+    #9 testing::internal::UnitTestImpl::RunAllTests() /usr/src/googletest/googletest/src/gtest.cc:4651 (libgtest.so+0x76655)
+    #10 bool testing::internal::HandleSehExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2402 (libgtest.so+0x9c9f6)
+    #11 bool testing::internal::HandleExceptionsInMethodIfSupported<testing::internal::UnitTestImpl, bool>(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) /usr/src/googletest/googletest/src/gtest.cc:2438 (libgtest.so+0x933d1)
+    #12 testing::UnitTest::Run() /usr/src/googletest/googletest/src/gtest.cc:4259 (libgtest.so+0x74ae3)
+    #13 RUN_ALL_TESTS() /usr/src/googletest/googletest/include/gtest/gtest.h:2233 (test_roscpp-test_poll_set+0x3a71a)
+    #14 main /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_poll_set.cpp:530 (test_roscpp-test_poll_set+0x39635)
+
+SUMMARY: ThreadSanitizer: data race /catkin/buildtmp/test_roscpp/src/test_roscpp/test/test_poll_set.cpp:498 in Poller_updateWhileAddDel_Test::TestBody()
+==================
+ThreadSanitizer: reported 3 warnings
